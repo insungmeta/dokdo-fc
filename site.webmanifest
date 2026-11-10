@@ -1,0 +1,17 @@
+{
+  "name": "DOKDO FC — FC27 Pro Clubs",
+  "short_name": "DOKDO FC",
+  "start_url": "/dokdo-fc/",
+  "scope": "/dokdo-fc/",
+  "display": "standalone",
+  "background_color": "#080d17",
+  "theme_color": "#080d17",
+  "icons": [
+    {
+      "src": "./assets/dfc-crest.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
