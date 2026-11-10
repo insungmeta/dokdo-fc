@@ -20,11 +20,19 @@ class FakeApi:
         return [{"gamesPlayed": 11, "wins": 6, "goals": 17, "skillRating": 1400}]
 
     def search_club_by_name(self, club_name, scope="current_season", max_result_count=None):
-        return [
-            {"clubId": 987654, "clubName": club_name, "currentDivision": "1"},
-            {"clubId": CLUB_ID, "clubName": club_name, "currentDivision": "3",
-             "bestDivision": "2", "points": "43"},
-        ]
+        if scope == "current_season":
+            return [
+                {"clubId": 987654, "clubName": club_name, "currentDivision": "1"},
+                {"clubId": CLUB_ID, "clubName": club_name, "currentDivision": "5",
+                 "bestDivision": "3", "points": "43"},
+            ]
+        if scope == "all_time":
+            return [
+                {"clubId": 987654, "clubName": club_name, "currentDivision": "1"},
+                {"clubId": CLUB_ID, "clubName": club_name, "currentDivision": "5",
+                 "bestDivision": "2", "points": "130"},
+            ]
+        raise AssertionError("Unexpected leaderboard scope")
 
     def get_member_stats(self, club_id):
         return [{"name": "PLAYER", "goals": 8, "assists": 4, "gamesPlayed": 11}]
@@ -119,8 +127,11 @@ class CollectorTests(unittest.TestCase):
             history_path = Path(directory) / "history.json"
             archive = json.loads(history_path.read_text(encoding="utf-8"))
             self.assertEqual(len(d["matches"]), 2)
-            self.assertEqual(d["league"]["currentDivision"], 3)
+            self.assertEqual(d["league"]["currentDivision"], 5)
+            self.assertEqual(d["league"]["bestDivision"], 3)
+            self.assertEqual(d["leagueAllTime"]["bestDivision"], 2)
             self.assertEqual(d["league"]["clubId"], CLUB_ID)
+            self.assertEqual(d["leagueAllTime"]["clubId"], CLUB_ID)
             self.assertEqual(len(d["members"]), 2)
             self.assertEqual(d["matches"][-1]["players"][0]["saves"], 5)
             self.assertEqual(d["matches"][0]["opponentPlayers"][0]["name"], "OPPONENT HUMAN")
@@ -129,7 +140,8 @@ class CollectorTests(unittest.TestCase):
             self.assertEqual(archive["changes"][0]["matches"][0]["matchId"], "101")
             self.assertEqual(archive["changes"][1]["matches"][0]["matchId"], "202")
             self.assertEqual(archive["changes"][1]["members"][0]["goals"], 8)
-            self.assertEqual(archive["changes"][1]["league"]["currentDivision"], 3)
+            self.assertEqual(archive["changes"][1]["league"]["currentDivision"], 5)
+            self.assertEqual(archive["changes"][1]["leagueAllTime"]["bestDivision"], 2)
 
             # Identical information should not create duplicate history events.
             collect(FakeApi, path)
