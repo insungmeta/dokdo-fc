@@ -15037,9 +15037,27 @@
     }
   ],
   "sync": {
-    "lastAttempt": "2026-11-10T08:04:11.709152+00:00",
-    "lastSuccess": "2026-11-10T08:04:11.709152+00:00",
+    "lastAttempt": "2026-11-10T08:10:35.903282+00:00",
+    "lastSuccess": "2026-11-10T08:10:35.903282+00:00",
     "error": null
   },
-  "archiveVersion": 1
+  "archiveVersion": 1,
+  "league": {
+    "clubId": 331042,
+    "clubName": "DOKDO FC",
+    "currentDivision": 5,
+    "bestDivision": 3,
+    "gamesPlayed": 129,
+    "wins": 47,
+    "ties": 24,
+    "losses": 58,
+    "goals": 162,
+    "goalsAgainst": 180,
+    "cleanSheets": 47,
+    "points": 87,
+    "promotions": 7,
+    "relegations": 6,
+    "reputationTier": 1,
+    "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l112893.png"
+  }
 }
