@@ -94,22 +94,162 @@ def when(m):
         return 0
 
 
+def _has_value(v):
+    """A missing value must never erase a previously captured nonempty value."""
+    return v is not None and v != "" and v != [] and v != {}
+
+
+def _enrich(old, incoming):
+    """Update supplied values, retaining richer historical fields on partial responses."""
+    merged = copy.deepcopy(old or {})
+    for field, val in (incoming or {}).items():
+        if _has_value(val) or field not in merged:
+            merged[field] = copy.deepcopy(val)
+    return merged
+
+
+def _member_key(p):
+    """Some EA member endpoints omit playerId; fall back to stable displayed name."""
+    player_id = p.get("playerId")
+    if player_id not in (None, "", 0, "0"):
+        return "id:" + str(player_id)
+    name = str(p.get("name") or p.get("playerName") or "").strip().casefold()
+    return "name:" + name if name else None
+
+
+def merge_members(old, incoming):
+    """Never drop former players or discard fields during temporary API omissions."""
+    result = []
+    locations = {}
+    for item in list(old or []) + list(incoming or []):
+        if not isinstance(item, dict):
+            continue
+        who = _member_key(item)
+        if who is None:
+            if item not in result:
+                result.append(copy.deepcopy(item))
+        elif who in locations:
+            i = locations[who]
+            result[i] = _enrich(result[i], item)
+        else:
+            locations[who] = len(result)
+            result.append(copy.deepcopy(item))
+    return result
+
+
+def _player_key(p):
+    pid = p.get("playerId")
+    club = p.get("clubId")
+    if pid not in (None, "", 0, "0"):
+        return str(club) + ":" + str(pid)
+    return str(club) + ":name:" + str(p.get("name", "")).strip().casefold()
+
+
+def _merge_roster(old, new):
+    result = []
+    locations = {}
+    for p in list(old or []) + list(new or []):
+        if not isinstance(p, dict):
+            continue
+        ident = _player_key(p)
+        if ident in locations:
+            i = locations[ident]
+            result[i] = _enrich(result[i], p)
+        else:
+            locations[ident] = len(result)
+            result.append(copy.deepcopy(p))
+    return result
+
+
 def merge(old, incoming):
+    """Append all unique matches forever; enrich rather than replace earlier details."""
     store = {key(m): copy.deepcopy(m) for m in old if isinstance(m, dict)}
     for m in incoming:
-        row = copy.deepcopy(m)
-        k = key(row)
-        if k in store:
-            for side in ("players", "opponentPlayers"):
-                if not row.get(side) and store[k].get(side):
-                    row[side] = store[k][side]
+        if not isinstance(m, dict):
+            continue
+        k = key(m)
+        previous = store.get(k, {})
+        row = _enrich(previous, m)
+        for side in ("players", "opponentPlayers"):
+            if side in previous or side in m:
+                row[side] = _merge_roster(previous.get(side), m.get(side))
         store[k] = row
     return sorted(store.values(), key=when, reverse=True)
 
 
+def _same(old, new):
+    return old == new
+
+
+def _diff_members(old, new):
+    old_map = {_member_key(p): p for p in old or [] if isinstance(p, dict)}
+    return [copy.deepcopy(p) for p in new or []
+            if isinstance(p, dict) and not _same(old_map.get(_member_key(p)), p)]
+
+
+def _diff_matches(old, new):
+    old_map = {key(m): m for m in old or [] if isinstance(m, dict)}
+    return [copy.deepcopy(m) for m in new or []
+            if isinstance(m, dict) and not _same(old_map.get(key(m)), m)]
+
+
+def load_history(path, original, now):
+    """Bootstrap from already archived matches/player stats; fail closed if archive lost."""
+    history_path = path.parent / "history.json"
+    if history_path.exists():
+        history = json.loads(history_path.read_text(encoding="utf-8"))
+        if history.get("clubId") != CLUB_ID or history.get("platform") != PLATFORM:
+            raise ValueError("History archive belongs to a different club.")
+        if not isinstance(history.get("changes"), list):
+            raise ValueError("History archive is incomplete; refusing to overwrite.")
+        return history_path, history
+    if original.get("archiveVersion"):
+        raise FileNotFoundError("Historical stat file is missing; refusing to reset archive.")
+    started = (original.get("sync") or {}).get("lastSuccess") or now
+    history = {
+        "schemaVersion": 1,
+        "clubId": CLUB_ID,
+        "platform": PLATFORM,
+        "startedAt": started,
+        "changes": [],
+    }
+    if any(original.get(k) for k in ("club", "overall", "members", "career", "matches")):
+        history["changes"].append({
+            "at": started, "kind": "preserved-baseline",
+            "club": copy.deepcopy(original.get("club")),
+            "overall": copy.deepcopy(original.get("overall")),
+            "members": copy.deepcopy(original.get("members") or []),
+            "career": copy.deepcopy(original.get("career") or []),
+            "matches": copy.deepcopy(original.get("matches") or []),
+        })
+    return history_path, history
+
+
+def archive_updates(original, current, history, now):
+    """Append changes only when real data changes, not every 30-minute sync heartbeat."""
+    changes = {"at": now, "kind": "data-change"}
+    for field in ("club", "overall"):
+        if not _same(original.get(field), current.get(field)):
+            changes[field] = copy.deepcopy(current.get(field))
+    for field in ("members", "career"):
+        delta = _diff_members(original.get(field), current.get(field))
+        if delta:
+            changes[field] = delta
+    match_updates = _diff_matches(original.get("matches"), current.get("matches"))
+    if match_updates:
+        changes["matches"] = match_updates
+    if len(changes) > 2:
+        history["changes"].append(changes)
+    # Snapshot history is append-only; old changes are never removed or capped.
+    return history
+
+
+
 def collect(api_factory=None, path=OUT):
     d = load(path)
+    original = copy.deepcopy(d)
     now = datetime.now(timezone.utc).isoformat()
+    history_path, history = load_history(path, original, now)
     sync = dict(d.get("sync") or {})
     sync["lastAttempt"] = now
     d["sync"] = sync
@@ -139,7 +279,10 @@ def collect(api_factory=None, path=OUT):
                 if response is not None:
                     if field == "club":
                         response["name"] = response.get("name") or response.get("clubName") or "DOKDO FC"
-                    d[field] = response
+                    if field in ("members", "career"):
+                        d[field] = merge_members(d.get(field), response)
+                    else:
+                        d[field] = _enrich(d.get(field), response)
                     successes += 1
             except Exception as exc:
                 errors.append(f"{field}: {exc}")
@@ -189,9 +332,25 @@ def collect(api_factory=None, path=OUT):
     if successes:
         sync["lastSuccess"] = now
     sync["error"] = " | ".join(errors)[:500] or None
+
+    # Keep a permanent, append-only revision log of all team, season, career,
+    # per-player and both-sides match details. Old data is never deleted.
+    archive_updates(original, d, history, now)
+    d["archiveVersion"] = 1
+
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(d, ensure_ascii=False, indent=2, default=serialized) + "\n", encoding="utf-8")
-    log.info("success=%s errors=%s matches_archived=%s", successes, len(errors), len(d["matches"]))
+    history_path.write_text(
+        json.dumps(history, ensure_ascii=False, indent=2, default=serialized) + "\n",
+        encoding="utf-8",
+    )
+    path.write_text(
+        json.dumps(d, ensure_ascii=False, indent=2, default=serialized) + "\n",
+        encoding="utf-8",
+    )
+    log.info(
+        "success=%s errors=%s matches_archived=%s history_revisions=%s",
+        successes, len(errors), len(d["matches"]), len(history["changes"]),
+    )
     return d
 
 
