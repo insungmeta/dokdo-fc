@@ -99,8 +99,10 @@ def merge(old, incoming):
     for m in incoming:
         row = copy.deepcopy(m)
         k = key(row)
-        if k in store and not row.get("players") and store[k].get("players"):
-            row["players"] = store[k]["players"]
+        if k in store:
+            for side in ("players", "opponentPlayers"):
+                if not row.get(side) and store[k].get(side):
+                    row[side] = store[k][side]
         store[k] = row
     return sorted(store.values(), key=when, reverse=True)
 
@@ -148,18 +150,35 @@ def collect(api_factory=None, path=OUT):
                 recent = api.get_club_matches(CLUB_ID, match_type=kind, count=10)
                 if recent is None:
                     raise RuntimeError("EA returned no match response")
-                roster = {}
+                our_roster, opponents_roster = {}, {}
                 try:
-                    players = api.get_match_players(CLUB_ID, match_type=kind, count=10) or []
+                    # EA already returns both club IDs in this match payload.
+                    # Calling with both_teams avoids extra queries per opponent.
+                    players = api.get_match_players(
+                        CLUB_ID, match_type=kind, count=10,
+                        both_teams=True, include_events=True,
+                    ) or []
                     for item in players:
                         mid = item.get("matchId")
-                        if mid not in (None, ""):
-                            roster.setdefault(str(mid), []).append(player(item))
+                        pid = item.get("playerId")
+                        club = item.get("clubId")
+                        if mid in (None, "") or pid in (None, "", 0, "0"):
+                            continue
+                        p = player(item)
+                        if not p["name"].strip():
+                            continue
+                        if str(club) == str(CLUB_ID):
+                            our_roster.setdefault(str(mid), []).append(p)
+                        else:
+                            opponents_roster.setdefault((str(mid), str(club)), []).append(p)
                 except Exception as exc:
                     errors.append(f"{kind} player details: {exc}")
                 for item in recent:
                     row = match(item, kind)
-                    row["players"] = roster.get(str(row.get("matchId")), [])
+                    mid = str(row.get("matchId"))
+                    opp = str(row.get("opponentId"))
+                    row["players"] = our_roster.get(mid, [])
+                    row["opponentPlayers"] = opponents_roster.get((mid, opp), [])
                     incoming.append(row)
                 successes += 1
             except Exception as exc:
