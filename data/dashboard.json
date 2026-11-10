@@ -15037,8 +15037,8 @@
     }
   ],
   "sync": {
-    "lastAttempt": "2026-11-10T08:12:34.878551+00:00",
-    "lastSuccess": "2026-11-10T08:12:34.878551+00:00",
+    "lastAttempt": "2026-11-10T08:22:11.538978+00:00",
+    "lastSuccess": "2026-11-10T08:22:11.538978+00:00",
     "error": null
   },
   "archiveVersion": 1,
@@ -15058,6 +15058,24 @@
     "promotions": 7,
     "relegations": 6,
     "reputationTier": 1,
+    "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l112893.png"
+  },
+  "leagueAllTime": {
+    "clubId": 331042,
+    "clubName": "DOKDO FC",
+    "currentDivision": 5,
+    "bestDivision": 5,
+    "gamesPlayed": 31,
+    "wins": 8,
+    "ties": 6,
+    "losses": 17,
+    "goals": 34,
+    "goalsAgainst": 76,
+    "cleanSheets": 4,
+    "points": 13,
+    "promotions": 1,
+    "relegations": 0,
+    "reputationTier": 0,
     "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l112893.png"
   }
 }
