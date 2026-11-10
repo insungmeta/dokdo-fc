@@ -31,6 +31,7 @@ def base():
         "clubId": CLUB_ID,
         "platform": PLATFORM,
         "club": None,
+        "league": None,
         "overall": None,
         "members": [],
         "career": [],
@@ -224,10 +225,11 @@ def load_history(path, original, now):
         "startedAt": started,
         "changes": [],
     }
-    if any(original.get(k) for k in ("club", "overall", "members", "career", "matches")):
+    if any(original.get(k) for k in ("club", "league", "overall", "members", "career", "matches")):
         history["changes"].append({
             "at": started, "kind": "preserved-baseline",
             "club": copy.deepcopy(original.get("club")),
+            "league": copy.deepcopy(original.get("league")),
             "overall": copy.deepcopy(original.get("overall")),
             "members": copy.deepcopy(original.get("members") or []),
             "career": copy.deepcopy(original.get("career") or []),
@@ -239,7 +241,7 @@ def load_history(path, original, now):
 def archive_updates(original, current, history, now):
     """Append changes only when real data changes, not every 30-minute sync heartbeat."""
     changes = {"at": now, "kind": "data-change"}
-    for field in ("club", "overall"):
+    for field in ("club", "league", "overall"):
         if not _same(original.get(field), current.get(field)):
             changes[field] = copy.deepcopy(current.get(field))
     for field in ("members", "career"):
@@ -254,6 +256,30 @@ def archive_updates(original, current, history, now):
     # Snapshot history is append-only; old changes are never removed or capped.
     return history
 
+
+
+def get_verified_league(api, club_name, club_id):
+    """Use FC27 leaderboard currentDivision; never assume a club name is unique."""
+    if not club_name:
+        return None
+    rows = api.search_club_by_name(
+        str(club_name),
+        scope="current_season",
+        max_result_count=100,
+    ) or []
+    for item in rows:
+        if not isinstance(item, dict) or str(item.get("clubId")) != str(club_id):
+            continue
+        league = copy.deepcopy(item)
+        raw = league.get("currentDivision")
+        # EA uses 1-6, possibly no data. Never invent a division number.
+        try:
+            number = int(raw)
+        except (TypeError, ValueError):
+            number = None
+        league["currentDivision"] = number if number is not None and 1 <= number <= 6 else None
+        return league
+    return None
 
 
 def collect(api_factory=None, path=OUT):
@@ -298,6 +324,22 @@ def collect(api_factory=None, path=OUT):
             except Exception as exc:
                 errors.append(f"{field}: {exc}")
                 log.warning("%s failed: %s", field, exc)
+
+        # The clubs/info and clubs/overallStats endpoints do not include
+        # currentDivision. FC27's currentSeasonLeaderboard/search does.
+        try:
+            league = get_verified_league(
+                api, (d.get("club") or {}).get("name") or (d.get("club") or {}).get("clubName"),
+                CLUB_ID,
+            )
+            if league is not None:
+                d["league"] = _enrich(d.get("league"), league)
+                successes += 1
+            else:
+                log.warning("DOKDO FC ID %s was not in the season leaderboard response", CLUB_ID)
+        except Exception as exc:
+            errors.append(f"current division: {exc}")
+            log.warning("Current division lookup failed: %s", exc)
 
         for kind in MATCH_TYPES:
             try:
