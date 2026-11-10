@@ -176,7 +176,10 @@
 .board-note{font-size:11px;line-height:1.9;color:#91aabd;margin:15px 2px 0}
 .board-fallback{display:inline-block;margin-top:15px;padding:9px 14px;background:#c5f350;color:#0b1a20;font-size:12px;font-weight:800}
 @media(max-width:800px){.nav{gap:8px}.nav button{font-size:10px;letter-spacing:0}.division-pulse{gap:9px;flex-wrap:wrap;padding:12px}.division-pill{width:100%;font-size:9px}.division-number{font-size:34px}.division-detail strong{font-size:12px}.division-pulse>a{font-size:9px}.board-list{grid-template-columns:1fr}.board-intro{padding:17px}.board-intro>strong{font-size:18px}}
+.push-toggle{border:1px solid #53653f;background:#233a36;color:var(--lime);padding:9px 13px;font-size:11px;font-weight:800;white-space:nowrap}.push-toggle:hover{background:#2b4a3e}.push-toggle:disabled{opacity:.55;cursor:not-allowed}.push-hint{font-size:11px;color:#b4cee1;flex-basis:100%;line-height:1.6}.push-toggle[hidden],.push-hint[hidden]{display:none!important}
 </style>
+<link rel="manifest" href="./site.webmanifest">
+<script src="./push/client.js" defer></script>
 </head>
 <body>
 <div class="topline">THE ISLAND. THE PRIDE. THE CLUB. — DOKDO FC / EA SPORTS FC 27</div>
@@ -196,7 +199,7 @@
     </div>
   </div>
 </section>
-<div class="statusline"><span><strong id="statusLead">● SYNC STATUS</strong> &nbsp;<span id="statusDetail">EA 서버에서 팀 기록을 불러오는 중입니다.</span></span><span class="right" id="lastSync">마지막 동기화: 확인 중</span><button class="refresh" id="refresh" type="button">↻ 새로고침</button></div>
+<div class="statusline"><span><strong id="statusLead">● SYNC STATUS</strong> &nbsp;<span id="statusDetail">EA 서버에서 팀 기록을 불러오는 중입니다.</span></span><span class="right" id="lastSync">마지막 동기화: 확인 중</span><button id="pushToggle" class="push-toggle" type="button" hidden>🔔 경기 알림 받기</button><span id="pushHint" class="push-hint" role="status" aria-live="polite" hidden></span><button class="refresh" id="refresh" type="button">↻ 새로고침</button></div>
 <div class="division-pulse" aria-live="polite"><div class="division-pill">🏆 CURRENT DIVISION</div><div id="leagueDivision" class="division-number">—</div><div class="division-detail"><strong id="leagueLabel">현재 소속 디비전 조회 중</strong><span id="leagueStats">EA FC27 클럽 순위표 기반</span></div><a href="https://www.ea.com/games/ea-sports-fc/clubs/overview?clubId=331042&amp;platform=common-gen5" target="_blank" rel="noopener">EA 원본 확인 ↗</a></div>
 <main>
 <section id="view-home" class="section-page active">
