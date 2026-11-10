@@ -109,6 +109,32 @@
  .cards{margin-top:13px}
 }
 @media(max-width:390px){.club-strip-copy h1{font-size:31px}.club-strip-brand>img{width:53px;height:63px}.quick-main{font-size:17px}.quick-score{font-size:21px}.quick-card{padding:10px 9px}.quick-title strong{font-size:13px}}
+/* Detailed player, opponent and goalkeeper statistics */
+.gk-feature{margin:19px 0 12px;background:linear-gradient(120deg,#102737,#142b2a);border:1px solid #38595e;padding:20px}
+.gk-top{display:flex;justify-content:space-between;align-items:end;gap:14px;margin-bottom:13px}
+.gk-top h2{font-family:'Barlow Condensed','Noto Sans KR';font-weight:900;font-size:28px;margin:0}
+.gk-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.gk-card{border:1px solid #4a6970;background:#122537;text-align:left;padding:15px;color:#ecf9ff;min-width:0}
+.gk-card:hover{background:#1e3645}
+.gk-card .gk-tag{font-size:9px;letter-spacing:2px;font-weight:900;color:#c5f350}
+.gk-card strong{display:block;font-size:17px;margin:10px 0 13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gk-statline{display:flex;gap:8px;justify-content:space-between}
+.gk-statline div{min-width:0}
+.gk-statline b{display:block;font-family:'Barlow Condensed';font-size:28px;color:#c5f350}
+.gk-statline small{color:#8eacbd;font-size:9px;line-height:1.3}
+.gk-disclaimer{color:#8aa3b5;font-size:10px;line-height:1.6;margin-top:9px}
+.detail-section-title{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 0;border-bottom:1px solid #375161;margin-top:14px}
+.detail-section-title h3{margin:0;font-size:14px}
+.detail-tag{font-size:9px;color:#c5f350;font-weight:900;letter-spacing:1px}
+.match-player-table{min-width:640px}
+.match-player-table td,.match-player-table th{white-space:nowrap;padding:11px 12px;font-size:11px}
+.match-player-table td:nth-child(2){text-align:left}
+.pos-label{color:#b0c4d3;font-weight:700;font-size:10px}
+.event-tags{display:flex;gap:5px;flex-wrap:wrap;margin:10px 0}
+.event-tags span{display:inline-flex;gap:6px;align-items:center;border:1px solid #38546b;background:#172d3b;color:#dcecf4;padding:6px 8px;font-size:10px}
+.event-tags b{color:#c5f350}
+.stats-note{font-size:10px;line-height:1.7;color:#93aabd;margin-top:12px}
+@media(max-width:700px){.gk-feature{padding:12px;margin:14px 0}.gk-top h2{font-size:24px}.gk-grid{grid-template-columns:1fr}.gk-card{padding:12px}.gk-card strong{margin:4px 0 10px}.gk-statline b{font-size:24px}.match-player-table{min-width:585px}.detail-section-title h3{font-size:13px}}
 </style>
 </head>
 <body>
@@ -152,6 +178,11 @@
 <article class="metric"><div class="metric-label">팀 전체 득점</div><div class="metric-value" id="goals">—</div><div class="metric-foot">GOALS SCORED</div></article>
 <article class="metric"><div class="metric-label">스킬 레이팅</div><div class="metric-value" id="rating">—</div><div class="metric-foot">CLUB SKILL RATING</div></article>
 </div>
+<section class="gk-feature">
+<div class="gk-top"><div><div class="kicker">04 / HUMAN GOALKEEPERS</div><h2>🧤 GK 스페셜</h2></div><button class="linkbtn" data-viewgk="1">골키퍼 전체 기록 ↗</button></div>
+<div class="gk-grid" id="keeperHighlights"></div>
+<div class="gk-disclaimer">AI 골키퍼를 제외하기 위해 EA 클럽 명단에 등록된 골키퍼만 집계합니다. 시즌 클린시트와 최근 경기의 선방 횟수는 집계 기간이 다릅니다.</div>
+</section>
 <div class="cards">
 <section class="panel"><header class="panel-title"><div><span>LATEST RESULTS</span><h3>최근 리그 경기</h3></div><button class="linkbtn" data-go="matches">전체 기록 ↗</button></header><div id="recentMatches"></div></section>
 <section class="panel"><header class="panel-title"><div><span>STAR PERFORMERS</span><h3>우리 팀 TOP 5</h3></div><button class="linkbtn" data-go="players">선수 전체 ↗</button></header><div class="tabs" role="group" aria-label="랭킹 기준"><button class="active" data-rank="goals">득점왕</button><button data-rank="assists">도움왕</button><button data-rank="ratingAve">평점왕</button></div><div id="topPlayers"></div></section>
@@ -163,7 +194,7 @@
 </section>
 <section id="view-players" class="section-page">
 <div class="title-row"><div><div class="kicker">03 / THE SQUAD</div><h2>선수 랭킹</h2></div><span class="subtitle" id="playerCount">0 PLAYERS</span></div>
-<section class="panel"><div class="filters"><button class="active" data-sort="goals">득점순</button><button data-sort="assists">도움순</button><button data-sort="ratingAve">평점순</button><button data-sort="gamesPlayed">출전순</button></div><div class="table-scroll"><table class="data-table"><thead><tr><th>선수</th><th>출전</th><th>득점</th><th>도움</th><th>평점</th><th>MVP</th></tr></thead><tbody id="playerTable"></tbody></table></div></section>
+<section class="panel"><div class="filters"><button class="active" data-sort="goals">득점순</button><button data-sort="assists">도움순</button><button data-sort="ratingAve">평점순</button><button data-sort="gamesPlayed">출전순</button><button data-sort="goalkeeper">🧤 GK 기록</button></div><div class="table-scroll"><table class="data-table"><thead id="playerThead"><tr><th>선수</th><th>출전</th><th>득점</th><th>도움</th><th>평점</th><th>MVP</th></tr></thead><tbody id="playerTable"></tbody></table></div></section>
 </section>
 </main>
 
@@ -192,7 +223,29 @@ function renderNumbers(){const s=data.overall||{},games=num(s.gamesPlayed),wins=
 function renderMatches(){const league=matches().filter(m=>m.matchType==='leagueMatch');$('recentMatches').innerHTML=league.length?league.slice(0,6).map(matchMarkup).join(''):empty('아직 수집된 경기가 없습니다','리그 경기 데이터가 연동되면 이 자리에 승패·상대·득점이 표시됩니다.');const all=matches().filter(m=>m.matchType===kind);$('allMatches').innerHTML=all.length?all.map(matchMarkup).join(''):empty('보관된 경기 이력이 없습니다','새로 수집된 경기부터 자동으로 누적 저장됩니다.');$('matchCount').textContent=all.length+' MATCHES'}
 function ranked(field){return [...members()].sort((a,b)=>(num(b[field])??-Infinity)-(num(a[field])??-Infinity)||String(a.name).localeCompare(String(b.name)))}
 function renderRank(){const top=ranked(rank).slice(0,5);$('topPlayers').innerHTML=top.length?top.map((m,i)=>'<button class="player-row" data-player="'+E(encodeURIComponent(String(m.name||'')))+'"><span class="place">'+String(i+1).padStart(2,'0')+'</span><span class="avatar">'+E(String(m.name||'?').slice(0,1).toUpperCase())+'</span><span class="pn">'+E(val(m.name,'선수 이름 미상'))+'<small>'+E(val(m.favoritePosition||m.proPos,'DOKDO FC PLAYER'))+'</small></span><span class="pv">'+fmt(m[rank],rank==='ratingAve'?1:0)+'</span></button>').join(''):empty('선수 기록을 기다리고 있습니다','연동 후 득점왕·도움왕·평점왕 순위가 자동 계산됩니다.')}
-function renderPlayers(){const ms=ranked(sort);$('playerCount').textContent=ms.length+' PLAYERS';$('playerTable').innerHTML=ms.length?ms.map((m,i)=>'<tr data-player="'+E(encodeURIComponent(String(m.name||'')))+'"><td><span class="index">'+String(i+1).padStart(2,'0')+'</span><strong>'+E(val(m.name,'이름 없음'))+'</strong></td><td>'+fmt(m.gamesPlayed)+'</td><td>'+fmt(m.goals)+'</td><td>'+fmt(m.assists)+'</td><td>'+fmt(m.ratingAve,1)+'</td><td>'+fmt(m.manOfTheMatch)+'</td></tr>').join(''):'<tr><td colspan="6">'+empty('선수 기록이 없습니다','EA 선수 통계가 수집되면 여기에 자동 표시됩니다.')+'</td></tr>'}
+function isGoalkeeper(p){return /^(goalkeeper|gk)$/i.test(String(p.position||p.favoritePosition||p.proPos||'').trim())}
+function humanName(p){return !!String(p?.name||p?.playerName||'').trim()&&!/^(AI|CPU|COM|BOT|VIRTUAL PRO AI)$/i.test(String(p.name||p.playerName||'').trim())}
+function confirmedHuman(p,team){return Number(p?.playerId)>0&&humanName(p)&&(team!=='ours'||members().some(m=>String(m.name||'').toLowerCase()===String(p.name||'').toLowerCase()))}
+function gkList(){
+  const gks=new Map(members().filter(isGoalkeeper).filter(humanName).map(m=>[String(m.name).toLowerCase(),{...m,archivedSaves:0,archivedMatches:0,archivedCorrectDives:0}]));
+  matches().forEach(m=>(m.players||[]).forEach(p=>{
+    const row=gks.get(String(p.name||'').toLowerCase());
+    if(row&&isGoalkeeper(p)&&confirmedHuman(p,'ours')){
+      row.archivedSaves+=num(p.saves)??0;row.archivedMatches+=1;row.archivedCorrectDives+=num(p.goodDirectionSaves)??0;
+    }
+  }));
+  return [...gks.values()].sort((a,b)=>(num(b.cleanSheetsGK)??0)-(num(a.cleanSheetsGK)??0)||b.archivedSaves-a.archivedSaves);
+}
+function renderGK(){
+  const arr=gkList();
+  $('keeperHighlights').innerHTML=arr.length?arr.slice(0,3).map((p,i)=>'<button class="gk-card" data-player="'+E(encodeURIComponent(String(p.name)))+'"><span class="gk-tag">GK '+String(i+1).padStart(2,'0')+'</span><strong>'+E(p.name)+'</strong><div class="gk-statline"><div><b>'+fmt(p.cleanSheetsGK)+'</b><small>시즌 클린시트</small></div><div><b>'+fmt(p.archivedSaves)+'</b><small>기록된 선방</small></div><div><b>'+fmt(p.ratingAve,1)+'</b><small>시즌 평점</small></div></div></button>').join(''):empty('골키퍼 기록 없음','EA 클럽 멤버로 확인되는 실제 GK만 표시합니다.');
+}
+function renderPlayers(){
+ const isGK=sort==='goalkeeper',ms=isGK?gkList():ranked(sort);
+ $('playerCount').textContent=ms.length+(isGK?' HUMAN GKs':' PLAYERS');
+ $('playerThead').innerHTML=isGK?'<tr><th>선수</th><th>출전</th><th>클린시트</th><th>기록된 선방</th><th>평점</th><th>MVP</th></tr>':'<tr><th>선수</th><th>출전</th><th>득점</th><th>도움</th><th>평점</th><th>MVP</th></tr>';
+ $('playerTable').innerHTML=ms.length?ms.map((m,i)=>'<tr data-player="'+E(encodeURIComponent(String(m.name||'')))+'"><td><span class="index">'+String(i+1).padStart(2,'0')+'</span><strong>'+E(val(m.name,'이름 없음'))+'</strong></td><td>'+fmt(m.gamesPlayed)+'</td><td>'+fmt(isGK?m.cleanSheetsGK:m.goals)+'</td><td>'+fmt(isGK?m.archivedSaves:m.assists)+'</td><td>'+fmt(m.ratingAve,1)+'</td><td>'+fmt(m.manOfTheMatch)+'</td></tr>').join(''):'<tr><td colspan="6">'+empty('선수 기록 없음','EA에서 확인된 선수 데이터를 기다리고 있습니다.')+'</td></tr>';
+}
 function renderSpotlight(){
   const league=matches().filter(m=>m.matchType==='leagueMatch').sort((a,b)=>Number(b.timestamp||0)-Number(a.timestamp||0));
   const m=league[0],p=ranked('goals')[0];
@@ -209,12 +262,12 @@ function renderSpotlight(){
     $('spotPlayer').innerHTML='<div class="quick-detail"><span class="quick-main">기록 수집 대기</span><span class="quick-sub">선수 득점 기록을 불러오는 중</span></div>';
   }
 }
-function render(){renderMeta();renderNumbers();renderSpotlight();renderMatches();renderRank();renderPlayers()}
+function render(){renderMeta();renderNumbers();renderSpotlight();renderMatches();renderRank();renderGK();renderPlayers()}
 function showPage(p){page=['home','matches','players'].includes(p)?p:'home';document.querySelectorAll('.section-page').forEach(e=>e.classList.toggle('active',e.id==='view-'+page));document.querySelectorAll('[data-go]').forEach(e=>e.classList.toggle('active',e.dataset.go===page));history.replaceState(null,'','#'+page);window.scrollTo({top:0,behavior:'smooth'})}
 function openDetails(label,title,body){$('detailLabel').textContent=label;$('detailTitle').textContent=title;$('detailBody').innerHTML=body;$('details').showModal()}
 function matchDetails(encoded){let key;try{key=decodeURIComponent(encoded)}catch{return}const m=matches().find((x,i)=>String(x.matchType??'')+':'+String(x.matchId??i)===key);if(!m)return;const club=val(data.club?.name,'DOKDO FC');const pp=Array.isArray(m.players)?m.players:[];const body='<div class="detail-score"><strong>'+E(club)+'</strong><span>'+fmt(m.goals)+' : '+fmt(m.goalsAgainst)+'</span><strong>'+E(val(m.opponentName,'상대팀'))+'</strong></div><div class="detail-grid"><div><small>결과</small><strong>'+outcomeLetter[outcome(m)]+'</strong></div><div><small>경기 날짜</small><strong>'+E(mdate(m))+'</strong></div><div><small>종류</small><strong>'+E(KINDS[m.matchType]||'MATCH')+'</strong></div></div><h3 class="detail-heading">출전 선수 기록</h3>'+(pp.length?'<div class="table-scroll"><table class="data-table"><thead><tr><th>선수</th><th>골</th><th>도움</th><th>평점</th></tr></thead><tbody>'+pp.map(p=>'<tr><td>'+E(val(p.name||p.playerName,'선수'))+'</td><td>'+fmt(p.goals)+'</td><td>'+fmt(p.assists)+'</td><td>'+fmt(p.rating,1)+'</td></tr>').join('')+'</tbody></table></div>':empty('세부 선수 기록 없음','EA에서 이 경기의 출전 선수별 기록을 반환하지 않았습니다.'));openDetails('MATCH CENTER','vs. '+val(m.opponentName,'상대팀'),body)}
 function playerDetails(encoded){let name;try{name=decodeURIComponent(encoded)}catch{return}const m=members().find(x=>String(x.name||'')===name);if(!m)return;const career=(Array.isArray(data.career)?data.career:[]).find(x=>x.name===name)||{};const vals=[['출전',m.gamesPlayed],['골',m.goals],['도움',m.assists],['평점',m.ratingAve],['MVP',m.manOfTheMatch],['커리어 득점',career.goals]];const body='<div class="detail-grid">'+vals.map(([label,v])=>'<div><small>'+E(label)+'</small><strong>'+fmt(v,label==='평점'?1:0)+'</strong></div>').join('')+'</div><p class="stat-note">클럽 기록은 EA가 제공한 통계 기준입니다.</p>';openDetails('PLAYER PROFILE',name,body)}
 async function refresh(){const b=$('refresh');b.disabled=true;try{const res=await fetch('./data/dashboard.json?ts='+Date.now(),{cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status);const next=await res.json();if(next.clubId!==331042)throw new Error('다른 클럽 데이터');data=next;render()}catch(e){$('dot').className='light fail';$('syncState').textContent='데이터 조회 실패';$('statusDetail').textContent='게시된 데이터 파일을 읽지 못했습니다. 잠시 뒤 다시 시도해 주세요.';console.warn('DOKDO FC data fetch:',e)}finally{b.disabled=false}}
-document.addEventListener('click',e=>{const go=e.target.closest('[data-go]');if(go){showPage(go.dataset.go);return}const r=e.target.closest('[data-rank]');if(r){rank=r.dataset.rank;document.querySelectorAll('[data-rank]').forEach(el=>el.classList.toggle('active',el===r));renderRank();return}const k=e.target.closest('[data-kind]');if(k){kind=k.dataset.kind;document.querySelectorAll('[data-kind]').forEach(el=>el.classList.toggle('active',el===k));renderMatches();return}const s=e.target.closest('[data-sort]');if(s){sort=s.dataset.sort;document.querySelectorAll('[data-sort]').forEach(el=>el.classList.toggle('active',el===s));renderPlayers();return}const p=e.target.closest('[data-player]');if(p){playerDetails(p.dataset.player);return}const m=e.target.closest('[data-match]');if(m){matchDetails(m.dataset.match)}});$('closeDetail').addEventListener('click',()=>$('details').close());$('details').addEventListener('click',e=>{if(e.target===$('details'))$('details').close()});$('refresh').addEventListener('click',refresh);showPage(location.hash.slice(1));refresh();setInterval(refresh,60000);
+document.addEventListener('click',e=>{const go=e.target.closest('[data-go]');if(go){showPage(go.dataset.go);return}const r=e.target.closest('[data-rank]');if(r){rank=r.dataset.rank;document.querySelectorAll('[data-rank]').forEach(el=>el.classList.toggle('active',el===r));renderRank();return}const k=e.target.closest('[data-kind]');if(k){kind=k.dataset.kind;document.querySelectorAll('[data-kind]').forEach(el=>el.classList.toggle('active',el===k));renderMatches();return}const s=e.target.closest('[data-sort]');if(s){sort=s.dataset.sort;document.querySelectorAll('[data-sort]').forEach(el=>el.classList.toggle('active',el===s));renderPlayers();return}const g=e.target.closest('[data-viewgk]');if(g){sort='goalkeeper';document.querySelectorAll('[data-sort]').forEach(el=>el.classList.toggle('active',el.dataset.sort==='goalkeeper'));showPage('players');renderPlayers();return}const p=e.target.closest('[data-player]');if(p){playerDetails(p.dataset.player);return}const m=e.target.closest('[data-match]');if(m){matchDetails(m.dataset.match)}});$('closeDetail').addEventListener('click',()=>$('details').close());$('details').addEventListener('click',e=>{if(e.target===$('details'))$('details').close()});$('refresh').addEventListener('click',refresh);showPage(location.hash.slice(1));refresh();setInterval(refresh,60000);
 </script>
 </body></html>
