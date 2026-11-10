@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 294">
+<defs><linearGradient id="n" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#122d3e"/><stop offset="1" stop-color="#081525"/></linearGradient><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e2ff68"/><stop offset="1" stop-color="#b1ed20"/></linearGradient></defs>
+<path d="M128 7L247 49V198Q243 227 128 286Q13 227 9 198V49Z" fill="url(#g)"/>
+<path d="M128 19L236 57V192Q233 219 128 274Q23 219 20 192V57Z" fill="url(#n)"/>
+<path d="M42 98L62 88L77 69L93 81L109 59L130 91L144 73L166 97L180 83L204 101" fill="none" stroke="#effaff" stroke-width="3"/>
+<path d="M39 109Q129 126 213 109" stroke="#5ed9e5" stroke-width="3" fill="none"/>
+<text x="128" y="171" text-anchor="middle" font-family="Arial Black,Impact,Arial,sans-serif" font-size="86" font-weight="900" font-style="italic" textLength="198" lengthAdjust="spacingAndGlyphs" fill="#fff">DFC</text>
+<path d="M45 184H210" stroke="#c6f13c" stroke-width="6"/>
+<text x="128" y="210" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" font-weight="900" letter-spacing="1.2" fill="#f5fff8">DOKDO FC</text>
+<path d="M69 222H187" stroke="#70deee" stroke-width="2" opacity=".7"/>
+<circle cx="128" cy="242" r="10" fill="#d5f5fb"/><path d="M128 235L134 239L132 245H124L122 239Z" fill="#081b2a"/>
+</svg>
