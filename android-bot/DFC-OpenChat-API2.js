@@ -116,6 +116,16 @@ bot.addListener(Event.MESSAGE,function(msg){
  if(msg.packageName && msg.packageName!=="com.kakao.talk")return;
  if(!isRoom(msg.room))return;
  var cmd=String(msg.content||"").trim();
+ if(cmd==="!경기시작"||cmd.indexOf("!경기시작 ")===0){
+   if(!owner(msg)){msg.reply("경기 시작 알림은 등록된 관리자만 사용할 수 있습니다.");return;}
+   var opponent=cmd.substring("!경기시작".length).trim();
+   msg.reply("🔴 DOKDO FC 경기 시작!\n⚽ DFC 출격 · EA FC27 PRO CLUBS\n"+
+      (opponent?"⚔️ 상대팀: "+opponent+"\n":"")+
+      "🔥 ONE TEAM. ONE PRIDE. ONE LEGACY.\n"+
+      "📊 경기 종료 후 상세 기록: "+SITE_URL+"#matches\n"+
+      "※ 이 메시지는 방장의 수동 시작 명령으로 발송되었습니다.");
+   return;
+ }
  if(cmd==="!DFC등록"){
    var key=senderKey(msg);
    if(!key || key==="name:"){msg.reply("등록 실패: 발신자 정보를 확인할 수 없습니다.");return;}
