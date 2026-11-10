@@ -2,9 +2,10 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from datetime import datetime, timezone
 
 from collect import (
-    CLUB_ID, PLATFORM, base, collect, key, merge, merge_members,
+    CLUB_ID, PLATFORM, base, collect, key, merge, merge_members, _same,
 )
 
 
@@ -74,6 +75,14 @@ class CollectorTests(unittest.TestCase):
         self.assertEqual(saved[0]["players"][0]["rating"], 9.1)
         self.assertEqual(saved[0]["players"][0]["throughBallAssists"], 1)
         self.assertEqual(saved[0]["opponentPlayers"][0]["passesCompletedCross"], 4)
+
+    def test_iso_datetime_is_same_as_saved_timestamp(self):
+        # FC27 client supplies datetime; GitHub JSON stores ISO strings.
+        instant = datetime(2026, 11, 10, 1, 55, 1, tzinfo=timezone.utc)
+        self.assertTrue(_same(
+            {"matchId": 20, "timestamp": instant},
+            {"timestamp": instant.isoformat(), "matchId": 20},
+        ))
 
     def test_members_do_not_disappear(self):
         prior = [{"name": "FORMER", "goals": 8, "cleanSheetsGK": 1},
