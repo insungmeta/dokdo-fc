@@ -19,6 +19,7 @@ var state = Database.readObject(STATE_FILE) || {room:null,enabled:false,initiali
 if (!Array.isArray(state.seen)) state.seen=[];
 var currentData = null;
 var busy = false;
+var delayedTestPending = false;
 function persist(){ Database.writeObject(STATE_FILE, state); }
 function senderKey(msg){
   var user=msg.author||{};
@@ -142,6 +143,21 @@ bot.addListener(Event.MESSAGE,function(msg){
    var usable=bot.canReply(String(msg.room),"com.kakao.talk");
    msg.reply("🤖 DFC 테스트 응답 성공!\n알림 세션: "+(usable?"확보":"없음")+"\n최신 데이터: "+(currentData?"읽음":"대기")+"\n경기 기록: "+(currentData&&currentData.matches?currentData.matches.length:0)+"개\n"+
    (usable?"기본 응답 경로가 준비됐습니다. 실제 새 경기 알림은 다음 경기에서 확인할 수 있습니다.":"봇용 계정의 카카오톡 알림 설정을 확인해 주세요."));
+   return;
+ }
+ if(cmd==="!DFC예약테스트"){
+   if(!owner(msg)){msg.reply("예약 발송 테스트는 봇 관리자만 실행할 수 있습니다.");return;}
+   if(delayedTestPending){msg.reply("이미 1분 뒤 발송 테스트가 예약되어 있습니다.");return;}
+   if(!state.room){msg.reply("먼저 !DFC등록 을 입력해 주세요.");return;}
+   delayedTestPending=true;
+   msg.reply("⏰ 1분 후 DFC 예약 테스트 메시지가 자동 전송됩니다.\n이 메시지가 아닌 1분 뒤의 새 메시지가 오는지 확인하세요.");
+   setTimeout(function(){
+     delayedTestPending=false;
+     try{
+       var ok=bot.send(state.room,"🧪 DFC 예약 발송 테스트 성공!\n태블릿에서 시간 경과 후에도 카톡방에 자동 발송할 수 있습니다.","com.kakao.talk");
+       console.info("[DFC] delayed send session available: "+String(ok));
+     }catch(e){console.warn("[DFC] delayed send failed: "+String(e));}
+   },60000);
    return;
  }
  if(cmd==="!DFC상태"){
