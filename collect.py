@@ -178,7 +178,18 @@ def merge(old, incoming):
 
 
 def _same(old, new):
-    return old == new
+    """Compare saved JSON values, not transient Python datetime objects.
+
+    EA records return timestamp as datetime but our files contain ISO strings.
+    A plain Python comparison wrongly archived all 10 games every single poll.
+    Canonical JSON prevents phantom revisions and unbounded false duplicates.
+    """
+    def normalize(value):
+        return json.dumps(
+            value, ensure_ascii=False, default=serialized,
+            sort_keys=True, separators=(",", ":"),
+        )
+    return normalize(old) == normalize(new)
 
 
 def _diff_members(old, new):
