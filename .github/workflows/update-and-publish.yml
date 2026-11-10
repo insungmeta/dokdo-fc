@@ -35,6 +35,8 @@ jobs:
         run: |
           python -m json.tool data/dashboard.json > /dev/null
           python -m json.tool data/history.json > /dev/null
+      - name: Monitor long-term archive storage without deleting any records
+        run: python tools/check_storage.py
       - name: Persist match and all changing player stats
         run: |
           git config user.name "github-actions[bot]"
