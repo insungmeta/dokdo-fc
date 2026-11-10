@@ -1,5 +1,8 @@
 # DOKDO FC 카카오 오픈채팅 자동 알림봇 (0원 실험 버전)
 
+> ⚠️ **Google Play 프로텍트가 메신저봇R 설치를 차단했다면 억지로 설치하지 마세요.** 대신 [플레이스토어 MacroDroid 안전 대안 및 1차 테스트 가이드](./PLAY-STORE-ALTERNATIVE.md)를 이용하세요. 현재 페이지의 API2 코드는 MacroDroid에 그대로 붙여넣을 수 없습니다.
+
+
 이 디렉터리는 Android **메신저봇R API2**용 스크립트입니다. 별도 서버 요금은 없으며 DOKDO FC 홈페이지의 공개 JSON을 5분마다 확인합니다.
 
 - 스크립트: [DFC-OpenChat-API2.js](./DFC-OpenChat-API2.js)
