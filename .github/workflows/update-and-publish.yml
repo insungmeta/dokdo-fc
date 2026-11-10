@@ -2,7 +2,7 @@ name: Refresh DOKDO FC and publish
 on:
   workflow_dispatch:
   schedule:
-    - cron: '17,47 * * * *'
+    - cron: '7,17,27,37,47,57 * * * *'
   push:
     branches:
       - main
@@ -27,15 +27,19 @@ jobs:
           cache: pip
       - name: Install unofficial EA reader
         run: pip install -r requirements.txt
+      - name: Verify archive never deletes earlier records
+        run: python -m unittest discover -s tests -v
       - name: Collect live FC27 records
         run: python collect.py
-      - name: Check archived JSON
-        run: python -m json.tool data/dashboard.json > /dev/null
-      - name: Persist match history
+      - name: Check both permanent archives
+        run: |
+          python -m json.tool data/dashboard.json > /dev/null
+          python -m json.tool data/history.json > /dev/null
+      - name: Persist match and all changing player stats
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/dashboard.json
+          git add data/dashboard.json data/history.json
           if ! git diff --cached --quiet; then
             git commit -m "Update DOKDO FC stats [skip ci]"
             git push origin HEAD:main
