@@ -15,10 +15,18 @@ var SITE_URL = "https://insungmeta.github.io/dokdo-fc/";
 var STATE_FILE = "dfc-bot-state.json";
 var POLL_MS = 5 * 60 * 1000;
 var MAX_PER_CHECK = 3;
-var state = Database.readObject(STATE_FILE) || {room:null,enabled:false,initialized:false,seen:[]};
+var state = Database.readObject(STATE_FILE) || {room:null,enabled:false,initialized:false,seen:[],adminKey:null,adminName:null,lastSuccess:null,lastError:null};
+if (!Array.isArray(state.seen)) state.seen=[];
 var currentData = null;
 var busy = false;
 function persist(){ Database.writeObject(STATE_FILE, state); }
+function senderKey(msg){
+  var user=msg.author||{};
+  var hash=user.hash||user.userHash;
+  return hash ? ("hash:"+String(hash)) : ("name:"+String(user.name||""));
+}
+function owner(msg){return !!state.adminKey && state.adminKey===senderKey(msg);}
+function senderName(msg){return String(msg.author&&msg.author.name||"관리자");}
 function isRoom(room){ return String(room||"").toLowerCase().trim() === String(REQUIRED_ROOM).toLowerCase().trim(); }
 function seen(id){ return state.seen.indexOf(String(id)) !== -1; }
 function key(m){ return String(m.matchType || "leagueMatch")+":"+String(m.matchId); }
@@ -75,13 +83,13 @@ function poll(){
   Http.request({url:DATA_URL+"?t="+Date.now(),method:"GET",timeout:12000,
    headers:{"Accept":"application/json"}}, function(err,response,doc){
     busy=false;
-    if(err){console.warn("[DFC] Fetch error: "+err);return;}
+    if(err){state.lastError=String(err);persist();console.warn("[DFC] Fetch error: "+err);return;}
     try{
       var d=JSON.parse(String(response.body()));
-      updateMatches(d);
-    }catch(e){console.warn("[DFC] Parse error: "+e);}
+      state.lastSuccess=new Date().toISOString();state.lastError=null;persist();updateMatches(d);
+    }catch(e){state.lastError=String(e);persist();console.warn("[DFC] Parse error: "+e);}
    });
- }catch(e){busy=false;console.warn("[DFC] Request error: "+e);}
+ }catch(e){busy=false;state.lastError=String(e);persist();console.warn("[DFC] Request error: "+e);}
 }
 function replyStats(msg,d){
  if(!d){msg.reply("⚽ DFC: 통계가 아직 로드되지 않았습니다. 잠시 후 다시 입력해 주세요.");poll();return;}
@@ -108,20 +116,43 @@ bot.addListener(Event.MESSAGE,function(msg){
  if(!isRoom(msg.room))return;
  var cmd=String(msg.content||"").trim();
  if(cmd==="!DFC등록"){
+   var key=senderKey(msg);
+   if(!key || key==="name:"){msg.reply("등록 실패: 발신자 정보를 확인할 수 없습니다.");return;}
+   if(state.adminKey && !owner(msg)){msg.reply("이미 등록된 관리자만 봇을 다시 등록할 수 있습니다.");return;}
+   state.adminKey=key;
+   state.adminName=senderName(msg);
    state.room=String(msg.room);state.enabled=false;state.initialized=false;
-   // Seed first; operator must explicitly enable alerts afterward.
+   // No automatic backfill when registering. Owner explicitly enables alerts.
    persist();poll();
-   msg.reply("✅ DFC 봇 방 연결 완료\n과거 경기 중복 알림을 막기 위해 기록을 먼저 등록합니다. 잠시 후 !DFC켜기 를 입력해 주세요.");
+   msg.reply("✅ DFC 봇 등록 완료 ("+state.adminName+")\n예전 경기는 알리지 않습니다. 데이터 초기화 후 !DFC켜기 를 입력하세요.");
    return;
  }
  if(cmd==="!DFC켜기"){
+   if(!owner(msg)){msg.reply("봇 등록 관리자만 설정을 변경할 수 있습니다.");return;}
    if(!state.room){msg.reply("먼저 !DFC등록 을 입력해 주세요.");return;}
    if(!state.initialized){msg.reply("통계 초기화 중입니다. 잠시 후 다시 입력해 주세요.");poll();return;}
-   state.enabled=true;persist();msg.reply("🟢 DFC 경기 종료 알림 활성화! 새로운 경기 기록이 게시되면 자동 전송합니다. 경기 시작 실시간 알림은 지원하지 않습니다.");
+   state.enabled=true;persist();msg.reply("🟢 DFC 경기 종료 알림 ON! 새로운 결과가 홈페이지에 게시되면 자동 전송을 시도합니다. 경기 시작 알림은 지원하지 않습니다.");
    return;
  }
- if(cmd==="!DFC끄기"){state.enabled=false;persist();msg.reply("🔕 DFC 자동 알림 중지");return;}
- if(cmd==="!DFC상태"){msg.reply("DFC 봇: "+(state.enabled?"ON":"OFF")+"\n초기화: "+(state.initialized?"완료":"대기")+"\n저장된 경기 ID: "+state.seen.length+"개\n조회 간격: 5분(데이터 갱신은 약 30분 주기)");return;}
+ if(cmd==="!DFC끄기"){
+   if(!owner(msg)){msg.reply("봇 등록 관리자만 설정을 변경할 수 있습니다.");return;}
+   state.enabled=false;persist();msg.reply("🔕 DFC 자동 알림 중지");return;
+ }
+ if(cmd==="!DFC테스트"){
+   var usable=bot.canReply(String(msg.room),"com.kakao.talk");
+   msg.reply("🤖 DFC 테스트 응답 성공!\n알림 세션: "+(usable?"확보":"없음")+"\n최신 데이터: "+(currentData?"읽음":"대기")+"\n경기 기록: "+(currentData&&currentData.matches?currentData.matches.length:0)+"개\n"+
+   (usable?"기본 응답 경로가 준비됐습니다. 실제 새 경기 알림은 다음 경기에서 확인할 수 있습니다.":"봇용 계정의 카카오톡 알림 설정을 확인해 주세요."));
+   return;
+ }
+ if(cmd==="!DFC상태"){
+   msg.reply("DFC 봇: "+(state.enabled?"ON":"OFF")+"\n관리자: "+String(state.adminName||"미등록")+
+   "\n초기화: "+(state.initialized?"완료":"대기")+
+   "\n저장된 경기 ID: "+state.seen.length+"개"+
+   "\n마지막 조회: "+String(state.lastSuccess||"없음")+
+   "\n조회 오류: "+String(state.lastError||"없음")+
+   "\n조회 간격: 5분 (EA 원본은 약 30분 간격으로 갱신)");
+   return;
+ }
  if(["!전적","!최근경기","!득점왕","!도움왕","!골키퍼"].indexOf(cmd)>=0){replyStats(msg,currentData);}
 });
 setInterval(poll,POLL_MS);
