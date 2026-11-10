@@ -135,6 +135,21 @@
 .event-tags b{color:#c5f350}
 .stats-note{font-size:10px;line-height:1.7;color:#93aabd;margin-top:12px}
 @media(max-width:700px){.gk-feature{padding:12px;margin:14px 0}.gk-top h2{font-size:24px}.gk-grid{grid-template-columns:1fr}.gk-card{padding:12px}.gk-card strong{margin:4px 0 10px}.gk-statline b{font-size:24px}.match-player-table{min-width:585px}.detail-section-title h3{font-size:13px}}
+/* Permanent stats archive */
+.archive-notice{border-bottom:1px solid #2b4053;background:#0b1d2b;color:#aac1d2;padding:13px 20px;font-size:11px;line-height:1.7}
+.stat-history{background:#102233;border:1px solid #365166;padding:19px 21px;margin-top:18px}
+.stat-history summary{list-style:none;cursor:pointer;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:space-between;gap:13px}
+.stat-history summary::-webkit-details-marker{display:none}
+.stat-history summary span{font-weight:500;color:#a9bfcd;font-size:10px}
+.stat-history p{font-size:11px;line-height:1.8;color:#9ab4c7}
+.stat-history a{color:#c5f350}
+.history-feed{margin-top:17px;display:grid;gap:8px}
+.history-item{background:#152d40;border:1px solid #36566b;padding:14px}
+.history-item time{display:block;color:#c5f350;font-size:10px;letter-spacing:.4px;margin-bottom:7px}
+.history-item strong{font-size:12px;font-weight:800}
+.history-item div{margin-top:7px;font-size:11px;color:#a0b7ca;line-height:1.6}
+.history-more{background:#c5f350;color:#102718;border:0;font-weight:900;font-size:11px;padding:10px 15px;margin-top:10px}
+@media(max-width:650px){.stat-history{padding:14px 12px}.stat-history summary{font-size:12px;flex-wrap:wrap}.stat-history summary span{font-size:9px}.archive-notice{font-size:10px;padding:11px}}
 </style>
 </head>
 <body>
@@ -190,11 +205,18 @@
 </section>
 <section id="view-matches" class="section-page">
 <div class="title-row"><div><div class="kicker">02 / MATCH CENTER</div><h2>경기 아카이브</h2></div><span class="subtitle" id="matchCount">0 MATCHES</span></div>
-<section class="panel"><div class="filters"><button class="active" data-kind="leagueMatch">리그</button><button data-kind="friendlyMatch">친선 경기</button><button data-kind="playoffMatch">플레이오프</button></div><div id="allMatches"></div></section>
+<section class="panel"><div class="filters"><button class="active" data-kind="all">전체 누적</button><button data-kind="leagueMatch">리그</button><button data-kind="friendlyMatch">친선 경기</button><button data-kind="playoffMatch">플레이오프</button></div><div class="archive-notice">📚 최근 조회된 10경기에 한정하지 않고 앞으로 수집되는 모든 경기 기록을 영구 누적합니다. 리그·친선·플레이오프 기록은 각각 보존합니다.</div><div id="allMatches"></div></section>
 </section>
 <section id="view-players" class="section-page">
 <div class="title-row"><div><div class="kicker">03 / THE SQUAD</div><h2>선수 랭킹</h2></div><span class="subtitle" id="playerCount">0 PLAYERS</span></div>
 <section class="panel"><div class="filters"><button class="active" data-sort="goals">득점순</button><button data-sort="assists">도움순</button><button data-sort="ratingAve">평점순</button><button data-sort="gamesPlayed">출전순</button><button data-sort="manOfTheMatch">🏅 MVP순</button><button data-sort="goalkeeper">🧤 GK 기록</button></div><div class="table-scroll"><table class="data-table"><thead id="playerThead"><tr><th>선수</th><th>출전</th><th>득점</th><th>도움</th><th>평점</th><th>MVP</th></tr></thead><tbody id="playerTable"></tbody></table></div></section>
+<details class="stat-history" id="statHistory">
+  <summary>📈 과거 팀·선수 통계 변화 이력 <span>삭제하지 않고 누적 보관</span></summary>
+  <p>득점·도움·MVP·평점·GK 클린시트·팀 전적 등 기록이 변할 때마다 그 시점의 데이터가 남습니다. 예전 선수가 명단에서 사라져도 과거 통계를 보관합니다.</p>
+  <div class="history-feed" id="historyFeed">이력 목록을 불러오는 중입니다.</div>
+  <button type="button" id="historyMore" class="history-more" hidden>이전 변경 기록 더 보기</button>
+  <p><a href="./data/history.json" target="_blank" rel="noopener">누적 통계 원본 파일 확인 ↗</a></p>
+</details>
 </section>
 </main>
 
@@ -209,7 +231,7 @@ const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt
 const num=v=>v===null||v===undefined||v===''||!Number.isFinite(Number(v))?null:Number(v);
 const fmt=(v,dec=0)=>num(v)===null?'—':num(v).toLocaleString('ko-KR',{maximumFractionDigits:dec});
 const val=(v,fallback='—')=>v===null||v===undefined||v===''?fallback:String(v);
-let data={club:null,overall:null,members:[],matches:[],career:[],sync:{}},page='home',kind='leagueMatch',rank='goals',sort='goals';
+let data={club:null,overall:null,members:[],matches:[],career:[],sync:{}},page='home',kind='all',rank='goals',sort='goals';
 const KINDS={leagueMatch:'LEAGUE',friendlyMatch:'FRIENDLY',playoffMatch:'PLAYOFF'};
 const members=()=>Array.isArray(data.members)?data.members.filter(x=>x&&typeof x==='object'):[];
 const matches=()=>Array.isArray(data.matches)?data.matches.filter(x=>x&&typeof x==='object'):[];
@@ -220,7 +242,7 @@ function matchMarkup(m,i){const k=outcome(m);const id=encodeURIComponent(String(
 const empty=(title,sub)=>'<div class="empty"><div class="empty-symbol">DK / 27</div><strong>'+E(title)+'</strong><p>'+E(sub)+'</p></div>';
 function renderMeta(){const s=data.sync||{},ok=!!s.lastSuccess,err=!!s.error;$('dot').className='light '+(ok?'ok':err?'fail':'');$('syncState').textContent=ok?(err?'부분 연동':'기록 동기화됨'):err?'연동 점검 필요':'연동 대기';$('statusLead').textContent=ok?'● DATA CONNECTED':'● SYNC STATUS';$('statusDetail').textContent=err?ok?'일부 요청 실패 · 저장된 기록 표시':'EA 기록 수집이 아직 정상적으로 완료되지 않았습니다.':ok?'수집된 데이터를 표시하고 있습니다.':'자동 수집이 성공하면 실제 경기 기록이 표시됩니다.';$('lastSync').textContent=ok?'마지막 성공: '+new Date(s.lastSuccess).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}):'마지막 성공: 없음';const d=data.club?.divisionNumber;$('division').textContent=d==null?'GEN 5':'DIVISION '+E(d)}
 function renderNumbers(){const s=data.overall||{},games=num(s.gamesPlayed),wins=num(s.wins);$('games').textContent=fmt(games);$('winRate').textContent=games&&wins!==null?Math.round(wins/games*100)+'%':'—';$('record').textContent='W '+fmt(s.wins)+' / D '+fmt(s.ties??s.draws)+' / L '+fmt(s.losses);$('goals').textContent=fmt(s.goals);$('rating').textContent=fmt(s.skillRating)}
-function renderMatches(){const league=matches().filter(m=>m.matchType==='leagueMatch');$('recentMatches').innerHTML=league.length?league.slice(0,6).map(matchMarkup).join(''):empty('아직 수집된 경기가 없습니다','리그 경기 데이터가 연동되면 이 자리에 승패·상대·득점이 표시됩니다.');const all=matches().filter(m=>m.matchType===kind);$('allMatches').innerHTML=all.length?all.map(matchMarkup).join(''):empty('보관된 경기 이력이 없습니다','새로 수집된 경기부터 자동으로 누적 저장됩니다.');$('matchCount').textContent=all.length+' MATCHES'}
+function renderMatches(){const league=matches().filter(m=>m.matchType==='leagueMatch');$('recentMatches').innerHTML=league.length?league.slice(0,6).map(matchMarkup).join(''):empty('아직 수집된 경기가 없습니다','리그 경기 데이터가 연동되면 이 자리에 승패·상대·득점이 표시됩니다.');const all=kind==='all'?matches():matches().filter(m=>m.matchType===kind);$('allMatches').innerHTML=all.length?all.map(matchMarkup).join(''):empty('보관된 경기 이력이 없습니다','새로 수집된 경기부터 자동으로 누적 저장됩니다.');$('matchCount').textContent=all.length+' MATCHES · 누적 보관'}
 function ranked(field){return [...members()].sort((a,b)=>(num(b[field])??-Infinity)-(num(a[field])??-Infinity)||String(a.name).localeCompare(String(b.name)))}
 function renderRank(){const top=ranked(rank).slice(0,5);$('topPlayers').innerHTML=top.length?top.map((m,i)=>'<button class="player-row" data-player="'+E(encodeURIComponent(String(m.name||'')))+'"><span class="place">'+String(i+1).padStart(2,'0')+'</span><span class="avatar">'+E(String(m.name||'?').slice(0,1).toUpperCase())+'</span><span class="pn">'+E(val(m.name,'선수 이름 미상'))+'<small>'+E(val(m.favoritePosition||m.proPos,'DOKDO FC PLAYER'))+'</small></span><span class="pv">'+fmt(m[rank],rank==='ratingAve'?1:0)+'</span></button>').join(''):empty('선수 기록을 기다리고 있습니다','연동 후 득점왕·도움왕·평점왕 순위가 자동 계산됩니다.')}
 function isGoalkeeper(p){return /^(goalkeeper|gk)$/i.test(String(p.position||p.favoritePosition||p.proPos||'').trim())}
@@ -331,6 +353,39 @@ function playerDetails(encoded){
  openDetails('PLAYER PROFILE',name,body);
 }
 async function refresh(){const b=$('refresh');b.disabled=true;try{const res=await fetch('./data/dashboard.json?ts='+Date.now(),{cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status);const next=await res.json();if(next.clubId!==331042)throw new Error('다른 클럽 데이터');data=next;render()}catch(e){$('dot').className='light fail';$('syncState').textContent='데이터 조회 실패';$('statusDetail').textContent='게시된 데이터 파일을 읽지 못했습니다. 잠시 뒤 다시 시도해 주세요.';console.warn('DOKDO FC data fetch:',e)}finally{b.disabled=false}}
+let statHistoryData=null,historyCount=20;
+function makeHistoryNotes(event){
+ const lines=[];
+ if(event.overall){const o=event.overall;lines.push('팀 전적 '+fmt(o.gamesPlayed)+'경기 · '+fmt(o.wins)+'승 · 레이팅 '+fmt(o.skillRating))}
+ if(Array.isArray(event.matches)&&event.matches.length)lines.push('경기별 선수·상대팀 상세 '+event.matches.length+'경기');
+ if(Array.isArray(event.members)&&event.members.length)lines.push('선수 시즌 통계 '+event.members.length+'명');
+ if(Array.isArray(event.career)&&event.career.length)lines.push('선수 커리어 통계 '+event.career.length+'명');
+ if(event.club)lines.push('구단 정보 기록');
+ return lines.length?lines.join(' / '):'변경 기록 보관';
+}
+function showStatHistory(){
+ const target=$('historyFeed'),changes=statHistoryData?.changes;
+ if(!Array.isArray(changes)){target.textContent='보관된 기록을 읽지 못했습니다.';return;}
+ const arr=changes.slice().reverse();
+ target.innerHTML=arr.slice(0,historyCount).map(e=>{
+  const dt=new Date(e.at);
+  const when=Number.isFinite(dt.getTime())?dt.toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}):String(e.at||'날짜 미상');
+  return '<article class="history-item"><time>'+E(when)+'</time><strong>'+E(e.kind==='preserved-baseline'?'최초 데이터 보관':'기록 변경 저장')+'</strong><div>'+E(makeHistoryNotes(e))+'</div></article>'
+ }).join('')||'<div class="history-item">수집된 변경 기록이 없습니다.</div>';
+ $('historyMore').hidden=historyCount>=arr.length;
+}
+async function loadStatHistory(){
+ $('historyFeed').textContent='보관된 기록을 불러오는 중입니다.';
+ try{
+  const response=await fetch('./data/history.json?ts='+Date.now(),{cache:'no-store'});
+  if(!response.ok)throw new Error('HTTP '+response.status);
+  const payload=await response.json();
+  if(payload.clubId!==331042||!Array.isArray(payload.changes))throw new Error('잘못된 클럽 기록');
+  statHistoryData=payload;historyCount=20;showStatHistory();
+ }catch(err){$('historyFeed').textContent='기록 이력을 불러오지 못했습니다. 다시 열어 주세요.';console.warn('History fetch:',err)}
+}
+$('statHistory').addEventListener('toggle',e=>{if(e.target.open&&!statHistoryData)loadStatHistory()});
+$('historyMore').addEventListener('click',()=>{historyCount+=20;showStatHistory()});
 document.addEventListener('click',e=>{const go=e.target.closest('[data-go]');if(go){showPage(go.dataset.go);return}const r=e.target.closest('[data-rank]');if(r){rank=r.dataset.rank;document.querySelectorAll('[data-rank]').forEach(el=>el.classList.toggle('active',el===r));renderRank();return}const k=e.target.closest('[data-kind]');if(k){kind=k.dataset.kind;document.querySelectorAll('[data-kind]').forEach(el=>el.classList.toggle('active',el===k));renderMatches();return}const s=e.target.closest('[data-sort]');if(s){sort=s.dataset.sort;document.querySelectorAll('[data-sort]').forEach(el=>el.classList.toggle('active',el===s));renderPlayers();return}const g=e.target.closest('[data-viewgk]');if(g){sort='goalkeeper';document.querySelectorAll('[data-sort]').forEach(el=>el.classList.toggle('active',el.dataset.sort==='goalkeeper'));showPage('players');renderPlayers();return}const p=e.target.closest('[data-player]');if(p){playerDetails(p.dataset.player);return}const detailP=e.target.closest('[data-detail-player]');if(detailP){matchPlayerDetails(detailP.dataset.detailPlayer,detailP.dataset.detailClub);return}const back=e.target.closest('[data-backmatch]');if(back&&detailMatch){matchDetails(encodeURIComponent(String(detailMatch.matchType)+':'+String(detailMatch.matchId)));return}const m=e.target.closest('[data-match]');if(m){matchDetails(m.dataset.match)}});$('closeDetail').addEventListener('click',()=>$('details').close());$('details').addEventListener('click',e=>{if(e.target===$('details'))$('details').close()});$('refresh').addEventListener('click',refresh);showPage(location.hash.slice(1));refresh();setInterval(refresh,60000);
 </script>
 </body></html>
