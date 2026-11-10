@@ -35,18 +35,80 @@
 @media(max-width:540px){.wrap{padding:0 16px}.topline{font-size:9px;letter-spacing:1px}.header{gap:8px}.brand{font-size:23px}.live{font-size:10px}.hero{margin-top:16px;grid-template-columns:1fr;min-height:330px}.hero-main{padding:42px 23px}.hero h1{font-size:96px;margin:28px 0 23px}.hero p{font-size:17px}.hero-art{position:absolute;right:-80px;top:10px;width:250px;height:310px;opacity:.21}.hero .pill{padding:8px 10px;font-size:9px}.statusline{margin:15px 0 27px}.title-row h2{font-size:34px}.metrics{gap:9px}.metric{padding:18px 16px;min-height:125px}.metric-value{font-size:49px}.metric-label{font-size:10px}.cards{gap:12px}.panel-title{padding:17px}.match-row{grid-template-columns:38px 1fr 63px;gap:8px;padding:14px 12px}.match-row .date{display:none}.score{font-size:23px}.result{width:32px;padding:5px 7px;font-size:17px}.player-row{padding:12px 15px}.footer{font-size:9px}.detail-grid{grid-template-columns:1fr 1fr}}
 @media(prefers-reduced-motion:no-preference){.hero{animation:entry .6s ease-out}.metric{animation:entry .65s ease-out}@keyframes entry{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}}
 
-/* DFC identity - responsive, uncropped full banner */
+/* Compact football club identity; visible records first, no cropped images */
 .crest-image{width:47px;height:55px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 3px 8px #baff2315)}
-.hero-visual{display:block;height:auto;min-height:0;margin-top:25px;isolation:isolate;background:#0c1e2e;overflow:visible}
-.hero-visual:before,.hero-visual:after{display:none}
-.hero-visual>img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:contain;object-position:center}
-.hero-bottom{display:flex;justify-content:space-between;align-items:center;gap:14px;background:#0c1a29;border-top:1px solid #344556;padding:12px 18px;min-height:57px}
-.hero-overlay{position:static;display:flex;gap:7px;flex-wrap:wrap;align-items:center;min-width:0}
-.hero-overlay span{display:inline-block;background:#0b2331;border:1px solid #baf13788;color:#e7fbaa;font-size:10px;font-weight:900;letter-spacing:1px;padding:8px 12px}
-.hero-cta{position:static;display:inline-flex;gap:9px;align-items:center;flex-shrink:0;background:#c5f350;color:#111f17;padding:10px 15px;font-size:11px;font-weight:900;letter-spacing:.2px;box-shadow:none}
-.hero-cta:hover{background:#d9ff86}
-@media(max-width:800px){.hero-visual{margin-top:16px}.hero-visual>img{display:block;height:auto;aspect-ratio:1200/630;object-fit:contain}.hero-bottom{flex-wrap:wrap;padding:10px 12px;gap:8px}.hero-overlay{gap:6px}.hero-overlay span{padding:7px 9px;font-size:9px}}
-@media(max-width:540px){.hero-visual{min-height:0!important;height:auto!important;grid-template-columns:none!important}.hero-visual>img{width:100%;height:auto!important;aspect-ratio:1200/630!important;object-fit:contain!important;object-position:center!important;max-height:none!important;min-height:0!important}.hero-bottom{padding:10px;flex-wrap:wrap}.hero-overlay span{font-size:8px;letter-spacing:0;padding:7px 8px}.hero-cta{font-size:10px;padding:9px 11px;margin-left:auto}}
+.club-strip{display:grid;grid-template-columns:minmax(0,44%) 1fr;gap:0;min-height:0;margin:20px 0 12px;border:1px solid #38505c;background:radial-gradient(ellipse at 78% 45%,#1b3e48 0%,#0e2133 56%,#071826 100%);overflow:hidden;position:relative}
+.club-strip:after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#c5f350,transparent 65%);pointer-events:none}
+.club-strip-cover{min-width:0;display:flex;align-items:center;background:#0b1a29;padding:0;overflow:hidden}
+.club-strip-cover img{width:100%;height:auto;max-width:100%;object-fit:contain;display:block;aspect-ratio:1200/630}
+.club-strip-brand{display:flex;gap:23px;align-items:center;padding:22px 30px;min-width:0;z-index:1}
+.club-strip-brand>img{width:82px;height:95px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 8px 20px #b4fc2830)}
+.club-strip-copy{min-width:0}
+.eyebrow{font-weight:900;font-size:10px;color:#c9fb60;letter-spacing:2.2px}
+.eyebrow span{color:#7d98a9;padding:0 6px}
+.club-strip-copy h1{font-family:'Barlow Condensed','Noto Sans KR',sans-serif;font-size:clamp(42px,5vw,76px);font-weight:900;line-height:.98;margin:13px 0 10px;letter-spacing:-.8px;white-space:nowrap}
+.club-strip-copy h1 em{font-style:normal;color:#c5f350}
+.club-strip-copy p{font-family:'Barlow Condensed',sans-serif;font-size:15px;letter-spacing:1.2px;color:#c0d5e5;margin:0 0 18px;font-weight:700}
+.club-chips{display:flex;flex-wrap:wrap;gap:7px}
+.club-chips span{font-size:9px;font-weight:900;letter-spacing:1.3px;border:1px solid #66845b;color:#d6f4bb;padding:7px 10px;background:#0a1b26}
+.statusline{margin:9px 0 19px;padding:10px 15px;min-height:43px}
+.quick-section{margin:0 0 18px}
+.quick-title{display:flex;align-items:center;gap:12px;margin:0 0 11px}
+.quick-title>span:first-child{font-size:10px;font-weight:900;letter-spacing:2px;color:#c5f350}
+.quick-title strong{font-size:17px;letter-spacing:-.2px}
+.quick-indicator{margin-left:auto;color:#8da6ba;font-size:9px;font-weight:900;letter-spacing:1px}
+.quick-indicator span{color:#c5f350}
+.quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.quick-card{width:100%;background:linear-gradient(122deg,#1b2e3d,#10202e);border:1px solid #355063;border-left:3px solid #c5f350;padding:17px 20px;text-align:left;min-width:0;color:#f4faff;min-height:122px;display:block}
+.quick-card:hover{background:#1e3645;border-color:#94bba9}
+.quick-head{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10px;font-weight:900;letter-spacing:1.3px;color:#c5f350}
+.quick-head span:last-child{color:#afc8d7;font-weight:700;letter-spacing:0}
+.quick-content{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:11px;min-width:0}
+.quick-detail{min-width:0;flex:1}
+.quick-main{display:block;font-family:'Barlow Condensed','Noto Sans KR',sans-serif;font-weight:900;font-size:26px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.quick-sub{display:block;margin-top:6px;color:#94abbf;font-size:10px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.quick-score{flex-shrink:0;font-family:'Barlow Condensed',sans-serif;font-size:35px;font-weight:900;line-height:1;color:#c5f350;white-space:nowrap}
+.home-heading{margin:23px 0 12px}
+.home-heading h2{font-size:30px}
+.metrics{gap:10px}
+.metric{min-height:128px;padding:16px 19px}
+.metric-value{font-size:50px;margin-top:8px}
+.cards{margin-top:15px}
+@media(max-width:960px){.club-strip-brand{gap:15px;padding:17px}.club-strip-brand>img{width:70px;height:82px}.club-strip-copy h1{font-size:48px}}
+@media(max-width:700px){
+ .club-strip{margin:12px 0 8px;grid-template-columns:1fr;min-height:0;background:linear-gradient(120deg,#122b3b,#0b2231 72%,#1f3531)}
+ .club-strip-cover{display:none}
+ .club-strip-brand{gap:13px;padding:14px 14px 14px 13px}
+ .club-strip-brand>img{width:61px;height:72px}
+ .club-strip-copy h1{font-size:35px;margin:6px 0 4px}
+ .club-strip-copy p{font-size:11px;letter-spacing:.8px;margin:0 0 8px}
+ .eyebrow{font-size:8px;letter-spacing:1.2px}
+ .club-chips{gap:5px}
+ .club-chips span{padding:4px 7px;font-size:8px;letter-spacing:.5px}
+ .statusline{padding:8px 10px;gap:6px;margin:7px 0 14px}
+ .statusline #statusDetail,.statusline #lastSync{display:none}
+ .statusline .refresh{padding:7px 10px}
+ .quick-title{margin-bottom:8px;gap:7px}
+ .quick-title>span:first-child{font-size:8px;letter-spacing:.8px}
+ .quick-title strong{font-size:14px}
+ .quick-indicator{font-size:7px;letter-spacing:0}
+ .quick-grid{gap:8px}
+ .quick-card{padding:11px 10px;min-height:99px}
+ .quick-head{font-size:8px;letter-spacing:.6px}
+ .quick-head span:last-child{font-size:8px}
+ .quick-content{margin-top:11px;gap:5px}
+ .quick-main{font-size:19px}
+ .quick-score{font-size:23px}
+ .quick-sub{font-size:9px;margin-top:5px}
+ .home-heading{margin:18px 0 9px}
+ .home-heading h2{font-size:25px}
+ .home-heading .kicker{font-size:9px}
+ .metric{min-height:100px;padding:12px 13px}
+ .metric-value{font-size:42px;margin-top:6px}
+ .metric-foot{font-size:9px}
+ .cards{margin-top:13px}
+}
+@media(max-width:390px){.club-strip-copy h1{font-size:31px}.club-strip-brand>img{width:53px;height:63px}.quick-main{font-size:17px}.quick-score{font-size:21px}.quick-card{padding:10px 9px}.quick-title strong{font-size:13px}}
 </style>
 </head>
 <body>
@@ -57,17 +119,33 @@
 <nav class="nav" aria-label="사이트 메뉴"><button data-go="home" class="active">OVERVIEW</button><button data-go="matches">MATCHES</button><button data-go="players">SQUAD</button></nav>
 <div class="nav-right"><span class="live"><span id="dot" class="light"></span><span id="syncState">연동 확인 중</span></span><a class="official" href="https://www.ea.com/games/ea-sports-fc/clubs/overview?clubId=331042&amp;platform=common-gen5" target="_blank" rel="noopener">EA CLUB ↗</a></div>
 </header>
-<section class="hero hero-visual" aria-label="DOKDO FC 클럽 배너">
-  <img src="./assets/club-banner.svg" alt="DFC 엠블럼과 DOKDO FC 축구 경기장 배너. ONE TEAM. ONE PRIDE. ONE LEGACY." width="1200" height="630" fetchpriority="high">
-  <div class="hero-bottom">
-    <div class="hero-overlay"><span>FC 27</span><span>CLUB ID 331042</span><span id="division">GEN 5</span></div>
-    <a class="hero-cta" href="#matches" data-go="matches">경기 기록 보기 <span aria-hidden="true">↗</span></a>
+<section class="club-strip" aria-label="DOKDO FC 구단 소개">
+  <div class="club-strip-cover"><img src="./assets/club-banner.svg" width="1200" height="630" alt="DFC 독도 엠블럼과 경기장 그래픽" fetchpriority="high"></div>
+  <div class="club-strip-brand"><img src="./assets/dfc-crest.svg" width="80" height="92" alt="DFC 엠블럼">
+    <div class="club-strip-copy"><div class="eyebrow">DFC <span>•</span> EA SPORTS FC 27 PRO CLUBS</div>
+      <h1>DOKDO <em>FC</em></h1>
+      <p>ONE TEAM. ONE PRIDE. ONE LEGACY.</p>
+      <div class="club-chips"><span id="division">GEN 5</span><span>CLUB ID 331042</span></div>
+    </div>
   </div>
 </section>
 <div class="statusline"><span><strong id="statusLead">● SYNC STATUS</strong> &nbsp;<span id="statusDetail">EA 서버에서 팀 기록을 불러오는 중입니다.</span></span><span class="right" id="lastSync">마지막 동기화: 확인 중</span><button class="refresh" id="refresh" type="button">↻ 새로고침</button></div>
 <main>
 <section id="view-home" class="section-page active">
-<div class="title-row"><div><div class="kicker">01 / TEAM PERFORMANCE</div><h2>클럽 퍼포먼스</h2></div><span class="subtitle">FC27 · 시즌 통계</span></div>
+<div class="quick-section">
+  <div class="quick-title"><span>LIVE CLUB PULSE</span><strong>경기·선수 한눈에</strong><span class="quick-indicator">EA STATS <span aria-hidden="true">●</span></span></div>
+  <div class="quick-grid">
+    <button type="button" class="quick-card" data-go="matches" aria-label="최근 경기 전체 기록 보기">
+      <div class="quick-head"><span>LAST MATCH</span><span>경기 기록 ↗</span></div>
+      <div id="spotMatch" class="quick-content"><span class="quick-main">불러오는 중</span></div>
+    </button>
+    <button type="button" class="quick-card" data-go="players" aria-label="선수 전체 기록 보기">
+      <div class="quick-head"><span>TOP SCORER</span><span>선수 기록 ↗</span></div>
+      <div id="spotPlayer" class="quick-content"><span class="quick-main">불러오는 중</span></div>
+    </button>
+  </div>
+</div>
+<div class="title-row home-heading"><div><div class="kicker">01 / TEAM PERFORMANCE</div><h2>시즌 성적</h2></div><span class="subtitle">EA FC27 · 최신 통계</span></div>
 <div class="metrics">
 <article class="metric"><div class="metric-label">총 경기 수</div><div class="metric-value" id="games">—</div><div class="metric-foot">TOTAL MATCHES</div></article>
 <article class="metric highlight"><div class="metric-label">시즌 승률</div><div class="metric-value" id="winRate">—</div><div class="metric-foot" id="record">W — / D — / L —</div></article>
@@ -115,7 +193,23 @@ function renderMatches(){const league=matches().filter(m=>m.matchType==='leagueM
 function ranked(field){return [...members()].sort((a,b)=>(num(b[field])??-Infinity)-(num(a[field])??-Infinity)||String(a.name).localeCompare(String(b.name)))}
 function renderRank(){const top=ranked(rank).slice(0,5);$('topPlayers').innerHTML=top.length?top.map((m,i)=>'<button class="player-row" data-player="'+E(encodeURIComponent(String(m.name||'')))+'"><span class="place">'+String(i+1).padStart(2,'0')+'</span><span class="avatar">'+E(String(m.name||'?').slice(0,1).toUpperCase())+'</span><span class="pn">'+E(val(m.name,'선수 이름 미상'))+'<small>'+E(val(m.favoritePosition||m.proPos,'DOKDO FC PLAYER'))+'</small></span><span class="pv">'+fmt(m[rank],rank==='ratingAve'?1:0)+'</span></button>').join(''):empty('선수 기록을 기다리고 있습니다','연동 후 득점왕·도움왕·평점왕 순위가 자동 계산됩니다.')}
 function renderPlayers(){const ms=ranked(sort);$('playerCount').textContent=ms.length+' PLAYERS';$('playerTable').innerHTML=ms.length?ms.map((m,i)=>'<tr data-player="'+E(encodeURIComponent(String(m.name||'')))+'"><td><span class="index">'+String(i+1).padStart(2,'0')+'</span><strong>'+E(val(m.name,'이름 없음'))+'</strong></td><td>'+fmt(m.gamesPlayed)+'</td><td>'+fmt(m.goals)+'</td><td>'+fmt(m.assists)+'</td><td>'+fmt(m.ratingAve,1)+'</td><td>'+fmt(m.manOfTheMatch)+'</td></tr>').join(''):'<tr><td colspan="6">'+empty('선수 기록이 없습니다','EA 선수 통계가 수집되면 여기에 자동 표시됩니다.')+'</td></tr>'}
-function render(){renderMeta();renderNumbers();renderMatches();renderRank();renderPlayers()}
+function renderSpotlight(){
+  const league=matches().filter(m=>m.matchType==='leagueMatch').sort((a,b)=>Number(b.timestamp||0)-Number(a.timestamp||0));
+  const m=league[0],p=ranked('goals')[0];
+  if(m){
+    const result=outcome(m);
+    const flag=result==='win'?'승리':result==='draw'?'무승부':result==='loss'?'패배':'결과 확인';
+    $('spotMatch').innerHTML='<div class="quick-detail"><span class="quick-main">vs '+E(val(m.opponentName,'상대팀'))+'</span><span class="quick-sub">'+E(flag)+' · '+E(mdate(m))+'</span></div><strong class="quick-score">'+fmt(m.goals)+' : '+fmt(m.goalsAgainst)+'</strong>';
+  }else{
+    $('spotMatch').innerHTML='<div class="quick-detail"><span class="quick-main">기록 수집 대기</span><span class="quick-sub">최근 리그 경기를 불러오는 중</span></div>';
+  }
+  if(p){
+    $('spotPlayer').innerHTML='<div class="quick-detail"><span class="quick-main">'+E(val(p.name,'선수'))+'</span><span class="quick-sub">득점 1위 · '+fmt(p.gamesPlayed)+'경기 출전</span></div><strong class="quick-score">'+fmt(p.goals)+' GOAL</strong>';
+  }else{
+    $('spotPlayer').innerHTML='<div class="quick-detail"><span class="quick-main">기록 수집 대기</span><span class="quick-sub">선수 득점 기록을 불러오는 중</span></div>';
+  }
+}
+function render(){renderMeta();renderNumbers();renderSpotlight();renderMatches();renderRank();renderPlayers()}
 function showPage(p){page=['home','matches','players'].includes(p)?p:'home';document.querySelectorAll('.section-page').forEach(e=>e.classList.toggle('active',e.id==='view-'+page));document.querySelectorAll('[data-go]').forEach(e=>e.classList.toggle('active',e.dataset.go===page));history.replaceState(null,'','#'+page);window.scrollTo({top:0,behavior:'smooth'})}
 function openDetails(label,title,body){$('detailLabel').textContent=label;$('detailTitle').textContent=title;$('detailBody').innerHTML=body;$('details').showModal()}
 function matchDetails(encoded){let key;try{key=decodeURIComponent(encoded)}catch{return}const m=matches().find((x,i)=>String(x.matchType??'')+':'+String(x.matchId??i)===key);if(!m)return;const club=val(data.club?.name,'DOKDO FC');const pp=Array.isArray(m.players)?m.players:[];const body='<div class="detail-score"><strong>'+E(club)+'</strong><span>'+fmt(m.goals)+' : '+fmt(m.goalsAgainst)+'</span><strong>'+E(val(m.opponentName,'상대팀'))+'</strong></div><div class="detail-grid"><div><small>결과</small><strong>'+outcomeLetter[outcome(m)]+'</strong></div><div><small>경기 날짜</small><strong>'+E(mdate(m))+'</strong></div><div><small>종류</small><strong>'+E(KINDS[m.matchType]||'MATCH')+'</strong></div></div><h3 class="detail-heading">출전 선수 기록</h3>'+(pp.length?'<div class="table-scroll"><table class="data-table"><thead><tr><th>선수</th><th>골</th><th>도움</th><th>평점</th></tr></thead><tbody>'+pp.map(p=>'<tr><td>'+E(val(p.name||p.playerName,'선수'))+'</td><td>'+fmt(p.goals)+'</td><td>'+fmt(p.assists)+'</td><td>'+fmt(p.rating,1)+'</td></tr>').join('')+'</tbody></table></div>':empty('세부 선수 기록 없음','EA에서 이 경기의 출전 선수별 기록을 반환하지 않았습니다.'));openDetails('MATCH CENTER','vs. '+val(m.opponentName,'상대팀'),body)}
