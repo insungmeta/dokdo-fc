@@ -278,7 +278,7 @@ function renderMeta(){const s=data.sync||{},ok=!!s.lastSuccess,err=!!s.error;$('
 $('division').textContent=valid?'DIVISION '+d:'디비전 확인 중';
 $('leagueDivision').textContent=valid?d===1?'DIV 1':d+'부':'—';
 $('leagueLabel').textContent=valid?d+'부 리그 소속':'현재 디비전 확인 전';
-$('leagueStats').textContent=valid?'EA 현재 시즌 순위표 · 최고 디비전 '+(num(lg.bestDivision)===null?'—':fmt(lg.bestDivision))+' · 승격 '+fmt(data.overall?.promotions):'EA 순위표에서 클럽 ID 331042 확인 중';}
+$('leagueStats').textContent=valid?'EA 현재 시즌 · 이번 시즌 최고 '+(num(lg.bestDivision)===null?'—':fmt(lg.bestDivision))+' · 승격 '+fmt(data.overall?.promotions):'EA 순위표에서 클럽 ID 331042 확인 중';}
 function renderNumbers(){const s=data.overall||{},games=num(s.gamesPlayed),wins=num(s.wins);$('games').textContent=fmt(games);$('winRate').textContent=games&&wins!==null?Math.round(wins/games*100)+'%':'—';$('record').textContent='W '+fmt(s.wins)+' / D '+fmt(s.ties??s.draws)+' / L '+fmt(s.losses);$('goals').textContent=fmt(s.goals);$('rating').textContent=fmt(s.skillRating)}
 function renderMatches(){const league=matches().filter(m=>m.matchType==='leagueMatch');$('recentMatches').innerHTML=league.length?league.slice(0,6).map(matchMarkup).join(''):empty('아직 수집된 경기가 없습니다','리그 경기 데이터가 연동되면 이 자리에 승패·상대·득점이 표시됩니다.');const all=kind==='all'?matches():matches().filter(m=>m.matchType===kind);$('allMatches').innerHTML=all.length?all.map(matchMarkup).join(''):empty('보관된 경기 이력이 없습니다','새로 수집된 경기부터 자동으로 누적 저장됩니다.');$('matchCount').textContent=all.length+' MATCHES · 누적 보관'}
 function ranked(field){return [...members()].sort((a,b)=>(num(b[field])??-Infinity)-(num(a[field])??-Infinity)||String(a.name).localeCompare(String(b.name)))}
