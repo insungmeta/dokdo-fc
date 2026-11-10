@@ -2,15 +2,17 @@
 
 DOKDO FC's free fan-made match & player analytics dashboard for club ID `331042` / platform `common-gen5`.
 
-The site is deployed to **GitHub Pages** and its data is refreshed automatically by **GitHub Actions** using the community-built, unofficial `fc-clubs-api` package.
+The site is hosted with **GitHub Pages**, with match and player data refreshed automatically by **GitHub Actions** using the community-built, unofficial `fc-clubs-api` package.
 
 ## Free hosting
 
 This repository is public and uses GitHub's free-hosted Pages and standard GitHub Actions runners. No always-on personal computer is needed, and there is no paid hosting tier configured.
 
-## Activation
+## Website
 
-In repository **Settings → Pages → Build and deployment → Source**, choose **GitHub Actions** once. Open **Actions** to view the first deployment. The expected site address after successful deployment is `https://insungmeta.github.io/dokdo-fc/`.
+**https://insungmeta.github.io/dokdo-fc/**
+
+The repository's GitHub Pages setting was enabled on November 10, 2026. Publication status is shown at [GitHub Actions](https://github.com/insungmeta/dokdo-fc/actions/workflows/update-and-publish.yml). If the website is unavailable, verify that **Settings → Pages → Build and deployment → Source** is set to **GitHub Actions** and check the deployment workflow.
 
 ## Notes
 
