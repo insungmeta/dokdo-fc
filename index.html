@@ -307,7 +307,7 @@ function matchDetails(encoded){
 function matchPlayerDetails(encoded,side){
  if(!detailMatch)return;
  let name;try{name=decodeURIComponent(encoded)}catch{return}
- const player=(side==='opponent'?detailMatch.opponentPlayers:detailMatch.players||[]).find(p=>String(p.name||'')===name);
+ const player=((side==='opponent'?detailMatch.opponentPlayers:detailMatch.players)||[]).find(p=>String(p.name||'')===name);
  if(!player)return;
  const summary=[['경기 포지션',posLabel(player)],['평점',fmt(player.rating,1)],['골',fmt(player.goals)],['도움',fmt(player.assists)],['슈팅',fmt(player.shots)],['선방',isGoalkeeper(player)?fmt(player.saves):'—']];
  const body='<div class="detail-grid">'+summary.map(([k,v])=>'<div><small>'+E(k)+'</small><strong>'+E(v)+'</strong></div>').join('')+'</div>'+
