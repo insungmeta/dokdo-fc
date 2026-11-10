@@ -32,6 +32,7 @@ def base():
         "platform": PLATFORM,
         "club": None,
         "league": None,
+        "leagueAllTime": None,
         "overall": None,
         "members": [],
         "career": [],
@@ -225,11 +226,12 @@ def load_history(path, original, now):
         "startedAt": started,
         "changes": [],
     }
-    if any(original.get(k) for k in ("club", "league", "overall", "members", "career", "matches")):
+    if any(original.get(k) for k in ("club", "league", "leagueAllTime", "overall", "members", "career", "matches")):
         history["changes"].append({
             "at": started, "kind": "preserved-baseline",
             "club": copy.deepcopy(original.get("club")),
             "league": copy.deepcopy(original.get("league")),
+            "leagueAllTime": copy.deepcopy(original.get("leagueAllTime")),
             "overall": copy.deepcopy(original.get("overall")),
             "members": copy.deepcopy(original.get("members") or []),
             "career": copy.deepcopy(original.get("career") or []),
@@ -241,7 +243,7 @@ def load_history(path, original, now):
 def archive_updates(original, current, history, now):
     """Append changes only when real data changes, not every 30-minute sync heartbeat."""
     changes = {"at": now, "kind": "data-change"}
-    for field in ("club", "league", "overall"):
+    for field in ("club", "league", "leagueAllTime", "overall"):
         if not _same(original.get(field), current.get(field)):
             changes[field] = copy.deepcopy(current.get(field))
     for field in ("members", "career"):
@@ -258,13 +260,17 @@ def archive_updates(original, current, history, now):
 
 
 
-def get_verified_league(api, club_name, club_id):
-    """Use FC27 leaderboard currentDivision; never assume a club name is unique."""
+def get_verified_league(api, club_name, club_id, scope="current_season"):
+    """Fetch one verified club row. Current-season and all-time are distinct.
+
+    The season's bestDivision must never be presented as an all-time record.
+    Each league response is matched by exact club ID, not name alone.
+    """
     if not club_name:
         return None
     rows = api.search_club_by_name(
         str(club_name),
-        scope="current_season",
+        scope=scope,
         max_result_count=100,
     ) or []
     for item in rows:
@@ -325,21 +331,23 @@ def collect(api_factory=None, path=OUT):
                 errors.append(f"{field}: {exc}")
                 log.warning("%s failed: %s", field, exc)
 
-        # The clubs/info and clubs/overallStats endpoints do not include
-        # currentDivision. FC27's currentSeasonLeaderboard/search does.
-        try:
-            league = get_verified_league(
-                api, (d.get("club") or {}).get("name") or (d.get("club") or {}).get("clubName"),
-                CLUB_ID,
-            )
-            if league is not None:
-                d["league"] = _enrich(d.get("league"), league)
-                successes += 1
-            else:
-                log.warning("DOKDO FC ID %s was not in the season leaderboard response", CLUB_ID)
-        except Exception as exc:
-            errors.append(f"current division: {exc}")
-            log.warning("Current division lookup failed: %s", exc)
+        # EA offers two DIFFERENT leaderboards. Seasonal bestDivision can
+        # differ from the all-time best even when clubId is the same.
+        club_name = ((d.get("club") or {}).get("name")
+                     or (d.get("club") or {}).get("clubName"))
+        for field, scope in (("league", "current_season"),
+                             ("leagueAllTime", "all_time")):
+            try:
+                league = get_verified_league(api, club_name, CLUB_ID, scope=scope)
+                if league is not None:
+                    d[field] = _enrich(d.get(field), league)
+                    successes += 1
+                else:
+                    log.warning("DOKDO FC %s ID %s not found in leaderboard",
+                                scope, CLUB_ID)
+            except Exception as exc:
+                errors.append(f"{scope} division: {exc}")
+                log.warning("Division lookup (%s) failed: %s", scope, exc)
 
         for kind in MATCH_TYPES:
             try:
