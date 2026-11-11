@@ -91,7 +91,22 @@ $('matchReviewClose').addEventListener('click',()=>{
  if(source&&source.isConnected)source.focus({preventScroll:true});
 });
 
-function game(i){const m=games[i];if(!m)return;$('gameDate').textContent=m.time;$('gameTeamDisplay').innerHTML=dfc('detail-crest')+'<span class="team-name-pair">DOKDO FC <span>VS</span> '+E(m.opp)+'</span>'+crest(m.id,m.opp,'small');$('scoreUs').textContent=m.score[0];$('scoreThem').textContent=m.score[1];updateH2H(m.raw);
+/* Match contributors use archived player events, not season aggregates or inferred scorers. */
+function matchContributors(m){
+ const players=m.dnf?[]:(m.raw.players||[]).filter(human);
+ const recorded=k=>players.filter(p=>num(p[k])>0).sort((a,b)=>num(b[k])-num(a[k])||name(a).localeCompare(name(b)));
+ const scorers=recorded('goals'),assisters=recorded('assists');
+ const recordedGoals=SUM(scorers,'goals');
+ const chips=(arr,key,unit)=>arr.map(p=>'<span class="match-contributor-chip"><strong>'+E(name(p))+'</strong><b>'+num(p[key])+unit+'</b></span>').join('');
+ const goals=chips(scorers,'goals','골')||(m.score[0]===0?'<span class="match-contributor-empty">득점 없음</span>':'<span class="match-contributor-empty">득점자 기록 미확인</span>');
+ const assists=chips(assisters,'assists','도움')||(m.score[0]===0?'<span class="match-contributor-empty">도움 없음</span>':'<span class="match-contributor-empty">도움 기록 없음 · 미확인</span>');
+ const mismatch=m.score[0]>0&&recordedGoals!==m.score[0];
+ const note=mismatch?'<p class="match-contributor-note">'+(m.dnf?'EA 선수별 기록 미집계':'팀 '+m.score[0]+'득점 중 수집된 사람 선수 '+recordedGoals+'득점 확인 · AI·자책골 등 원인은 확인 불가')+'</p>':'';
+ return '<div class="match-contribution-row"><span class="match-contribution-label"><span aria-hidden="true">⚽</span> 득점</span><div class="match-contributor-values">'+goals+'</div></div>'+
+ '<div class="match-contribution-row"><span class="match-contribution-label"><span aria-hidden="true">🎯</span> 도움</span><div class="match-contributor-values">'+assists+'</div></div>'+note;
+}
+
+function game(i){const m=games[i];if(!m)return;$('gameDate').textContent=m.time;$('gameTeamDisplay').innerHTML=dfc('detail-crest')+'<span class="team-name-pair">DOKDO FC <span>VS</span> '+E(m.opp)+'</span>'+crest(m.id,m.opp,'small');$('scoreUs').textContent=m.score[0];$('scoreThem').textContent=m.score[1];$('matchContributors').innerHTML=matchContributors(m);updateH2H(m.raw);
 if(m.dnf){$('compareRows').innerHTML='<div class="coverage">이 경기의 선수별 세부 기록이 미집계되었습니다.</div>';$('coverage').textContent='세부 통계가 제공되지 않아 0으로 표시하지 않습니다.';$('ourPass').textContent='—';$('theirPass').textContent='—';return}
 $('compareRows').innerHTML=[['슈팅','shots'],['유효슈팅','onTarget'],['태클 성공','tackles'],['인터셉트','interceptions']].map(([label,k])=>{const a=m[k][0],b=m[k][1],mx=Math.max(a,b,1);return '<div class="dual"><strong>'+a+'</strong><div class="lane"><i style="width:'+Math.round(a/mx*100)+'%"></i></div><span class="label">'+label+'</span><div class="lane r"><i style="width:'+Math.round(b/mx*100)+'%"></i></div><strong>'+b+'</strong></div>'}).join('');
 $('coverage').innerHTML='수집된 사람 선수 기록 · DOKDO FC <b>'+m.counts[0]+'</b>명 / 상대 <b>'+m.counts[1]+'</b>명. AI 및 누락된 상대팀 기록은 제외합니다.';$('ourPass').textContent=m.attempts[0]?Math.round(m.passes[0]/m.attempts[0]*100)+'%':'—';$('theirPass').textContent=m.attempts[1]?Math.round(m.passes[1]/m.attempts[1]*100)+'%':'—'}
