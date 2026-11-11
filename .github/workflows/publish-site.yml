@@ -42,6 +42,10 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
+      # GitHub sometimes needs a short propagation window before deploy-pages
+      # can discover a successfully uploaded github-pages artifact.
+      - name: Allow Pages artifact metadata to become available
+        run: sleep 20
       - name: Deploy website
         id: deployment
         uses: actions/deploy-pages@v4
