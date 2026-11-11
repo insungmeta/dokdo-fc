@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080d17">
+<meta name="site-version" content="2026-11-11-defender-cards-deploy2">
+<meta name="description" content="DOKDO FC (DFC) · EA SPORTS FC27 프로클럽. 리그 경기 결과, 선수별 득점·도움·평점과 팀 통계를 자동 업데이트하는 무료 팀 홈페이지.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="DOKDO FC · PRO CLUBS">
+<meta property="og:title" content="DOKDO FC | DFC 프로클럽 경기·선수 기록">
+<meta property="og:description" content="DOKDO FC의 최신 리그 경기, 득점왕·도움왕, 선수 기록을 확인하세요. FC27 팀 통계 자동 업데이트.">
+<meta property="og:url" content="https://insungmeta.github.io/dokdo-fc/">
+<meta property="og:image" content="https://insungmeta.github.io/dokdo-fc/assets/og-dokdo-fc.png?v=20261110">
+<meta property="og:image:secure_url" content="https://insungmeta.github.io/dokdo-fc/assets/og-dokdo-fc.png?v=20261110">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="DFC 엠블럼이 있는 DOKDO FC 프로클럽 경기장 배너">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DOKDO FC · DFC 프로클럽">
+<meta name="twitter:description" content="FC27 팀 경기와 선수 기록이 자동 업데이트됩니다.">
+<meta name="twitter:image" content="https://insungmeta.github.io/dokdo-fc/assets/og-dokdo-fc.png?v=20261110">
+<link rel="canonical" href="https://insungmeta.github.io/dokdo-fc/">
+<link rel="icon" type="image/svg+xml" href="./assets/dfc-crest.svg">
+<title>DOKDO FC — EST. TO CONQUER</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap');
+:root{--bg:#080d17;--panel:#111b2a;--line:#263144;--ink:#edf5fc;--muted:#90a3b8;--lime:#c5f350;--cyan:#5ce5e7;--shadow:0 20px 70px #0005}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:'DM Sans','Noto Sans KR',sans-serif;font-size:14px}button,select{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}button:focus-visible,a:focus-visible,select:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+.wrap{max-width:1480px;padding:0 44px;margin:0 auto}.topline{background:#c5f350;color:#08111c;font-weight:800;font-size:10px;letter-spacing:2px;line-height:27px;text-align:center}.header{height:88px;display:flex;align-items:center;justify-content:space-between;gap:24px;border-bottom:1px solid #ffffff14}.logo{display:flex;align-items:center;gap:13px;flex-shrink:0}.crest{height:51px;width:43px;background:var(--lime);clip-path:polygon(50% 0,100% 17%,100% 72%,50% 100%,0 72%,0 17%);display:grid;place-items:center;color:#0c1b26;font-family:'Barlow Condensed';font-weight:900;font-size:23px}.brand{font-family:'Barlow Condensed';font-size:26px;font-weight:900;letter-spacing:.6px;line-height:.9}.brand small{display:block;font-family:'DM Sans';font-size:9px;font-weight:800;letter-spacing:2.7px;color:var(--muted);margin-top:7px}.nav{display:flex;align-items:center;gap:35px}.nav button{color:#9eb1c5;background:none;border:0;font-size:12px;font-weight:800;letter-spacing:.4px;padding:15px 0;border-bottom:2px solid transparent}.nav button.active,.nav button:hover{color:var(--lime);border-color:var(--lime)}.nav-right{display:flex;align-items:center;gap:18px}.live{display:flex;align-items:center;gap:8px;color:#b4c1ce;font-size:11px;font-weight:700}.light{width:7px;height:7px;display:inline-block;border-radius:50%;background:#607183;box-shadow:0 0 0 4px #60718322}.light.ok{background:var(--lime);box-shadow:0 0 0 4px #c5f35022}.light.fail{background:#ff897b;box-shadow:0 0 0 4px #ff897b22}.official{border:1px solid #536577;padding:11px 14px;font-size:11px;font-weight:800;color:#d2dbe5}.official:hover{border-color:var(--lime);color:var(--lime)}
+.hero{position:relative;overflow:hidden;min-height:435px;margin-top:25px;display:grid;grid-template-columns:1fr 380px;background:radial-gradient(ellipse at 89% 24%,#294c56 0%,transparent 36%),linear-gradient(117deg,#14283a 0%,#0e1b2a 57%,#0e2630 100%);border:1px solid #344556}.hero:before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(124deg,transparent 0 66px,#ffffff05 67px 68px,transparent 69px 145px);pointer-events:none}.hero:after{content:'';position:absolute;left:0;bottom:0;height:5px;width:30%;background:var(--lime)}.hero-main{padding:55px 0 48px 65px;z-index:1}.sup{font-size:11px;letter-spacing:3px;font-weight:800;color:var(--lime);display:flex;align-items:center;gap:12px}.sup:before{content:'';width:25px;height:2px;background:var(--lime)}.hero h1{font-family:'Barlow Condensed';font-size:clamp(90px,11vw,156px);letter-spacing:-2px;font-weight:900;line-height:.76;margin:34px 0 24px}.hero h1 span{color:var(--lime)}.hero p{font-family:'Barlow Condensed';font-weight:700;font-size:23px;letter-spacing:2.2px;margin:0 0 30px;color:#d7e1eb}.pills{display:flex;gap:9px;flex-wrap:wrap}.pill{font-size:10px;letter-spacing:1.5px;border:1px solid #536c7b;padding:10px 15px;font-weight:800;color:#c0d7e0}.pill.lime{border-color:var(--lime);color:var(--lime)}.hero-art{display:flex;align-items:center;justify-content:center;position:relative;isolation:isolate}.hero-art:before{content:'';position:absolute;width:490px;height:490px;border:1px solid #ffffff19;border-radius:50%;z-index:-1}.hero-art:after{content:'';position:absolute;width:310px;height:310px;border:1px dashed #b1d7da40;border-radius:50%;z-index:-1}.bigcrest{width:240px;height:288px;background:linear-gradient(160deg,#d6ff7d,#a0dc3b);clip-path:polygon(50% 0,96% 14%,96% 69%,50% 100%,4% 69%,4% 14%);display:flex;flex-direction:column;align-items:center;justify-content:center;filter:drop-shadow(0 0 44px #c5f35018);color:#122632;transform:rotate(-5deg)}.bigcrest strong{font-family:'Barlow Condensed';font-size:94px;line-height:.9;font-weight:900;letter-spacing:-5px}.bigcrest small{font-family:'Barlow Condensed';font-size:17px;font-weight:800;letter-spacing:3px}.bigcrest i{width:95px;border-top:3px solid #122632;margin:15px 0 10px}.orbit{position:absolute;font-family:'Barlow Condensed';font-size:210px;font-weight:900;color:#fff0; -webkit-text-stroke:1px #ffffff1d;right:0;bottom:-80px;z-index:-2}.statusline{margin:22px 0 32px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:12px;border:1px solid #293a4a;background:#101a28;padding:14px 18px;color:#bccbd8}.statusline strong{color:var(--lime)}.statusline .right{color:#879bb0;font-size:11px}.title-row{display:flex;align-items:end;justify-content:space-between;gap:18px;margin:35px 0 19px}.kicker{font-size:10px;letter-spacing:3px;color:var(--lime);font-weight:900;margin-bottom:6px}.title-row h2{font-family:'Barlow Condensed','Noto Sans KR';font-size:40px;letter-spacing:.5px;margin:0;font-weight:900}.subtitle{color:var(--muted);font-size:11px}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}.metric{position:relative;background:linear-gradient(150deg,#172437,#111a29);min-height:155px;border:1px solid #2b3a4c;padding:22px 24px;overflow:hidden}.metric:before{content:'';position:absolute;right:-20px;top:-34px;width:115px;height:115px;border:1px solid #ffffff11;border-radius:50%}.metric.highlight{border-color:#53653f;background:linear-gradient(135deg,#273c37,#142a31)}.metric-label{font-size:11px;font-weight:700;color:#b1c0ce}.metric-value{font-family:'Barlow Condensed';font-size:64px;line-height:1.15;font-weight:800;letter-spacing:-.5px;margin-top:12px}.metric.highlight .metric-value{color:var(--lime)}.metric-foot{font-size:10px;letter-spacing:1px;color:#7f94aa;margin-top:3px}.cards{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,1fr);gap:18px;margin-top:20px}.panel{background:#101a28;border:1px solid #28364a;min-width:0}.panel-title{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #263548;padding:23px 25px}.panel-title h3{font-family:'Barlow Condensed','Noto Sans KR';font-weight:800;font-size:26px;margin:0}.panel-title span{font-weight:800;color:#98acbd;font-size:10px;letter-spacing:1.6px}.linkbtn{border:0;background:none;color:var(--lime);font-weight:800;font-size:11px}.tabs{display:flex;gap:5px;margin:14px 24px 4px;flex-wrap:wrap}.tabs button{padding:9px 12px;border:1px solid transparent;background:#1a293b;color:#93a8bc;font-size:11px;font-weight:700}.tabs button.active{background:var(--lime);color:#0a1820}.match-row{display:grid;grid-template-columns:54px 1fr 85px 82px;align-items:center;gap:10px;width:100%;padding:16px 22px;background:none;border:0;border-bottom:1px solid #243143;color:var(--ink);text-align:left}.match-row:hover,.player-row:hover{background:#1a2b3a}.result{display:inline-grid;place-items:center;border-radius:3px;padding:7px 10px;width:38px;font-family:'Barlow Condensed';font-size:19px;font-weight:800}.result.win{background:#c5f350;color:#11251b}.result.loss{background:#542f3e;color:#ff9ba5}.result.draw{background:#38465a;color:#d0d9e5}.result.unknown{background:#26384d;color:#c3d1de}.match-opponent{font-size:12px;font-weight:800}.match-opponent small{display:block;color:#758da1;font-size:10px;font-weight:600;margin-top:4px}.score{font-family:'Barlow Condensed';font-weight:800;font-size:25px;text-align:center}.date{font-size:10px;color:#8297ab;text-align:right}.player-row{width:100%;display:grid;grid-template-columns:28px 40px 1fr 60px;align-items:center;gap:11px;padding:13px 22px;color:var(--ink);background:none;border:0;border-bottom:1px solid #243143;text-align:left}.place{color:#728a9e;font-family:'Barlow Condensed';font-size:20px;font-weight:800}.player-row:first-child .place{color:var(--lime)}.avatar{width:38px;height:38px;display:grid;place-items:center;background:#263c49;border:1px solid #3c5764;color:var(--lime);font-weight:900;font-family:'Barlow Condensed';font-size:22px}.pn{font-size:12px;font-weight:800;overflow-wrap:anywhere}.pn small{display:block;margin-top:3px;font-size:10px;color:#7e94a9;font-weight:500}.pv{text-align:right;font-family:'Barlow Condensed';font-size:26px;color:var(--lime);font-weight:800}.empty{padding:53px 20px;text-align:center;color:#a5b7c6}.empty strong{display:block;color:#d6e4ee;font-size:15px;margin:10px 0}.empty p{font-size:11px;line-height:1.7;color:#8196a7;margin:0}.empty-symbol{font-family:'Barlow Condensed';font-size:45px;font-weight:800;color:#466070}.section-page{display:none}.section-page.active{display:block}.filters{display:flex;flex-wrap:wrap;gap:8px;padding:20px 23px;border-bottom:1px solid #263548}.filters button{border:1px solid #34495c;color:#a6b9ca;padding:10px 15px;background:#172436;font-size:11px;font-weight:700}.filters button.active{background:var(--lime);color:#10221b;border-color:var(--lime)}.data-table{width:100%;border-collapse:collapse}.data-table th{color:#829bb0;letter-spacing:.5px;text-align:right;font-size:11px;padding:18px 18px;border-bottom:1px solid #344456}.data-table th:first-child,.data-table td:first-child{text-align:left}.data-table td{font-size:12px;text-align:right;padding:16px 18px;border-bottom:1px solid #25374a}.data-table tbody tr{cursor:pointer}.data-table tbody tr:hover{background:#1b2d40}.data-table td strong{color:#edf5fc}.table-scroll{overflow:auto}.index{font-family:'Barlow Condensed';color:var(--lime);font-weight:800;font-size:19px;margin-right:12px}.footer{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:38px 0 45px;color:#6f8598;font-size:10px;letter-spacing:1.4px;border-top:1px solid #263549;margin-top:48px}.refresh{color:#182719;background:var(--lime);border:0;padding:9px 14px;font-size:11px;font-weight:800}.refresh:disabled{opacity:.5}.disclaimer{border-left:3px solid var(--lime);padding:15px 20px;background:#131f2c;color:#91a8bc;font-size:11px;line-height:1.8;margin-top:20px}.disclaimer a{color:var(--lime)}dialog{max-width:680px;width:calc(100% - 30px);max-height:85vh;overflow:auto;border:1px solid #607d8b;background:#101d2b;color:var(--ink);padding:0;box-shadow:var(--shadow)}dialog::backdrop{background:#02060bdd;backdrop-filter:blur(6px)}.dialoghead{padding:22px 27px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #324357}.dialoghead h2{margin:3px 0 0;font-size:23px}.close{background:none;border:1px solid #506578;color:white;width:34px;height:34px;font-size:20px}.dialogbody{padding:26px}.detail-score{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;text-align:center;background:#192d3b;padding:20px 10px;margin-bottom:20px}.detail-score span{font-family:'Barlow Condensed';font-size:45px;font-weight:900;color:var(--lime)}.detail-score strong{font-size:13px;overflow-wrap:anywhere}.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.detail-grid div{background:#182b3b;padding:18px 12px}.detail-grid small{display:block;color:#96a9b9;margin-bottom:9px}.detail-grid strong{font-family:'Barlow Condensed';font-size:25px}.detail-heading{font-weight:800;margin:25px 0 15px}.stat-note{color:#849bad;font-size:11px;margin-top:12px}
+@media(max-width:1120px){.wrap{padding:0 24px}.hero{grid-template-columns:1fr 300px}.hero-main{padding-left:40px}.hero h1{font-size:112px}.bigcrest{transform:rotate(-5deg) scale(.8)}.cards{grid-template-columns:1fr 1fr}}
+@media(max-width:800px){.header{height:auto;min-height:77px;flex-wrap:wrap;padding:12px 0}.nav{order:3;width:100%;justify-content:space-between;border-top:1px solid #203044}.nav button{flex:1}.official{display:none}.hero{min-height:355px;grid-template-columns:1fr 170px}.hero-main{padding:47px 0 40px 29px}.hero h1{font-size:90px}.hero p{font-size:17px}.bigcrest{transform:rotate(-5deg) scale(.5)}.orbit{font-size:125px}.metrics{grid-template-columns:1fr 1fr}.cards{grid-template-columns:1fr}}
+@media(max-width:540px){.wrap{padding:0 16px}.topline{font-size:9px;letter-spacing:1px}.header{gap:8px}.brand{font-size:23px}.live{font-size:10px}.hero{margin-top:16px;grid-template-columns:1fr;min-height:330px}.hero-main{padding:42px 23px}.hero h1{font-size:96px;margin:28px 0 23px}.hero p{font-size:17px}.hero-art{position:absolute;right:-80px;top:10px;width:250px;height:310px;opacity:.21}.hero .pill{padding:8px 10px;font-size:9px}.statusline{margin:15px 0 27px}.title-row h2{font-size:34px}.metrics{gap:9px}.metric{padding:18px 16px;min-height:125px}.metric-value{font-size:49px}.metric-label{font-size:10px}.cards{gap:12px}.panel-title{padding:17px}.match-row{grid-template-columns:38px 1fr 63px;gap:8px;padding:14px 12px}.match-row .date{display:none}.score{font-size:23px}.result{width:32px;padding:5px 7px;font-size:17px}.player-row{padding:12px 15px}.footer{font-size:9px}.detail-grid{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:no-preference){.hero{animation:entry .6s ease-out}.metric{animation:entry .65s ease-out}@keyframes entry{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}}
+
+/* Compact football club identity; visible records first, no cropped images */
+.crest-image{width:47px;height:55px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 3px 8px #baff2315)}
+.club-strip{display:grid;grid-template-columns:minmax(0,44%) 1fr;gap:0;min-height:0;margin:20px 0 12px;border:1px solid #38505c;background:radial-gradient(ellipse at 78% 45%,#1b3e48 0%,#0e2133 56%,#071826 100%);overflow:hidden;position:relative}
+.club-strip:after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#c5f350,transparent 65%);pointer-events:none}
+.club-strip-cover{min-width:0;display:flex;align-items:center;background:#0b1a29;padding:0;overflow:hidden}
+.club-strip-cover img{width:100%;height:auto;max-width:100%;object-fit:contain;display:block;aspect-ratio:1200/630}
+.club-strip-brand{display:flex;gap:23px;align-items:center;padding:22px 30px;min-width:0;z-index:1}
+.club-strip-brand>img{width:82px;height:95px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 8px 20px #b4fc2830)}
+.club-strip-copy{min-width:0}
+.eyebrow{font-weight:900;font-size:10px;color:#c9fb60;letter-spacing:2.2px}
+.eyebrow span{color:#7d98a9;padding:0 6px}
+.club-strip-copy h1{font-family:'Barlow Condensed','Noto Sans KR',sans-serif;font-size:clamp(42px,5vw,76px);font-weight:900;line-height:.98;margin:13px 0 10px;letter-spacing:-.8px;white-space:nowrap}
+.club-strip-copy h1 em{font-style:normal;color:#c5f350}
+.club-strip-copy p{font-family:'Barlow Condensed',sans-serif;font-size:15px;letter-spacing:1.2px;color:#c0d5e5;margin:0 0 18px;font-weight:700}
+.club-chips{display:flex;flex-wrap:wrap;gap:7px}
+.club-chips span{font-size:9px;font-weight:900;letter-spacing:1.3px;border:1px solid #66845b;color:#d6f4bb;padding:7px 10px;background:#0a1b26}
+.statusline{margin:9px 0 19px;padding:10px 15px;min-height:43px}
+.quick-section{margin:0 0 18px}
+.quick-title{display:flex;align-items:center;gap:12px;margin:0 0 11px}
+.quick-title>span:first-child{font-size:10px;font-weight:900;letter-spacing:2px;color:#c5f350}
+.quick-title strong{font-size:17px;letter-spacing:-.2px}
+.quick-indicator{margin-left:auto;color:#8da6ba;font-size:9px;font-weight:900;letter-spacing:1px}
+.quick-indicator span{color:#c5f350}
+.quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.quick-card{width:100%;background:linear-gradient(122deg,#1b2e3d,#10202e);border:1px solid #355063;border-left:3px solid #c5f350;padding:17px 20px;text-align:left;min-width:0;color:#f4faff;min-height:122px;display:block}
+.quick-card:hover{background:#1e3645;border-color:#94bba9}
+.quick-head{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10px;font-weight:900;letter-spacing:1.3px;color:#c5f350}
+.quick-head span:last-child{color:#afc8d7;font-weight:700;letter-spacing:0}
+.quick-content{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:11px;min-width:0}
+.quick-detail{min-width:0;flex:1}
+.quick-main{display:block;font-family:'Barlow Condensed','Noto Sans KR',sans-serif;font-weight:900;font-size:26px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.quick-sub{display:block;margin-top:6px;color:#94abbf;font-size:10px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.quick-score{flex-shrink:0;font-family:'Barlow Condensed',sans-serif;font-size:35px;font-weight:900;line-height:1;color:#c5f350;white-space:nowrap}
+.home-heading{margin:23px 0 12px}
+.home-heading h2{font-size:30px}
+.metrics{gap:10px}
+.metric{min-height:128px;padding:16px 19px}
+.metric-value{font-size:50px;margin-top:8px}
+.cards{margin-top:15px}
+@media(max-width:960px){.club-strip-brand{gap:15px;padding:17px}.club-strip-brand>img{width:70px;height:82px}.club-strip-copy h1{font-size:48px}}
+@media(max-width:700px){
+ .club-strip{margin:12px 0 8px;grid-template-columns:1fr;min-height:0;background:linear-gradient(120deg,#122b3b,#0b2231 72%,#1f3531)}
+ .club-strip-cover{display:none}
+ .club-strip-brand{gap:13px;padding:14px 14px 14px 13px}
+ .club-strip-brand>img{width:61px;height:72px}
+ .club-strip-copy h1{font-size:35px;margin:6px 0 4px}
+ .club-strip-copy p{font-size:11px;letter-spacing:.8px;margin:0 0 8px}
+ .eyebrow{font-size:8px;letter-spacing:1.2px}
+ .club-chips{gap:5px}
+ .club-chips span{padding:4px 7px;font-size:8px;letter-spacing:.5px}
+ .statusline{padding:8px 10px;gap:6px;margin:7px 0 14px}
+ .statusline #statusDetail,.statusline #lastSync{display:none}
+ .statusline .refresh{padding:7px 10px}
+ .quick-title{margin-bottom:8px;gap:7px}
+ .quick-title>span:first-child{font-size:8px;letter-spacing:.8px}
+ .quick-title strong{font-size:14px}
+ .quick-indicator{font-size:7px;letter-spacing:0}
+ .quick-grid{gap:8px}
+ .quick-card{padding:11px 10px;min-height:99px}
+ .quick-head{font-size:8px;letter-spacing:.6px}
+ .quick-head span:last-child{font-size:8px}
+ .quick-content{margin-top:11px;gap:5px}
+ .quick-main{font-size:19px}
+ .quick-score{font-size:23px}
+ .quick-sub{font-size:9px;margin-top:5px}
+ .home-heading{margin:18px 0 9px}
+ .home-heading h2{font-size:25px}
+ .home-heading .kicker{font-size:9px}
+ .metric{min-height:100px;padding:12px 13px}
+ .metric-value{font-size:42px;margin-top:6px}
+ .metric-foot{font-size:9px}
+ .cards{margin-top:13px}
+}
+@media(max-width:390px){.club-strip-copy h1{font-size:31px}.club-strip-brand>img{width:53px;height:63px}.quick-main{font-size:17px}.quick-score{font-size:21px}.quick-card{padding:10px 9px}.quick-title strong{font-size:13px}}
+/* Detailed player, opponent and goalkeeper statistics */
+.gk-feature{margin:19px 0 12px;background:linear-gradient(120deg,#102737,#142b2a);border:1px solid #38595e;padding:20px}
+.gk-top{display:flex;justify-content:space-between;align-items:end;gap:14px;margin-bottom:13px}
+.gk-top h2{font-family:'Barlow Condensed','Noto Sans KR';font-weight:900;font-size:28px;margin:0}
+.gk-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.gk-card{border:1px solid #4a6970;background:#122537;text-align:left;padding:15px;color:#ecf9ff;min-width:0}
+.gk-card:hover{background:#1e3645}
+.gk-card .gk-tag{font-size:9px;letter-spacing:2px;font-weight:900;color:#c5f350}
+.gk-card strong{display:block;font-size:17px;margin:10px 0 13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gk-statline{display:flex;gap:8px;justify-content:space-between}
+.gk-statline div{min-width:0}
+.gk-statline b{display:block;font-family:'Barlow Condensed';font-size:28px;color:#c5f350}
+.gk-statline small{color:#8eacbd;font-size:9px;line-height:1.3}
+.gk-disclaimer{color:#8aa3b5;font-size:10px;line-height:1.6;margin-top:9px}
+.detail-section-title{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 0;border-bottom:1px solid #375161;margin-top:14px}
+.detail-section-title h3{margin:0;font-size:14px}
+.detail-tag{font-size:9px;color:#c5f350;font-weight:900;letter-spacing:1px}
+.match-player-table{min-width:640px}
+.match-player-table td,.match-player-table th{white-space:nowrap;padding:11px 12px;font-size:11px}
+.match-player-table td:nth-child(2){text-align:left}
+.pos-label{color:#b0c4d3;font-weight:700;font-size:10px}
+.event-tags{display:flex;gap:5px;flex-wrap:wrap;margin:10px 0}
+.event-tags span{display:inline-flex;gap:6px;align-items:center;border:1px solid #38546b;background:#172d3b;color:#dcecf4;padding:6px 8px;font-size:10px}
+.event-tags b{color:#c5f350}
+.stats-note{font-size:10px;line-height:1.7;color:#93aabd;margin-top:12px}
+@media(max-width:700px){.gk-feature{padding:12px;margin:14px 0}.gk-top h2{font-size:24px}.gk-grid{grid-template-columns:1fr}.gk-card{padding:12px}.gk-card strong{margin:4px 0 10px}.gk-statline b{font-size:24px}.match-player-table{min-width:585px}.detail-section-title h3{font-size:13px}}
+/* Permanent stats archive */
+.archive-notice{border-bottom:1px solid #2b4053;background:#0b1d2b;color:#aac1d2;padding:13px 20px;font-size:11px;line-height:1.7}
+.stat-history{background:#102233;border:1px solid #365166;padding:19px 21px;margin-top:18px}
+.stat-history summary{list-style:none;cursor:pointer;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:space-between;gap:13px}
+.stat-history summary::-webkit-details-marker{display:none}
+.stat-history summary span{font-weight:500;color:#a9bfcd;font-size:10px}
+.stat-history p{font-size:11px;line-height:1.8;color:#9ab4c7}
+.stat-history a{color:#c5f350}
+.history-feed{margin-top:17px;display:grid;gap:8px}
+.history-item{background:#152d40;border:1px solid #36566b;padding:14px}
+.history-item time{display:block;color:#c5f350;font-size:10px;letter-spacing:.4px;margin-bottom:7px}
+.history-item strong{font-size:12px;font-weight:800}
+.history-item div{margin-top:7px;font-size:11px;color:#a0b7ca;line-height:1.6}
+.history-more{background:#c5f350;color:#102718;border:0;font-weight:900;font-size:11px;padding:10px 15px;margin-top:10px}
+@media(max-width:650px){.stat-history{padding:14px 12px}.stat-history summary{font-size:12px;flex-wrap:wrap}.stat-history summary span{font-size:9px}.archive-notice{font-size:10px;padding:11px}}
+/* EA FC27 current division and free community board */
+.division-pulse{display:flex;align-items:center;gap:14px;padding:12px 17px;background:linear-gradient(105deg,#243b32,#142a31);border:1px solid #53705d;margin:0 0 21px;min-height:73px;box-shadow:inset 4px 0 #c5f350}
+.division-pill{font-weight:900;letter-spacing:1.4px;color:#b8eb78;font-size:10px;white-space:nowrap}
+.division-number{font-family:'Barlow Condensed';font-weight:900;color:#c5f350;font-size:43px;line-height:1;white-space:nowrap}
+.division-detail{display:flex;flex:1;gap:3px;flex-direction:column;min-width:0}
+.division-detail strong{font-size:13px}
+.division-detail span{font-size:10px;color:#a4b7c4;line-height:1.4}
+.division-pulse>a{margin-left:auto;font-size:10px;color:#c9edc3;font-weight:800;white-space:nowrap}
+.board-intro{margin-bottom:16px;background:linear-gradient(130deg,#173345,#0e2436);border:1px solid #3b5468;padding:23px}
+.board-intro>strong{font-size:21px;font-weight:900}
+.board-intro p{font-size:12px;line-height:1.8;color:#a9c1cf;max-width:850px}
+.board-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.board-primary,.board-actions button{display:inline-block;border:1px solid #658574;padding:12px 17px;font-size:12px;font-weight:900}
+.board-primary{background:#c5f350;color:#102618}
+.board-actions button{background:#203748;color:#e7f1f8}
+.board-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:15px}
+.board-post{display:block;background:#17293a;border:1px solid #34485a;padding:18px 19px;min-width:0}
+.board-post:hover{border-color:#c5f350;background:#1e3344}
+.board-post-top,.board-post-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#93a9be;font-size:10px;letter-spacing:.4px}
+.board-post-top span:first-child{color:#c5f350;font-weight:800;letter-spacing:1.5px}
+.board-post h3{margin:12px 0 9px;font-size:16px;line-height:1.5;color:#f1f8fe;font-weight:900;overflow-wrap:anywhere}
+.board-post p{font-size:11px;line-height:1.7;color:#a0b5c8;min-height:38px;max-height:59px;overflow:hidden;margin:0 0 17px}
+.board-post-bottom{flex-wrap:wrap;justify-content:flex-start;gap:15px}
+.board-note{font-size:11px;line-height:1.9;color:#91aabd;margin:15px 2px 0}
+.board-fallback{display:inline-block;margin-top:15px;padding:9px 14px;background:#c5f350;color:#0b1a20;font-size:12px;font-weight:800}
+@media(max-width:800px){.nav{gap:8px}.nav button{font-size:10px;letter-spacing:0}.division-pulse{gap:9px;flex-wrap:wrap;padding:12px}.division-pill{width:100%;font-size:9px}.division-number{font-size:34px}.division-detail strong{font-size:12px}.division-pulse>a{font-size:9px}.board-list{grid-template-columns:1fr}.board-intro{padding:17px}.board-intro>strong{font-size:18px}}
+.push-toggle{border:1px solid #53653f;background:#233a36;color:var(--lime);padding:9px 13px;font-size:11px;font-weight:800;white-space:nowrap}.push-toggle:hover{background:#2b4a3e}.push-toggle:disabled{opacity:.55;cursor:not-allowed}.push-hint{font-size:11px;color:#b4cee1;flex-basis:100%;line-height:1.6}.push-toggle[hidden],.push-hint[hidden]{display:none!important}
+.match-data-warning{border:1px solid #96734a;background:#2e2926;color:#efdbbb;padding:14px 16px;margin:17px 0 8px;font-size:11px;line-height:1.7}
+.match-data-warning strong{font-size:12px;display:block;color:#ffdaa0;margin-bottom:5px}
+.match-data-warning p{margin:0}
+.rank-scope{color:#a1b8ca;font-size:10px;line-height:1.7;padding:0 23px;margin:8px 0 13px}
+.rank-scope[hidden]{display:none}
+.player-row.card-row{grid-template-columns:28px 40px 1fr auto}
+.player-row .card-value{display:flex;align-items:center;gap:11px;font-family:'DM Sans','Noto Sans KR',sans-serif;font-size:12px;white-space:nowrap}
+.player-row .card-value span{display:inline-block;color:#ecf4fb;font-weight:800}
+</style>
+<link rel="manifest" href="./site.webmanifest">
+<script src="./push/client.js" defer></script>
+</head>
+<body>
+<div class="topline">THE ISLAND. THE PRIDE. THE CLUB. — DOKDO FC / EA SPORTS FC 27</div>
+<div class="wrap">
+<header class="header">
+<a class="logo" href="#home" data-go="home"><img class="crest-image" src="./assets/dfc-crest.svg" width="48" height="56" alt="DFC 엠블럼"><span class="brand">DOKDO FC<small>PRO CLUBS · FC 27</small></span></a>
+<nav class="nav" aria-label="사이트 메뉴"><button data-go="home" class="active">OVERVIEW</button><button data-go="matches">MATCHES</button><button data-go="players">SQUAD</button><button data-go="board">BOARD</button></nav>
+<div class="nav-right"><span class="live"><span id="dot" class="light"></span><span id="syncState">연동 확인 중</span></span><a class="official" href="https://www.ea.com/games/ea-sports-fc/clubs/overview?clubId=331042&amp;platform=common-gen5" target="_blank" rel="noopener">EA CLUB ↗</a></div>
+</header>
+<section class="club-strip" aria-label="DOKDO FC 구단 소개">
+  <div class="club-strip-cover"><img src="./assets/club-banner.svg" width="1200" height="630" alt="DFC 독도 엠블럼과 경기장 그래픽" fetchpriority="high"></div>
+  <div class="club-strip-brand"><img src="./assets/dfc-crest.svg" width="80" height="92" alt="DFC 엠블럼">
+    <div class="club-strip-copy"><div class="eyebrow">DFC <span>•</span> EA SPORTS FC 27 PRO CLUBS</div>
+      <h1>DOKDO <em>FC</em></h1>
+      <p>ONE TEAM. ONE PRIDE. ONE LEGACY.</p>
+      <div class="club-chips"><span id="division">디비전 확인 중</span><span>CLUB ID 331042</span></div>
+    </div>
+  </div>
+</section>
+<div class="statusline"><span><strong id="statusLead">● SYNC STATUS</strong> &nbsp;<span id="statusDetail">EA 서버에서 팀 기록을 불러오는 중입니다.</span></span><span class="right" id="lastSync">마지막 동기화: 확인 중</span><button id="pushToggle" class="push-toggle" type="button" hidden>🔔 경기 알림 받기</button><span id="pushHint" class="push-hint" role="status" aria-live="polite" hidden></span><button class="refresh" id="refresh" type="button">↻ 새로고침</button></div>
+<div class="division-pulse" aria-live="polite"><div class="division-pill">🏆 CURRENT DIVISION</div><div id="leagueDivision" class="division-number">—</div><div class="division-detail"><strong id="leagueLabel">현재 소속 디비전 조회 중</strong><span id="leagueStats">EA FC27 클럽 순위표 기반</span></div><a href="https://www.ea.com/games/ea-sports-fc/clubs/overview?clubId=331042&amp;platform=common-gen5" target="_blank" rel="noopener">EA 원본 확인 ↗</a></div>
+<main>
+<section id="view-home" class="section-page active">
+<div class="quick-section">
+  <div class="quick-title"><span>LIVE CLUB PULSE</span><strong>경기·선수 한눈에</strong><span class="quick-indicator">EA STATS <span aria-hidden="true">●</span></span></div>
+  <div class="quick-grid">
+    <button type="button" class="quick-card" data-go="matches" aria-label="최근 경기 전체 기록 보기">
+      <div class="quick-head"><span>LAST MATCH</span><span>경기 기록 ↗</span></div>
+      <div id="spotMatch" class="quick-content"><span class="quick-main">불러오는 중</span></div>
+    </button>
+    <button type="button" class="quick-card" data-go="players" aria-label="선수 전체 기록 보기">
+      <div class="quick-head"><span>TOP SCORER</span><span>선수 기록 ↗</span></div>
+      <div id="spotPlayer" class="quick-content"><span class="quick-main">불러오는 중</span></div>
+    </button>
+  </div>
+</div>
+<div class="title-row home-heading"><div><div class="kicker">01 / TEAM PERFORMANCE</div><h2>시즌 성적</h2></div><span class="subtitle">EA FC27 · 최신 통계</span></div>
+<div class="metrics">
+<article class="metric"><div class="metric-label">총 경기 수</div><div class="metric-value" id="games">—</div><div class="metric-foot">TOTAL MATCHES</div></article>
+<article class="metric highlight"><div class="metric-label">시즌 승률</div><div class="metric-value" id="winRate">—</div><div class="metric-foot" id="record">W — / D — / L —</div></article>
+<article class="metric"><div class="metric-label">팀 전체 득점</div><div class="metric-value" id="goals">—</div><div class="metric-foot">GOALS SCORED</div></article>
+<article class="metric"><div class="metric-label">스킬 레이팅</div><div class="metric-value" id="rating">—</div><div class="metric-foot">CLUB SKILL RATING</div></article>
+</div>
+<section class="gk-feature">
+<div class="gk-top"><div><div class="kicker">04 / HUMAN GOALKEEPERS</div><h2>🧤 GK 스페셜</h2></div><button class="linkbtn" data-viewgk="1">골키퍼 전체 기록 ↗</button></div>
+<div class="gk-grid" id="keeperHighlights"></div>
+<div class="gk-disclaimer">AI 골키퍼를 제외하기 위해 EA 클럽 명단에 등록된 골키퍼만 집계합니다. 시즌 클린시트와 최근 경기의 선방 횟수는 집계 기간이 다릅니다.</div>
+</section>
+<div class="cards">
+<section class="panel"><header class="panel-title"><div><span>LATEST RESULTS</span><h3>최근 리그 경기</h3></div><button class="linkbtn" data-go="matches">전체 기록 ↗</button></header><div id="recentMatches"></div></section>
+<section class="panel"><header class="panel-title"><div><span>STAR PERFORMERS</span><h3>우리 팀 TOP 5</h3></div><button class="linkbtn" data-go="players">선수 전체 ↗</button></header><div class="tabs" role="group" aria-label="랭킹 기준"><button class="active" data-rank="goals">득점왕</button><button data-rank="assists">도움왕</button><button data-rank="ratingAve">평점왕</button><button data-rank="manOfTheMatch">MVP</button><button data-rank="archivedTackles">🦶 태클왕</button><button data-rank="archivedInterceptions">🧱 인터셉트왕</button><button data-rank="archivedAerial">🪂 수비 공중볼왕</button><button data-rank="discipline">🟨🟥 카드 기록</button></div><p id="rankScope" class="rank-scope" hidden></p><div id="topPlayers"></div></section>
+</div>
+</section>
+<section id="view-matches" class="section-page">
+<div class="title-row"><div><div class="kicker">02 / MATCH CENTER</div><h2>경기 아카이브</h2></div><span class="subtitle" id="matchCount">0 MATCHES</span></div>
+<section class="panel"><div class="filters"><button class="active" data-kind="all">전체 누적</button><button data-kind="leagueMatch">리그</button><button data-kind="friendlyMatch">친선 경기</button><button data-kind="playoffMatch">플레이오프</button></div><div class="archive-notice">📚 최근 조회된 10경기에 한정하지 않고 앞으로 수집되는 모든 경기 기록을 영구 누적합니다. 리그·친선·플레이오프 기록은 각각 보존합니다.</div><div id="allMatches"></div></section>
+</section>
+<section id="view-players" class="section-page">
+<div class="title-row"><div><div class="kicker">03 / THE SQUAD</div><h2>선수 랭킹</h2></div><span class="subtitle" id="playerCount">0 PLAYERS</span></div>
+<section class="panel"><div class="filters"><button class="active" data-sort="goals">득점순</button><button data-sort="assists">도움순</button><button data-sort="ratingAve">평점순</button><button data-sort="gamesPlayed">출전순</button><button data-sort="manOfTheMatch">🏅 MVP순</button><button data-sort="goalkeeper">🧤 GK 기록</button><button data-sort="defenseTackles">🦶 수비 태클</button><button data-sort="defenseInterceptions">🧱 인터셉트</button><button data-sort="defenseAerial">🪂 수비 공중볼</button><button data-sort="discipline">🟨🟥 카드 기록</button></div><p id="playerScope" class="rank-scope" hidden></p><div class="table-scroll"><table class="data-table"><thead id="playerThead"><tr><th>선수</th><th>출전</th><th>득점</th><th>도움</th><th>평점</th><th>MVP</th></tr></thead><tbody id="playerTable"></tbody></table></div></section>
+<details class="stat-history" id="statHistory">
+  <summary>📈 과거 팀·선수 통계 변화 이력 <span>삭제하지 않고 누적 보관</span></summary>
+  <p>득점·도움·MVP·평점·GK 클린시트·팀 전적 등 기록이 변할 때마다 그 시점의 데이터가 남습니다. 예전 선수가 명단에서 사라져도 과거 통계를 보관합니다.</p>
+  <div class="history-feed" id="historyFeed">이력 목록을 불러오는 중입니다.</div>
+  <button type="button" id="historyMore" class="history-more" hidden>이전 변경 기록 더 보기</button>
+  <p><a href="./data/history.json" target="_blank" rel="noopener">누적 통계 원본 파일 확인 ↗</a></p>
+</details>
+</section>
+<section id="view-board" class="section-page">
+  <div class="title-row"><div><div class="kicker">04 / DOKDO FC COMMUNITY</div><h2>DFC 자유게시판</h2></div><span class="subtitle">TEAM TALK / 응원 / 경기 후기</span></div>
+  <div class="board-intro"><strong>⚽ DOKDO FC 게시판</strong><p>팀원들의 자유로운 경기 후기, 전략 이야기, 응원 메시지를 남기는 공간입니다. 글과 댓글은 모두 공개됩니다. 처음 글을 작성할 때는 무료 GitHub 계정 로그인이 필요합니다.</p>
+  <div class="board-actions"><a class="board-primary" href="https://github.com/insungmeta/dokdo-fc/issues/new?title=%5BDFC%20%EA%B2%8C%EC%8B%9C%ED%8C%90%5D%20" target="_blank" rel="noopener">＋ 새 글 쓰기</a><button type="button" id="boardReload">↻ 게시판 새로고침</button></div></div>
+  <div class="panel"><header class="panel-title"><div><span>DFC TEAM BOARD</span><h3>최근 게시글</h3></div><span id="boardCount">불러오는 중</span></header><div id="boardList" class="board-list"><div class="empty">게시글을 불러오는 중입니다.</div></div></div>
+  <p class="board-note">게시글을 클릭하면 GitHub에서 댓글을 작성할 수 있습니다. 운영자 계정 <strong>insungmeta</strong>는 부적절한 게시물과 댓글을 관리하고 삭제할 수 있습니다. 저장소에 쓰기 권한을 추가한 사람이 있다면 그 사람도 댓글 관리 권한을 가질 수 있습니다.</p>
+</section>
+</main>
+
+<div class="disclaimer">실제 EA 기록을 수집한 경우에만 수치를 표시합니다. 데이터 수집이 실패하면 마지막 저장 기록을 유지하며, 업데이트가 늦어질 수 있습니다. <a href="https://www.ea.com/games/ea-sports-fc/clubs/overview?clubId=331042&amp;platform=common-gen5" target="_blank" rel="noopener">EA 원본 클럽 기록 ↗</a></div>
+<footer class="footer"><span>© DOKDO FC — WE PLAY AS ONE.</span><span>INDEPENDENT FAN SITE · NOT AFFILIATED WITH EA</span><span>FREE HOSTED / GEN 5</span></footer>
+</div>
+<dialog id="details"><header class="dialoghead"><div><div class="kicker" id="detailLabel">DOKDO FC</div><h2 id="detailTitle">경기 상세</h2></div><button class="close" id="closeDetail" aria-label="닫기">×</button></header><div class="dialogbody" id="detailBody"></div></dialog>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=v=>v===null||v===undefined||v===''||!Number.isFinite(Number(v))?null:Number(v);
+const fmt=(v,dec=0)=>num(v)===null?'—':num(v).toLocaleString('ko-KR',{maximumFractionDigits:dec});
+const val=(v,fallback='—')=>v===null||v===undefined||v===''?fallback:String(v);
+let data={club:null,overall:null,members:[],matches:[],career:[],sync:{}},page='home',kind='all',rank='goals',sort='goals';
+const KINDS={leagueMatch:'LEAGUE',friendlyMatch:'FRIENDLY',playoffMatch:'PLAYOFF'};
+const members=()=>Array.isArray(data.members)?data.members.filter(x=>x&&typeof x==='object'):[];
+const matches=()=>Array.isArray(data.matches)?data.matches.filter(x=>x&&typeof x==='object'):[];
+function mdate(m){const t=m.timestamp??m.time; if(!t)return '날짜 미상'; let d=new Date(typeof t==='number'?(t>1e12?t:t*1000):/^\d+$/.test(String(t))?(Number(t)>1e12?Number(t):Number(t)*1000):t);return Number.isNaN(d.getTime())?'날짜 미상':d.toLocaleDateString('ko-KR',{timeZone:'Asia/Seoul',month:'2-digit',day:'2-digit',year:'2-digit'})}
+function outcome(m){const r=String(m.result??'').toLowerCase();if(['win','wins','w','1'].includes(r))return 'win';if(['loss','lose','losses','l','2'].includes(r))return 'loss';if(['draw','tie','ties','d','0'].includes(r))return 'draw';const a=num(m.goals),b=num(m.goalsAgainst);if(a!==null&&b!==null)return a>b?'win':a<b?'loss':'draw';return 'unknown'}
+const outcomeLetter={win:'W',draw:'D',loss:'L',unknown:'?'};
+function matchStatsUnavailable(m){
+ // DNF can award a final score even if no actual player statistics were recorded.
+ if(m?.dnf!==true)return false;
+ const roster=[...(Array.isArray(m.players)?m.players:[]),...(Array.isArray(m.opponentPlayers)?m.opponentPlayers:[])];
+ if(!roster.length)return false;
+ const activity=['goals','assists','shots','passesMade','passAttempts','tacklesMade','tackleAttempts','saves','interceptions'];
+ return roster.every(p=>{
+  const seconds=num(p.secondsPlayed);
+  return seconds!==null&&seconds<=60&&num(p.rating)===6&&activity.every(k=>(num(p[k])??0)===0);
+ });
+}
+function matchMarkup(m,i){const k=outcome(m);const id=encodeURIComponent(String(m.matchType??'')+':'+String(m.matchId??i));return '<button class="match-row" data-match="'+E(id)+'"><span class="result '+k+'">'+outcomeLetter[k]+'</span><span class="match-opponent">vs. '+E(val(m.opponentName,'상대팀'))+'<small>'+E(KINDS[m.matchType]||'MATCH')+(m.dnf?' · DNF'+(matchStatsUnavailable(m)?' · 선수 기록 미집계':''):'')+'</small></span><span class="score">'+fmt(m.goals)+' : '+fmt(m.goalsAgainst)+'</span><span class="date">'+E(mdate(m))+'</span></button>'}
+const empty=(title,sub)=>'<div class="empty"><div class="empty-symbol">DK / 27</div><strong>'+E(title)+'</strong><p>'+E(sub)+'</p></div>';
+function clubDivision(raw){const n=num(raw);if(n===null||!Number.isInteger(n)||n<1||n>6)return null;return {label:n===1?'엘리트':(n-1)+'부',short:n===1?'ELITE':'DIVISION '+(n-1)};}
+function renderMeta(){const s=data.sync||{},ok=!!s.lastSuccess,err=!!s.error;$('dot').className='light '+(ok?'ok':err?'fail':'');$('syncState').textContent=ok?(err?'부분 연동':'기록 동기화됨'):err?'연동 점검 필요':'연동 대기';$('statusLead').textContent=ok?'● DATA CONNECTED':'● SYNC STATUS';$('statusDetail').textContent=err?ok?'일부 요청 실패 · 저장된 기록 표시':'EA 기록 수집이 아직 정상적으로 완료되지 않았습니다.':ok?'수집된 데이터를 표시하고 있습니다.':'자동 수집이 성공하면 실제 경기 기록이 표시됩니다.';$('lastSync').textContent=ok?'마지막 성공: '+new Date(s.lastSuccess).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}):'마지막 성공: 없음';const lg=data.league||{},d=clubDivision(lg.currentDivision),best=clubDivision(lg.bestDivision);
+$('division').textContent=d?d.short:'디비전 확인 중';
+$('leagueDivision').textContent=d?d.label:'—';
+$('leagueLabel').textContent=d?d.label+' 리그 소속':'현재 디비전 확인 전';
+$('leagueStats').textContent=d?'EA 현재 시즌 · 이번 시즌 최고 '+(best?best.label:'—')+' · 승격 '+fmt(data.overall?.promotions):'EA 순위표에서 클럽 ID 331042 확인 중';}
+function renderNumbers(){const s=data.overall||{},games=num(s.gamesPlayed),wins=num(s.wins);$('games').textContent=fmt(games);$('winRate').textContent=games&&wins!==null?Math.round(wins/games*100)+'%':'—';$('record').textContent='W '+fmt(s.wins)+' / D '+fmt(s.ties??s.draws)+' / L '+fmt(s.losses);$('goals').textContent=fmt(s.goals);$('rating').textContent=fmt(s.skillRating)}
+function renderMatches(){const league=matches().filter(m=>m.matchType==='leagueMatch');$('recentMatches').innerHTML=league.length?league.slice(0,6).map(matchMarkup).join(''):empty('아직 수집된 경기가 없습니다','리그 경기 데이터가 연동되면 이 자리에 승패·상대·득점이 표시됩니다.');const all=kind==='all'?matches():matches().filter(m=>m.matchType===kind);$('allMatches').innerHTML=all.length?all.map(matchMarkup).join(''):empty('보관된 경기 이력이 없습니다','새로 수집된 경기부터 자동으로 누적 저장됩니다.');$('matchCount').textContent=all.length+' MATCHES · 누적 보관'}
+function ranked(field){return [...members()].sort((a,b)=>(num(b[field])??-Infinity)-(num(a[field])??-Infinity)||String(a.name).localeCompare(String(b.name)))}
+function isDefender(p){return /^(defender|def|df)$/i.test(String(p?.position||p?.favoritePosition||p?.proPos||'').trim())}
+function defenderStats(){
+ // Count only archived DOKDO FC games where this player actually appeared as DF.
+ // Do not mix season-wide EA member totals (which may include games in other roles).
+ // Former members remain eligible when their archived human-player records are available.
+ const byId=new Map();
+ matches().forEach(m=>{
+  if(matchStatsUnavailable(m))return;
+  const seen=new Set();
+  (Array.isArray(m.players)?m.players:[]).forEach(p=>{
+   if(!isDefender(p)||!humanName(p)||!(Number(p.playerId)>0))return;
+   const id=String(p.playerId),name=String(p.name||p.playerName||'').trim();
+   if(!name||seen.has(id))return;
+   seen.add(id);
+   let row=byId.get(id);
+   if(!row){
+    const member=members().find(x=>String(x.name||'').toLowerCase()===name.toLowerCase());
+    row={...(member||{}),name,playerId:p.playerId,archivedDefMatches:0,archivedTackles:0,archivedInterceptions:0,archivedAerial:0};
+    byId.set(id,row);
+   }
+   row.archivedDefMatches++;
+   row.archivedTackles+=num(p.tacklesMade)??0;
+   row.archivedInterceptions+=num(p.interceptions)??0;
+   row.archivedAerial+=num(p.aerialDuelsWonDefending)??0;
+  });
+ });
+ return [...byId.values()];
+}
+const DEFENSE_FIELDS={archivedTackles:'defenseTackles',archivedInterceptions:'defenseInterceptions',archivedAerial:'defenseAerial'};
+const DEFENSE_SORTS={defenseTackles:'archivedTackles',defenseInterceptions:'archivedInterceptions',defenseAerial:'archivedAerial'};
+const DEFENSE_HELP='🛡️ 보관된 경기에서 실제 DF로 출전한 기록만 집계 · FW/MF/GK 출전 기록 제외 · DNF 선수 기록 미집계 경기 제외 · 시즌 전체 통계 아님';
+function defenseList(field){
+ return defenderStats().filter(p=>p.archivedDefMatches>0).sort((a,b)=>(num(b[field])??0)-(num(a[field])??0)||
+                      (num(b.archivedDefMatches)??0)-(num(a.archivedDefMatches)??0)||
+                      String(a.name).localeCompare(String(b.name)));
+}
+function isDefenseField(field){return Object.prototype.hasOwnProperty.call(DEFENSE_FIELDS,field)}
+function defenseHelp(){return DEFENSE_HELP}
+const DISCIPLINE_HELP='🟨 경고 / 🟥 퇴장 · 전체 포지션 대상 · 보관된 경기의 EA 선수별 카드 기록만 집계 · 선수별 기록이 누락된 DNF 경기는 제외 · 시즌 전체 기록 아님 · 퇴장 수 우선 정렬';
+function disciplineStats(){
+ // Use only the same archived-game scope for both card types. The season
+ // member.redCards count cannot be mixed with archived match yellowCards.
+ const byId=new Map(),seenMatches=new Set();
+ matches().forEach(m=>{
+  const matchKey=String(m.matchType||'')+':'+String(m.matchId||'');
+  if(seenMatches.has(matchKey)||matchStatsUnavailable(m))return;
+  seenMatches.add(matchKey);
+  const seenPlayers=new Set();
+  (Array.isArray(m.players)?m.players:[]).forEach(p=>{
+   if(!humanName(p)||!(Number(p.playerId)>0))return;
+   const id=String(p.playerId),name=String(p.name||p.playerName||'').trim();
+   if(!name||seenPlayers.has(id))return;
+   seenPlayers.add(id);
+   let row=byId.get(id);
+   if(!row){
+    const member=members().find(x=>String(x.name||'').toLowerCase()===name.toLowerCase());
+    row={...(member||{}),name,playerId:p.playerId,archivedCardGames:0,archivedYellowCards:0,archivedRedCards:0};
+    byId.set(id,row);
+   }
+   row.archivedCardGames++;
+   row.archivedYellowCards+=num(p.yellowCards)??0;
+   row.archivedRedCards+=num(p.redCards)??0;
+  });
+ });
+ return [...byId.values()].sort((a,b)=>b.archivedRedCards-a.archivedRedCards||
+  b.archivedYellowCards-a.archivedYellowCards||b.archivedCardGames-a.archivedCardGames||
+  String(a.name).localeCompare(String(b.name)));
+}
+function rankValue(p,field){return fmt(p[field],field==='ratingAve'?1:0)}
+function renderRank(){
+ const defense=isDefenseField(rank),cards=rank==='discipline';
+ const top=(cards?disciplineStats().filter(p=>p.archivedYellowCards+p.archivedRedCards>0):defense?defenseList(rank):ranked(rank)).slice(0,5);
+ const note=$('rankScope');note.hidden=!(defense||cards);if(defense||cards)note.textContent=cards?DISCIPLINE_HELP:defenseHelp(rank);
+ $('topPlayers').innerHTML=top.length?top.map((m,i)=>'<button class="player-row'+(cards?' card-row':'')+'" data-player="'+E(encodeURIComponent(String(m.name||'')))+'"><span class="place">'+String(i+1).padStart(2,'0')+'</span><span class="avatar">'+E(String(m.name||'?').slice(0,1).toUpperCase())+'</span><span class="pn">'+E(val(m.name,'선수 이름 미상'))+'<small>'+(cards?E('보관 경기 '+fmt(m.archivedCardGames)+'회'):defense?E('보관 DF '+fmt(m.archivedDefMatches)+'경기'):E(val(m.favoritePosition||m.proPos,'DOKDO FC PLAYER')))+'</small></span>'+(cards?'<span class="pv card-value"><span>🟨 '+fmt(m.archivedYellowCards)+'</span><span>🟥 '+fmt(m.archivedRedCards)+'</span></span>':'<span class="pv">'+rankValue(m,rank)+'</span>')+'</button>').join(''):empty(cards?'보관 경기의 카드 기록 없음':'해당 수비 기록 없음',cards?'현재 보관된 경기에서 경고·퇴장이 확인되지 않았습니다.':defense?'EA 수비수 기록이 확인되면 표시됩니다.':'연동 후 득점왕·도움왕·평점왕 순위가 자동 계산됩니다.');
+}
+function isGoalkeeper(p){return /^(goalkeeper|gk)$/i.test(String(p.position||p.favoritePosition||p.proPos||'').trim())}
+function humanName(p){return !!String(p?.name||p?.playerName||'').trim()&&!/^(AI|CPU|COM|BOT|VIRTUAL PRO AI)$/i.test(String(p.name||p.playerName||'').trim())}
+function confirmedHuman(p,team){return Number(p?.playerId)>0&&humanName(p)&&(team!=='ours'||members().some(m=>String(m.name||'').toLowerCase()===String(p.name||'').toLowerCase()))}
+function gkList(){
+  const gks=new Map(members().filter(isGoalkeeper).filter(humanName).map(m=>[String(m.name).toLowerCase(),{...m,archivedSaves:0,archivedMatches:0,archivedCorrectDives:0}]));
+  matches().forEach(m=>(m.players||[]).forEach(p=>{
+    const row=gks.get(String(p.name||'').toLowerCase());
+    if(row&&!matchStatsUnavailable(m)&&isGoalkeeper(p)&&confirmedHuman(p,'ours')){
+      row.archivedSaves+=num(p.saves)??0;row.archivedMatches+=1;row.archivedCorrectDives+=num(p.goodDirectionSaves)??0;
+    }
+  }));
+  return [...gks.values()].sort((a,b)=>(num(b.cleanSheetsGK)??0)-(num(a.cleanSheetsGK)??0)||b.archivedSaves-a.archivedSaves);
+}
+function renderGK(){
+  const arr=gkList();
+  $('keeperHighlights').innerHTML=arr.length?arr.slice(0,3).map((p,i)=>'<button class="gk-card" data-player="'+E(encodeURIComponent(String(p.name)))+'"><span class="gk-tag">GK '+String(i+1).padStart(2,'0')+'</span><strong>'+E(p.name)+'</strong><div class="gk-statline"><div><b>'+fmt(p.cleanSheetsGK)+'</b><small>시즌 클린시트</small></div><div><b>'+fmt(p.archivedSaves)+'</b><small>기록된 선방</small></div><div><b>'+fmt(p.ratingAve,1)+'</b><small>시즌 평점</small></div></div></button>').join(''):empty('골키퍼 기록 없음','EA 클럽 멤버로 확인되는 실제 GK만 표시합니다.');
+}
+function renderPlayers(){
+ const isGK=sort==='goalkeeper',defField=DEFENSE_SORTS[sort],isDF=!!defField,isCards=sort==='discipline';
+ const ms=isGK?gkList():isDF?defenseList(defField):isCards?disciplineStats():ranked(sort);
+ const info=$('playerScope');info.hidden=!(isDF||isCards);if(isDF||isCards)info.textContent=isCards?DISCIPLINE_HELP:defenseHelp(defField);
+ $('playerCount').textContent=ms.length+(isGK?' HUMAN GKs':isDF?' DEFENDERS':isCards?' ARCHIVED PLAYERS':' PLAYERS');
+ if(isGK){
+  $('playerThead').innerHTML='<tr><th>선수</th><th>출전</th><th>클린시트</th><th>기록된 선방</th><th>평점</th><th>MVP</th></tr>';
+ }else if(isDF){
+  $('playerThead').innerHTML='<tr><th>수비수</th><th>DF 출전</th><th>태클 성공</th><th>인터셉트</th><th>수비 공중볼 승리</th></tr>';
+ }else if(isCards){
+  $('playerThead').innerHTML='<tr><th>선수</th><th>보관 경기</th><th>🟨 경고</th><th>🟥 퇴장</th></tr>';
+ }else{
+  $('playerThead').innerHTML='<tr><th>선수</th><th>출전</th><th>득점</th><th>도움</th><th>평점</th><th>MVP</th></tr>';
+ }
+ $('playerTable').innerHTML=ms.length?ms.map((m,i)=>{
+  const start='<tr data-player="'+E(encodeURIComponent(String(m.name||'')))+'"><td><span class="index">'+String(i+1).padStart(2,'0')+'</span><strong>'+E(val(m.name,'이름 없음'))+'</strong></td>';
+  if(isDF){
+   return start+'<td>'+fmt(m.archivedDefMatches)+'</td><td>'+fmt(m.archivedTackles)+'</td><td>'+fmt(m.archivedInterceptions)+'</td><td>'+fmt(m.archivedAerial)+'</td></tr>';
+  }
+  if(isCards){
+   return start+'<td>'+fmt(m.archivedCardGames)+'</td><td>'+fmt(m.archivedYellowCards)+'</td><td>'+fmt(m.archivedRedCards)+'</td></tr>';
+  }
+  return start+'<td>'+fmt(m.gamesPlayed)+'</td><td>'+fmt(isGK?m.cleanSheetsGK:m.goals)+'</td><td>'+fmt(isGK?m.archivedSaves:m.assists)+'</td><td>'+fmt(m.ratingAve,1)+'</td><td>'+fmt(m.manOfTheMatch)+'</td></tr>';
+ }).join(''):'<tr><td colspan="'+(isDF?'5':isCards?'4':'6')+'">'+empty(isCards?'카드 기록 없음':isDF?'수비수 기록 없음':'선수 기록 없음',isCards?'아직 보관된 선수별 카드 기록이 없습니다.':isDF?'보관된 경기에서 확인된 DF 출전 기록이 없습니다.':'EA에서 확인된 선수 데이터를 기다리고 있습니다.')+'</td></tr>';
+}
+function renderSpotlight(){
+  const league=matches().filter(m=>m.matchType==='leagueMatch').sort((a,b)=>Number(b.timestamp||0)-Number(a.timestamp||0));
+  const m=league[0],p=ranked('goals')[0];
+  if(m){
+    const result=outcome(m);
+    const flag=result==='win'?'승리':result==='draw'?'무승부':result==='loss'?'패배':'결과 확인';
+    $('spotMatch').innerHTML='<div class="quick-detail"><span class="quick-main">vs '+E(val(m.opponentName,'상대팀'))+'</span><span class="quick-sub">'+E(flag)+' · '+E(mdate(m))+'</span></div><strong class="quick-score">'+fmt(m.goals)+' : '+fmt(m.goalsAgainst)+'</strong>';
+  }else{
+    $('spotMatch').innerHTML='<div class="quick-detail"><span class="quick-main">기록 수집 대기</span><span class="quick-sub">최근 리그 경기를 불러오는 중</span></div>';
+  }
+  if(p){
+    $('spotPlayer').innerHTML='<div class="quick-detail"><span class="quick-main">'+E(val(p.name,'선수'))+'</span><span class="quick-sub">득점 1위 · '+fmt(p.gamesPlayed)+'경기 출전</span></div><strong class="quick-score">'+fmt(p.goals)+' GOAL</strong>';
+  }else{
+    $('spotPlayer').innerHTML='<div class="quick-detail"><span class="quick-main">기록 수집 대기</span><span class="quick-sub">선수 득점 기록을 불러오는 중</span></div>';
+  }
+}
+function render(){renderMeta();renderNumbers();renderSpotlight();renderMatches();renderRank();renderGK();renderPlayers()}
+function showPage(p){page=['home','matches','players','board'].includes(p)?p:'home';if(page==='board'&&!boardLoaded)loadBoard();document.querySelectorAll('.section-page').forEach(e=>e.classList.toggle('active',e.id==='view-'+page));document.querySelectorAll('[data-go]').forEach(e=>e.classList.toggle('active',e.dataset.go===page));history.replaceState(null,'','#'+page);window.scrollTo({top:0,behavior:'smooth'})}
+function openDetails(label,title,body){$('detailLabel').textContent=label;$('detailTitle').textContent=title;$('detailBody').innerHTML=body;$('details').showModal()}
+function posLabel(p){
+ const v=String(p?.position||p?.proPos||'').trim().toLowerCase();
+ return ({goalkeeper:'GK',defender:'DF',midfielder:'MF',forward:'FW',striker:'ST',gk:'GK',def:'DF',mid:'MF',att:'FW'})[v]|| (v? v.toUpperCase():'—');
+}
+function posExplanation(){
+ return '<div class="stats-note">※ 포지션은 EA가 해당 경기에서 기록한 분류입니다. 킥오프 당시 세부 선발 위치나 경기 중 변경 시점까지 입증하는 데이터는 아닙니다.</div>';
+}
+function detailStats(p){
+ const nums=[
+ ['원터치 골',p.goalsFirstTime],['약발 골',p.goalsWeakFoot],['골대 맞고 골',p.goalsOffPost],
+ ['스루패스 도움',p.throughBallAssists],['세컨드 도움',p.secondAssists],
+ ['성공 크로스',p.passesCompletedCross],['롱패스 성공',p.passesCompletedLong],['전진패스 성공',p.passesCompletedForward],
+ ['유효슈팅',p.shotsOnTarget],['박스 안 유효슈팅',p.shotsOnTargetInsideBox],['박스 밖 유효슈팅',p.shotsOnTargetOutsideBox],
+ ['태클 성공',p.tacklesWon],['인터셉트',p.interceptions],['옐로카드',p.yellowCards],['레드카드',p.redCards],
+ ['선방',p.saves],['방향 예측 선방',p.goodDirectionSaves],
+ ['공중볼 경합 승리',p.aerialDuelsWonDefending]
+ ];
+ const visible=nums.filter(([k,v])=>(num(v)??0)>0);
+ return visible.length?'<div class="event-tags">'+visible.map(([k,v])=>'<span>'+E(k)+' <b>'+fmt(v)+'</b></span>').join('')+'</div>':'<div class="stats-note">이 경기에서 추가로 확인된 긍정 이벤트가 없습니다.</div>';
+}
+function rosterTable(players,side,unavailable=false){
+ const pp=(Array.isArray(players)?players:[]).filter(p=>confirmedHuman(p,side)).sort((a,b)=>(num(b.rating)??0)-(num(a.rating)??0));
+ if(!pp.length)return empty('세부 선수 기록 없음','EA에서 이 경기의 선수 상세 기록을 제공하지 않았습니다.');
+ const field=(v,dec=0)=>unavailable?'—':fmt(v,dec);
+ return '<div class="table-scroll"><table class="data-table match-player-table"><thead><tr><th>선수</th><th>경기 포지션</th><th>골</th><th>도움</th><th>평점</th><th>슈팅</th><th>선방</th></tr></thead><tbody>'+pp.map(p=>'<tr data-detail-player="'+E(encodeURIComponent(String(p.name||'')))+'" data-detail-club="'+E(side)+'"><td><strong>'+E(val(p.name,'선수'))+'</strong></td><td class="pos-label">'+E(posLabel(p))+'</td><td>'+field(p.goals)+'</td><td>'+field(p.assists)+'</td><td>'+field(p.rating,1)+'</td><td>'+field(p.shots)+'</td><td>'+field(isGoalkeeper(p)?p.saves:null)+'</td></tr>').join('')+'</tbody></table></div>';
+}
+let detailMatch=null;
+function matchDetails(encoded){
+ let key;try{key=decodeURIComponent(encoded)}catch{return}
+ const m=matches().find((x,i)=>String(x.matchType??'')+':'+String(x.matchId??i)===key);if(!m)return;
+ detailMatch=m;
+ const club=val(data.club?.name,'DOKDO FC');
+ const our=Array.isArray(m.players)?m.players:[],opponents=Array.isArray(m.opponentPlayers)?m.opponentPlayers:[],unavailable=matchStatsUnavailable(m);
+ const body='<div class="detail-score"><strong>'+E(club)+'</strong><span>'+fmt(m.goals)+' : '+fmt(m.goalsAgainst)+'</span><strong>'+E(val(m.opponentName,'상대팀'))+'</strong></div>'+
+ '<div class="detail-grid"><div><small>경기 결과</small><strong>'+outcomeLetter[outcome(m)]+'</strong></div><div><small>경기 날짜</small><strong>'+E(mdate(m))+'</strong></div><div><small>경기 종류</small><strong>'+E(KINDS[m.matchType]||'MATCH')+'</strong></div></div>'+
+ (m.dnf?'<div class="match-data-warning"><strong>⚠ EA DNF · 경기 중단 처리</strong><p>'+(unavailable?'경기는 '+fmt(m.goals)+' : '+fmt(m.goalsAgainst)+'으로 처리됐지만 선수별 플레이 기록은 미집계 상태입니다. 표시되던 0골·평점 6.0은 실제 경기력 통계가 아닌 초기값입니다. 아래 미집계 항목은 — 로 표시합니다.':'경기 중단(DNF) 기록입니다. 선수별 통계는 실제 기록된 값만 표시합니다.')+'</p></div>':'')+
+ '<div class="detail-section-title"><h3>🟢 DOKDO FC · 경기별 선수</h3><span class="detail-tag">HUMAN PLAYERS</span></div>'+rosterTable(our,'ours',unavailable)+
+ '<div class="detail-section-title"><h3>⚔️ '+E(val(m.opponentName,'상대팀'))+' · 선수</h3><span class="detail-tag">OPPONENT</span></div>'+rosterTable(opponents,'opponent',unavailable)+
+ posExplanation()+(unavailable?'':'<div class="stats-note">선수명을 누르면 해당 경기의 골·패스·슈팅·선방 등 추가 기록을 볼 수 있습니다. 원터치·약발 골 등은 서로 중복되는 태그이며 개별 골 장면의 정확한 종류를 모두 알려 주는 데이터는 아닙니다.</div>');
+ openDetails('MATCH CENTER','vs. '+val(m.opponentName,'상대팀'),body);
+}
+function matchPlayerDetails(encoded,side){
+ if(!detailMatch)return;
+ let name;try{name=decodeURIComponent(encoded)}catch{return}
+ const player=((side==='opponent'?detailMatch.opponentPlayers:detailMatch.players)||[]).find(p=>String(p.name||'')===name);
+ if(!player)return;
+ const unavailable=matchStatsUnavailable(detailMatch),field=(v,dec=0)=>unavailable?'—':fmt(v,dec);
+ const summary=[['경기 포지션',posLabel(player)],['평점',field(player.rating,1)],['골',field(player.goals)],['도움',field(player.assists)],['슈팅',field(player.shots)],['선방',isGoalkeeper(player)?field(player.saves):'—']];
+ const body='<div class="detail-grid">'+summary.map(([k,v])=>'<div><small>'+E(k)+'</small><strong>'+E(v)+'</strong></div>').join('')+'</div>'+
+ '<h3 class="detail-heading">실제 경기 이벤트 세부 기록</h3>'+(unavailable?'<div class="match-data-warning">EA 경기 중단(DNF)으로 선수별 이벤트가 미집계되었습니다.</div>':detailStats(player))+
+ (unavailable?'':'<div class="stats-note">페널티킥·프리킥·헤딩·발리·오버헤드킥 득점 또는 크로스 어시스트 여부는 현재 확인할 수 없습니다. 정확한 선발 위치와 경기 중 포지션 변경도 알 수 없습니다.</div>')+
+ '<button type="button" class="refresh" data-backmatch="1">← 해당 경기로 돌아가기</button>';
+ openDetails(side==='opponent'?'OPPONENT PLAYER':'DOKDO FC PLAYER',name,body);
+}
+function playerDetails(encoded){
+ let name;try{name=decodeURIComponent(encoded)}catch{return}
+ const defender=defenderStats().find(x=>String(x.name||'')===name);
+ const cardPlayer=disciplineStats().find(x=>String(x.name||'')===name);
+ const m=members().find(x=>String(x.name||'')===name)||defender||cardPlayer;if(!m)return;
+ const career=(Array.isArray(data.career)?data.career:[]).find(x=>x.name===name)||{};
+ const gk=isGoalkeeper(m),keeper=gkList().find(x=>x.name===name);
+ const vals=[['출전',m.gamesPlayed],['골',m.goals],['도움',m.assists],['평점',m.ratingAve],['MVP',m.manOfTheMatch],['커리어 득점',career.goals]];
+ if(gk){vals.splice(1,0,['시즌 클린시트',m.cleanSheetsGK]);vals.push(['최근 저장 경기 선방',keeper?.archivedSaves]);vals.push(['저장 경기 방향 예측 선방',keeper?.archivedCorrectDives]);}
+ if(defender){vals.push(['보관 DF 출전',defender.archivedDefMatches],['보관 DF 태클',defender.archivedTackles],['보관 DF 인터셉트',defender.archivedInterceptions],['보관 DF 공중볼',defender.archivedAerial]);}
+ if(cardPlayer){vals.push(['보관 경기 🟨 경고',cardPlayer.archivedYellowCards],['보관 경기 🟥 퇴장',cardPlayer.archivedRedCards]);}
+ const related=matches().flatMap(x=>(x.players||[]).filter(p=>p.name===name&&Number(p.playerId)>0&&humanName(p)).map(p=>({m:x,p})));
+ const body='<div class="detail-grid">'+vals.map(([k,v])=>'<div><small>'+E(k)+'</small><strong>'+fmt(v,k==='평점'?1:0)+'</strong></div>').join('')+'</div>'+
+ (gk?'<p class="stats-note">🧤 시즌 클린시트는 EA 멤버 통계 기준이고, 선방 기록은 현재 저장된 경기에서만 합산했습니다. AI의 기록은 제외합니다.</p>':'')+
+ '<h3 class="detail-heading">최근 경기에서 기록된 포지션과 이벤트</h3>'+
+ (related.length?related.slice(0,10).map(x=>'<div class="detail-section-title"><h3>'+E(mdate(x.m))+' · vs '+E(val(x.m.opponentName,'상대팀'))+'</h3><span class="detail-tag">'+E(posLabel(x.p))+' / '+(matchStatsUnavailable(x.m)?'기록 미집계':fmt(x.p.rating,1)+'점')+'</span></div>'+(matchStatsUnavailable(x.m)?'<div class="stats-note">EA 경기 중단(DNF) · 선수별 기록 미집계</div>':detailStats(x.p))).join(''):empty('저장된 상세 기록 없음','향후 수집되는 경기에서 개인별 상세 기록을 보여드립니다.'))+posExplanation();
+ openDetails('PLAYER PROFILE',name,body);
+}
+async function refresh(){const b=$('refresh');b.disabled=true;try{const res=await fetch('./data/dashboard.json?ts='+Date.now(),{cache:'no-store'});if(!res.ok)throw new Error('HTTP '+res.status);const next=await res.json();if(next.clubId!==331042)throw new Error('다른 클럽 데이터');data=next;render()}catch(e){$('dot').className='light fail';$('syncState').textContent='데이터 조회 실패';$('statusDetail').textContent='게시된 데이터 파일을 읽지 못했습니다. 잠시 뒤 다시 시도해 주세요.';console.warn('DOKDO FC data fetch:',e)}finally{b.disabled=false}}
+let statHistoryData=null,historyCount=20;
+function makeHistoryNotes(event){
+ const lines=[];
+ if(event.overall){const o=event.overall;lines.push('팀 전적 '+fmt(o.gamesPlayed)+'경기 · '+fmt(o.wins)+'승 · 레이팅 '+fmt(o.skillRating))}
+ if(Array.isArray(event.matches)&&event.matches.length)lines.push('경기별 선수·상대팀 상세 '+event.matches.length+'경기');
+ if(Array.isArray(event.members)&&event.members.length)lines.push('선수 시즌 통계 '+event.members.length+'명');
+ if(Array.isArray(event.career)&&event.career.length)lines.push('선수 커리어 통계 '+event.career.length+'명');
+ if(event.club)lines.push('구단 정보 기록');
+ return lines.length?lines.join(' / '):'변경 기록 보관';
+}
+function showStatHistory(){
+ const target=$('historyFeed'),changes=statHistoryData?.changes;
+ if(!Array.isArray(changes)){target.textContent='보관된 기록을 읽지 못했습니다.';return;}
+ const arr=changes.slice().reverse();
+ target.innerHTML=arr.slice(0,historyCount).map(e=>{
+  const dt=new Date(e.at);
+  const when=Number.isFinite(dt.getTime())?dt.toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}):String(e.at||'날짜 미상');
+  return '<article class="history-item"><time>'+E(when)+'</time><strong>'+E(e.kind==='preserved-baseline'?'최초 데이터 보관':'기록 변경 저장')+'</strong><div>'+E(makeHistoryNotes(e))+'</div></article>'
+ }).join('')||'<div class="history-item">수집된 변경 기록이 없습니다.</div>';
+ $('historyMore').hidden=historyCount>=arr.length;
+}
+async function loadStatHistory(){
+ $('historyFeed').textContent='보관된 기록을 불러오는 중입니다.';
+ try{
+  const response=await fetch('./data/history.json?ts='+Date.now(),{cache:'no-store'});
+  if(!response.ok)throw new Error('HTTP '+response.status);
+  const payload=await response.json();
+  if(payload.clubId!==331042||!Array.isArray(payload.changes))throw new Error('잘못된 클럽 기록');
+  statHistoryData=payload;historyCount=20;showStatHistory();
+ }catch(err){$('historyFeed').textContent='기록 이력을 불러오지 못했습니다. 다시 열어 주세요.';console.warn('History fetch:',err)}
+}
+$('statHistory').addEventListener('toggle',e=>{if(e.target.open&&!statHistoryData)loadStatHistory()});
+$('historyMore').addEventListener('click',()=>{historyCount+=20;showStatHistory()});
+let boardLoaded=false;
+const BOARD_API='https://api.github.com/repos/insungmeta/dokdo-fc/issues?state=open&sort=updated&direction=desc&per_page=100';
+function postURL(issue){
+ const u=String(issue?.html_url||'');
+ return /^https:\/\/github\.com\/insungmeta\/dokdo-fc\/issues\/\d+$/.test(u)?u:'https://github.com/insungmeta/dokdo-fc/issues';
+}
+function plainPreview(body){
+ return String(body||'').replace(/```[\s\S]*?```/g,'').replace(/!\[[^\]]*\]\([^)]*\)/g,'').replace(/\[([^\]]+)\]\([^)]*\)/g,'$1').replace(/[#*_>|\r\n]/g,' ').replace(/\s+/g,' ').trim().slice(0,165);
+}
+async function loadBoard(){
+ boardLoaded=true;
+ $('boardList').innerHTML='<div class="empty"><strong>게시글을 불러오는 중</strong><p>GitHub 무료 게시판과 연결하고 있습니다.</p></div>';
+ try{
+   const res=await fetch(BOARD_API,{headers:{Accept:'application/vnd.github+json'}});
+   if(!res.ok)throw new Error('HTTP '+res.status);
+   const data=await res.json();
+   const posts=(Array.isArray(data)?data:[]).filter(p=>!p.pull_request&&String(p.title||'').startsWith('[DFC 게시판]'));
+   $('boardCount').textContent=posts.length+' POSTS';
+   $('boardList').innerHTML=posts.length?posts.map(p=>{
+     const created=new Date(p.updated_at),date=Number.isFinite(created.getTime())?created.toLocaleDateString('ko-KR',{timeZone:'Asia/Seoul'}):'';
+     const title=String(p.title||'').replace(/^\[DFC 게시판\]\s*/,'');
+     return '<a class="board-post" href="'+E(postURL(p))+'" target="_blank" rel="noopener"><div class="board-post-top"><span>DFC / TEAM TALK</span><span>#'+E(p.number)+'</span></div><h3>'+E(title)+'</h3><p>'+E(plainPreview(p.body))+'</p><div class="board-post-bottom"><span>✍ '+E(p.user?.login||'팀원')+'</span><span>💬 댓글 '+fmt(p.comments||0)+'</span><span>'+E(date)+'</span></div></a>';
+   }).join(''):empty('첫 게시글을 기다리고 있습니다','새 글 쓰기에서 우리 팀 이야기를 올려 주세요.');
+ }catch(e){
+   boardLoaded=false;
+   $('boardCount').textContent='조회 실패';
+   $('boardList').innerHTML='<div class="empty"><strong>게시판 연결에 실패했습니다</strong><p>GitHub 일시 장애 또는 공개 API 이용량 제한일 수 있습니다. 아래 링크에서 게시글을 확인하세요.</p><a class="board-fallback" href="https://github.com/insungmeta/dokdo-fc/issues" target="_blank" rel="noopener">GitHub 게시판에서 보기 ↗</a></div>';
+   console.warn('DFC board:',e);
+ }
+}
+$('boardReload').addEventListener('click',loadBoard);
+document.addEventListener('click',e=>{const go=e.target.closest('[data-go]');if(go){showPage(go.dataset.go);return}const r=e.target.closest('[data-rank]');if(r){rank=r.dataset.rank;document.querySelectorAll('[data-rank]').forEach(el=>el.classList.toggle('active',el===r));renderRank();return}const k=e.target.closest('[data-kind]');if(k){kind=k.dataset.kind;document.querySelectorAll('[data-kind]').forEach(el=>el.classList.toggle('active',el===k));renderMatches();return}const s=e.target.closest('[data-sort]');if(s){sort=s.dataset.sort;document.querySelectorAll('[data-sort]').forEach(el=>el.classList.toggle('active',el===s));renderPlayers();return}const g=e.target.closest('[data-viewgk]');if(g){sort='goalkeeper';document.querySelectorAll('[data-sort]').forEach(el=>el.classList.toggle('active',el.dataset.sort==='goalkeeper'));showPage('players');renderPlayers();return}const p=e.target.closest('[data-player]');if(p){playerDetails(p.dataset.player);return}const detailP=e.target.closest('[data-detail-player]');if(detailP){matchPlayerDetails(detailP.dataset.detailPlayer,detailP.dataset.detailClub);return}const back=e.target.closest('[data-backmatch]');if(back&&detailMatch){matchDetails(encodeURIComponent(String(detailMatch.matchType)+':'+String(detailMatch.matchId)));return}const m=e.target.closest('[data-match]');if(m){matchDetails(m.dataset.match)}});$('closeDetail').addEventListener('click',()=>$('details').close());$('details').addEventListener('click',e=>{if(e.target===$('details'))$('details').close()});$('refresh').addEventListener('click',refresh);showPage(location.hash.slice(1));refresh();setInterval(refresh,60000);
+</script>
+</body></html>
