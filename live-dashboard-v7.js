@@ -48,8 +48,8 @@ const items=['tackles','interceptions','aerial'].includes(k)?[['DF 출전',p.dfM
 $('profileSecondary').innerHTML=items.map(([a,b])=>'<div class="profile-stat"><span>'+E(a)+'</span><strong>'+E(b)+'</strong></div>').join('');$('profileHint').textContent=b.note;$('profileBadge').textContent=b.period;document.querySelectorAll('.standing-row').forEach(el=>el.classList.toggle('active',el.dataset.name===n))}
 function leader(k){active=k;const b=boards[k];document.querySelectorAll('[data-leader]').forEach(el=>el.classList.toggle('active',el.dataset.leader===k));const mx=Math.max(1,...b.rows.map(x=>x[1]));$('leaderRows').innerHTML=b.rows.length?b.rows.map(([n,v,c],i)=>'<div class="standing-row" role="button" tabindex="0" data-name="'+E(n)+'"><span class="order">'+String(i+1).padStart(2,'0')+'</span><div class="who"><strong>'+E(n)+'</strong><span>'+E(profiles[n]?.tag||'DFC 선수')+'</span></div><div class="progress"><i style="width:'+Math.max(3,Math.round(v/mx*100))+'%"></i></div><b class="amount">'+E(c||v+' '+b.unit)+'</b></div>').join(''):'<p class="note">해당 부문에 집계된 선수가 없습니다.</p>';$('leaderNote').textContent=b.note;if(b.rows.length)detail(b.rows[0][0],k)}
 $('leaderTabs').addEventListener('click',e=>{const el=e.target.closest('[data-leader]');if(el)leader(el.dataset.leader)});
-$('leaderRows').addEventListener('click',e=>{const el=e.target.closest('[data-name]');if(el)detail(el.dataset.name,active)});
-$('leaderRows').addEventListener('keydown',e=>{const el=e.target.closest('[data-name]');if(el&&(e.key==='Enter'||e.key===' ')){e.preventDefault();detail(el.dataset.name,active)}});
+$('leaderRows').addEventListener('click',e=>{const el=e.target.closest('[data-name]');if(el){detail(el.dataset.name,active);$('playerDetails').open=true;if(window.matchMedia('(max-width:820px)').matches)$('playerDetails').scrollIntoView({behavior:'smooth',block:'start'})}});
+$('leaderRows').addEventListener('keydown',e=>{const el=e.target.closest('[data-name]');if(el&&(e.key==='Enter'||e.key===' ')){e.preventDefault();detail(el.dataset.name,active);$('playerDetails').open=true;if(window.matchMedia('(max-width:820px)').matches)$('playerDetails').scrollIntoView({behavior:'smooth',block:'start'})}});
 const crests=new Map(matches.filter(m=>m.opponentCrestUrl).map(m=>[String(m.opponentId),m.opponentCrestUrl]));
 function crest(id,n,size='small'){const raw=crests.get(String(id))||'',url=/^https:\/\/eafc24\.content\.easports\.com\//.test(raw)?raw:'';const ab=String(n||'FC').trim().split(/\s+/).slice(0,2).map(s=>s.slice(0,1)).join('').toUpperCase();return '<span class="crest-frame '+size+'" role="img" aria-label="'+E(n)+' 엠블럼"><span class="crest-fallback">'+E(ab)+'</span>'+(url?'<img class="crest-img" src="'+E(url)+'" loading="lazy" alt="">':'')+'</span>'}
 const dfc=cls=>'<svg class="mini-logo '+(cls||'')+'" role="img" aria-label="DOKDO FC 엠블럼"><use href="#dfc-crest"/></svg>';
@@ -65,18 +65,45 @@ $('rivalSelect').addEventListener('change',e=>h2h(e.target.value));
 function updateH2H(m){const key=String(m.opponentId||('name:'+String(m.opponentName).toLowerCase())),g=groups.get(key);if(!g)return;const a=g.fixtures,w=a.filter(x=>num(x.goals)>num(x.goalsAgainst)).length,d=a.filter(x=>num(x.goals)===num(x.goalsAgainst)).length;$('inlineH2H').textContent='🤝 '+g.name+' 상대전적 · 보관 '+a.length+'전 '+w+'승 '+d+'무 '+(a.length-w-d)+'패';h2h(key)}
 const G=m=>{const ps=(m.players||[]).filter(human),op=(m.opponentPlayers||[]).filter(human),p=[ps,op],pair=k=>p.map(a=>SUM(a,k));return {raw:m,opp:String(m.opponentName||'상대팀'),id:m.opponentId,time:date(m.timestamp),score:[num(m.goals),num(m.goalsAgainst)],dnf:missing(m)||!ps.length,counts:p.map(x=>x.length),shots:pair('shots'),onTarget:pair('shotsOnTarget'),tackles:pair('tacklesWon'),interceptions:pair('interceptions'),passes:pair('passesCompleted'),attempts:pair('passAttempts')}};
 const games=matches.map(G);
-function game(i){const m=games[i];if(!m)return;document.querySelectorAll('[data-game]').forEach(el=>el.classList.toggle('active',num(el.dataset.game)===i));$('gameDate').textContent=m.time;$('gameTeamDisplay').innerHTML=dfc('detail-crest')+'<span class="team-name-pair">DOKDO FC <span>VS</span> '+E(m.opp)+'</span>'+crest(m.id,m.opp,'small');$('scoreUs').textContent=m.score[0];$('scoreThem').textContent=m.score[1];updateH2H(m.raw);
+
+const matchReview=$('matchReviewPanel'),reviewDock=$('reviewDock');
+let selectedMatchButton=null;
+function closeMatchReview(){
+ if(selectedMatchButton){selectedMatchButton.setAttribute('aria-expanded','false');selectedMatchButton.classList.remove('active')}
+ selectedMatchButton=null;
+ matchReview.hidden=true;
+ reviewDock.appendChild(matchReview);
+}
+function toggleMatchReview(index,button){
+ if(!button)return;
+ if(selectedMatchButton===button&&!matchReview.hidden){closeMatchReview();return}
+ closeMatchReview();
+ game(index);
+ button.insertAdjacentElement('afterend',matchReview);
+ matchReview.hidden=false;
+ button.setAttribute('aria-expanded','true');
+ button.classList.add('active');
+ selectedMatchButton=button;
+}
+$('matchReviewClose').addEventListener('click',()=>{
+ const source=selectedMatchButton;
+ closeMatchReview();
+ if(source&&source.isConnected)source.focus({preventScroll:true});
+});
+
+function game(i){const m=games[i];if(!m)return;$('gameDate').textContent=m.time;$('gameTeamDisplay').innerHTML=dfc('detail-crest')+'<span class="team-name-pair">DOKDO FC <span>VS</span> '+E(m.opp)+'</span>'+crest(m.id,m.opp,'small');$('scoreUs').textContent=m.score[0];$('scoreThem').textContent=m.score[1];updateH2H(m.raw);
 if(m.dnf){$('compareRows').innerHTML='<div class="coverage">이 경기의 선수별 세부 기록이 미집계되었습니다.</div>';$('coverage').textContent='세부 통계가 제공되지 않아 0으로 표시하지 않습니다.';$('ourPass').textContent='—';$('theirPass').textContent='—';return}
 $('compareRows').innerHTML=[['슈팅','shots'],['유효슈팅','onTarget'],['태클 성공','tackles'],['인터셉트','interceptions']].map(([label,k])=>{const a=m[k][0],b=m[k][1],mx=Math.max(a,b,1);return '<div class="dual"><strong>'+a+'</strong><div class="lane"><i style="width:'+Math.round(a/mx*100)+'%"></i></div><span class="label">'+label+'</span><div class="lane r"><i style="width:'+Math.round(b/mx*100)+'%"></i></div><strong>'+b+'</strong></div>'}).join('');
 $('coverage').innerHTML='수집된 사람 선수 기록 · DOKDO FC <b>'+m.counts[0]+'</b>명 / 상대 <b>'+m.counts[1]+'</b>명. AI 및 누락된 상대팀 기록은 제외합니다.';$('ourPass').textContent=m.attempts[0]?Math.round(m.passes[0]/m.attempts[0]*100)+'%':'—';$('theirPass').textContent=m.attempts[1]?Math.round(m.passes[1]/m.attempts[1]*100)+'%':'—'}
 
-const matchItem=(m,i)=>{const st=m.score[0]>m.score[1]?'w':m.score[0]<m.score[1]?'l':'d';const type=({leagueMatch:'리그',friendlyMatch:'친선',playoffMatch:'플레이오프'})[m.raw.matchType]||'경기';return '<button type="button" class="match-item '+({w:'win',l:'loss',d:'draw'}[st])+'" data-game="'+i+'"><span class="wl">'+st.toUpperCase()+'</span><span class="match-logos">'+dfc()+crest(m.id,m.opp,'small')+'</span><span style="min-width:0"><div class="title">'+E(m.opp)+'</div><div class="date">'+E(m.time)+' · '+E(type)+(m.raw.dnf?' · DNF':'')+'</div></span><span class="score">'+m.score[0]+' : '+m.score[1]+'</span></button>'};
+const matchItem=(m,i)=>{const st=m.score[0]>m.score[1]?'w':m.score[0]<m.score[1]?'l':'d';const type=({leagueMatch:'리그',friendlyMatch:'친선',playoffMatch:'플레이오프'})[m.raw.matchType]||'경기';return '<button type="button" class="match-item '+({w:'win',l:'loss',d:'draw'}[st])+'" data-game="'+i+'" aria-expanded="false" aria-controls="matchReviewPanel"><span class="wl">'+st.toUpperCase()+'</span><span class="match-logos">'+dfc()+crest(m.id,m.opp,'small')+'</span><span style="min-width:0"><div class="title">'+E(m.opp)+'</div><div class="date">'+E(m.time)+' · '+E(type)+(m.raw.dnf?' · DNF':'')+'</div></span><span class="score">'+m.score[0]+' : '+m.score[1]+'<span class="match-chevron" aria-hidden="true">⌄</span></span></button>'};
 const topGames=games.map((m,i)=>({m,i})).slice(0,5);
 $('heroRecentCount').textContent='최근 '+topGames.length+'경기';
 $('heroRecentMatches').innerHTML=topGames.length?topGames.map(x=>matchItem(x.m,x.i)).join(''):'<p class="hero-loading">아직 보관된 경기가 없습니다.</p>';
-$('heroRecentMatches').addEventListener('click',e=>{const el=e.target.closest('[data-game]');if(!el)return;game(num(el.dataset.game));document.querySelector('.match-center-head').scrollIntoView({behavior:'smooth',block:'start'})});
+$('heroRecentMatches').addEventListener('click',e=>{const el=e.target.closest('[data-game]');if(!el)return;toggleMatchReview(num(el.dataset.game),el)});
 let archiveKind='all',archiveExpanded=false;
 function renderArchive(){
+ closeMatchReview();
  const indices=games.map((m,i)=>({m,i})).filter(x=>archiveKind==='all'||x.m.raw.matchType===archiveKind);
  const selected=archiveExpanded?indices:indices.slice(0,10);
  $('archiveTotal').textContent='('+games.length+'경기)';
@@ -87,7 +114,7 @@ function renderArchive(){
  $('archiveFilters').querySelectorAll('[data-archive-kind]').forEach(btn=>{const on=btn.dataset.archiveKind===archiveKind;btn.classList.toggle('active',on);btn.setAttribute('aria-pressed',String(on))});
 }
 renderArchive();
-$('matchList').addEventListener('click',e=>{const el=e.target.closest('[data-game]');if(!el)return;game(num(el.dataset.game));document.querySelector('.match-center-head').scrollIntoView({behavior:'smooth',block:'start'})});
+$('matchList').addEventListener('click',e=>{const el=e.target.closest('[data-game]');if(!el)return;toggleMatchReview(num(el.dataset.game),el)});
 $('archiveFilters').addEventListener('click',e=>{const btn=e.target.closest('[data-archive-kind]');if(!btn)return;archiveKind=btn.dataset.archiveKind;archiveExpanded=false;renderArchive()});
 $('archiveShowAll').addEventListener('click',()=>{archiveExpanded=true;renderArchive()});
 document.querySelector('.hero-recent-all').addEventListener('click',()=>{archiveKind='all';archiveExpanded=true;renderArchive()});
@@ -100,7 +127,7 @@ document.querySelector('.division-subline').innerHTML='<span class="best-divisio
 document.querySelector('.hero-chips').innerHTML='<span class="chip"><b>CLUB ID</b> '+E(overall.clubId||league.clubId||'331042')+'</span><span class="chip"><b>DIVISION</b> EA 수집 기준</span><span class="chip"><b>갱신</b> '+E(fullDate(data.sync?.lastSuccess))+'</span>';
 const metrics=document.querySelectorAll('.metric-strip .metric');if(metrics.length===4){metrics[0].querySelector('b').textContent=num(overall.gamesPlayed)+'G';const wdlCells=metrics[1].querySelectorAll('.wdl-values strong');if(wdlCells.length===3){[overall.wins,overall.ties,overall.losses].forEach((n,i)=>wdlCells[i].textContent=num(n));}else{const wdlOld=metrics[1].querySelector('b');if(wdlOld)wdlOld.textContent=[overall.wins,overall.ties,overall.losses].map(num).join(' / ');}metrics[1].querySelector('small').textContent='승률 '+(num(overall.gamesPlayed)?(num(overall.wins)/num(overall.gamesPlayed)*100).toFixed(1):'0')+'%';metrics[2].querySelector('b').textContent=num(overall.goals);metrics[2].querySelector('small').textContent='실점 '+num(overall.goalsAgainst)+' · EA 누적';metrics[3].querySelector('b').textContent=num(overall.skillRating)}
 const stars=document.querySelectorAll('.star-grid .star');['goals','assists','mvp','interceptions','goalkeepers'].forEach((k,i)=>{if(!stars[i])return;const x=boards[k].rows[0];stars[i].querySelector('.hero-number').textContent=x?x[1]:'—';stars[i].querySelector('.person').textContent=x?x[0]:'기록 없음';if(i===3)stars[i].querySelector('.detail').textContent='보관 DF 출전 경기 · 인터셉트'});
-if(games.length)game(0);
+/* Match reviews are collapsed by default. */
 if(rivals.length)h2h(rivals[0].key);
 leader('goals');
 const cards=document.querySelector('.cards-board');if(cards)cards.innerHTML=boards.cards.rows.slice(0,3).map(x=>'<div class="card-row"><div><div class="name">'+E(x[0])+'</div><div class="sub">보관된 경기 카드 기록</div></div><div class="card-count">'+E(x[2])+'</div></div>').join('')+'<div class="notice-ribbon"><b>집계 기준</b> · 보관 경기 카드만 표시 · 시즌 누적과 혼합하지 않음</div>';
@@ -110,5 +137,20 @@ document.querySelector('footer.foot').textContent='DOKDO FC · EA FC27 · FAN PR
 document.querySelector('.microtop .shell span:last-child').textContent='FC27 · LIVE TEAM DASHBOARD';
 document.querySelector('.live').innerHTML='<span class="demo">AUTO UPDATE</span> EA 자동 연동';
 document.querySelector('.nav').insertAdjacentHTML('beforeend','<a href="./legacy.html#matches">전체 기록</a><a href="./legacy.html#board">게시판</a>');
+
+const nav=document.querySelector('.nav');
+nav.addEventListener('click',e=>{
+ const link=e.target.closest('a[href^="#"]');
+ if(!link)return;
+ const target=document.querySelector(link.getAttribute('href'));
+ if(target&&target.tagName==='DETAILS')target.open=true;
+ if(target?.id==='more')$('moreDetails').open=true;
+ nav.querySelectorAll('a[href^="#"]').forEach(a=>a.classList.toggle('selected',a===link));
+});
+const backButton=$('backToTop');
+const syncBackButton=()=>{backButton.hidden=window.scrollY<460};
+window.addEventListener('scroll',syncBackButton,{passive:true});syncBackButton();
+backButton.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
 const modal=$('methodModal');$('methodBtn').addEventListener('click',()=>modal.showModal());$('methodClose').addEventListener('click',()=>modal.close());modal.addEventListener('click',e=>{if(e.target===modal)modal.close()});
 })();
