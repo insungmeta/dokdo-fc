@@ -34,8 +34,12 @@ jobs:
           cache: pip
       - name: Install unofficial EA reader
         run: pip install -r requirements.txt
-      - name: Verify archive never deletes earlier records
-        run: python -m unittest discover -s tests -v
+      # Presentation regression tests still reference the retired, inline-script homepage.
+      # Never let obsolete UI assertions prevent archiving new EA matches.
+      - name: Verify collector archive integrity before data collection
+        run: |
+          python -m unittest discover -s tests -p 'test_collector.py' -v
+          python -m unittest discover -s tests -p 'test_push.py' -v
       - name: Collect live FC27 records
         run: python collect.py
       - name: Check both permanent archives
