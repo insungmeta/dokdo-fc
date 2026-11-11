@@ -29,6 +29,76 @@ const labels={home:'클럽 홈',players:'선수 랭킹',matches:'경기 기록',
 const bottom=document.createElement('nav');bottom.className='app-bottom-nav';bottom.setAttribute('aria-label','주요 화면');
 bottom.innerHTML=Object.entries(labels).map(([id,label])=>'<button type="button" data-screen="'+id+'" aria-label="'+label+' 메뉴"><span class="app-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true">'+icons[id]+'</svg></span><span class="app-nav-label">'+label+'</span></button>').join('');document.body.append(bottom);
 
+
+/* Squad: compact rankings and complete EA-observed member directory, no extra main menu. */
+let updateRoster=()=>{};
+const squadHeading=players.querySelector('.section-title');
+const squadStars=players.querySelector('.star-grid');
+const squadStats=players.querySelector('.squad-layout');
+const squadNotes=players.querySelector('.separate-row');
+if(squadHeading&&squadStars&&squadStats&&squadNotes){
+ const switcher=document.createElement('div');
+ switcher.className='squad-switch';
+ switcher.setAttribute('role','group');
+ switcher.setAttribute('aria-label','선수 랭킹과 전체 선수 명단 선택');
+ switcher.innerHTML='<button type="button" class="is-selected" data-squad-view="ranking" aria-pressed="true">🏆 선수 랭킹</button><button type="button" data-squad-view="roster" aria-pressed="false">👥 전체 선수 명단 <span id="rosterTabCount"></span></button>';
+ const ranking=document.createElement('div');
+ ranking.id='squadRankingView';
+ ranking.append(squadStars,squadStats,squadNotes);
+ const roster=document.createElement('section');
+ roster.id='squadRosterView';
+ roster.className='roster-panel';
+ roster.hidden=true;
+ roster.innerHTML='<div class="roster-heading"><div><span class="roster-kicker">DOKDO FC · SQUAD DIRECTORY</span><h3>전체 선수 명단 <b id="rosterCount">—</b></h3></div><span class="roster-live" id="rosterObserved">EA 수집 기준</span></div>'+
+ '<p class="roster-caution">EA에서 수집·보관된 선수 명단입니다. 과거 소속 선수가 포함될 수 있으며, 현역 여부는 이 데이터만으로 확인할 수 없습니다.</p>'+
+ '<div class="roster-toolbar"><label class="roster-search">선수 검색<input id="rosterSearch" type="search" placeholder="선수 닉네임 검색" autocomplete="off"></label><label class="roster-position">포지션<select id="rosterPosition"><option value="all">전체 포지션</option><option value="forward">공격수 (FW)</option><option value="midfielder">미드필더 (MF)</option><option value="defender">수비수 (DF)</option><option value="goalkeeper">골키퍼 (GK)</option><option value="unknown">미확인</option></select></label></div>'+
+ '<div class="roster-status" role="group" aria-label="출전 기록 필터"><button type="button" data-roster-status="all" aria-pressed="true" class="is-selected">전체</button><button type="button" data-roster-status="played" aria-pressed="false">출전 기록 있음</button><button type="button" data-roster-status="unplayed" aria-pressed="false">출전 기록 0</button></div>'+
+ '<div id="rosterList" class="roster-list" aria-live="polite"></div><div class="roster-bottom"><span id="rosterVisible">기록을 불러오는 중</span><button id="rosterShowAll" type="button" hidden>나머지 선수 모두 보기</button></div>'+
+ '<p class="roster-footnote">출전·득점·도움·평점·MVP는 수집된 EA 선수 기록입니다. 출전 기록 0은 비활동 또는 탈퇴를 의미하지 않습니다. <a href="./legacy.html#players">전체 통계 표 ↗</a></p>';
+ squadHeading.after(switcher,ranking,roster);
+ const rosterSearch=roster.querySelector('#rosterSearch');
+ const rosterPosition=roster.querySelector('#rosterPosition');
+ const rosterList=roster.querySelector('#rosterList');
+ let allRoster=[],rosterStatus='all',rosterExpanded=false;
+ const normalizeName=x=>String(x??'').trim().toLocaleLowerCase();
+ const posLabel={forward:'FW · 공격수',midfielder:'MF · 미드필더',defender:'DF · 수비수',goalkeeper:'GK · 골키퍼'};
+ const positionOf=p=>['forward','midfielder','defender','goalkeeper'].includes(String(p.position||'').toLowerCase())?String(p.position).toLowerCase():'unknown';
+ const value=p=>Math.max(0,Number(p)||0);
+ const fmtRating=p=>value(p.gamesPlayed)>0&&value(p.ratingAve||p.averageRating)>0?value(p.ratingAve||p.averageRating).toFixed(1):'—';
+ const renderRoster=()=>{
+  const query=normalizeName(rosterSearch.value),position=rosterPosition.value;
+  const matched=allRoster.filter(p=>(!query||normalizeName(p.name).includes(query)||normalizeName(p.playerName).includes(query))&&(position==='all'||positionOf(p)===position)&&(rosterStatus==='all'||(rosterStatus==='played'?value(p.gamesPlayed)>0:value(p.gamesPlayed)===0)));
+  const visible=rosterExpanded?matched:matched.slice(0,12);
+  rosterList.innerHTML=visible.length?visible.map((p,i)=>{
+   const games=value(p.gamesPlayed),goals=value(p.goals),assists=value(p.assists),mvp=value(p.manOfTheMatch),role=posLabel[positionOf(p)]||'포지션 미확인';
+   return '<details class="roster-member"><summary><span class="roster-avatar" aria-hidden="true">'+esc(String(p.name||'?').slice(0,1).toUpperCase())+'</span><span class="roster-identity"><strong>'+esc(p.name)+'</strong><small>'+role+'</small></span><span class="roster-gamecount"><b>'+games+'</b><small>출전 경기</small></span><span class="roster-chevron" aria-hidden="true">⌄</span></summary><div class="roster-member-details"><div><span>출전 경기</span><b>'+games+'</b></div><div><span>득점</span><b>'+goals+'</b></div><div><span>도움</span><b>'+assists+'</b></div><div><span>시즌 평점</span><b>'+fmtRating(p)+'</b></div><div><span>MVP</span><b>'+mvp+'</b></div></div>'+(games===0?'<p class="roster-zero-note">보관된 시즌 출전 기록이 0입니다. 실제 소속·활동 상태는 별도 확인이 필요합니다.</p>':'')+'</details>';
+  }).join(''):'<div class="roster-empty">해당 조건에 맞는 선수가 없습니다.</div>';
+  roster.querySelector('#rosterVisible').textContent='검색 결과 '+matched.length+'명 중 '+visible.length+'명 표시';
+  const more=roster.querySelector('#rosterShowAll');more.hidden=visible.length===matched.length;
+  if(!more.hidden)more.textContent='나머지 '+(matched.length-visible.length)+'명 모두 보기';
+ };
+ updateRoster=users=>{
+  const seen=new Set();
+  allRoster=users.filter(p=>p&&p.name).filter(p=>{const k=normalizeName(p.name);if(seen.has(k))return false;seen.add(k);return true}).sort((a,b)=>value(b.gamesPlayed)-value(a.gamesPlayed)||String(a.name).localeCompare(String(b.name)));
+  roster.querySelector('#rosterCount').textContent=allRoster.length+'명';
+  switcher.querySelector('#rosterTabCount').textContent=allRoster.length?'('+allRoster.length+')':'';
+  renderRoster();
+ };
+ const setSquadView=view=>{
+  const isRoster=view==='roster';
+  ranking.hidden=isRoster;roster.hidden=!isRoster;
+  switcher.querySelectorAll('[data-squad-view]').forEach(button=>{
+   const yes=button.dataset.squadView===view;button.classList.toggle('is-selected',yes);button.setAttribute('aria-pressed',String(yes));
+  });
+ };
+ switcher.addEventListener('click',e=>{const b=e.target.closest('[data-squad-view]');if(b)setSquadView(b.dataset.squadView)});
+ rosterSearch.addEventListener('input',()=>{rosterExpanded=false;renderRoster()});
+ rosterPosition.addEventListener('change',()=>{rosterExpanded=false;renderRoster()});
+ roster.querySelector('.roster-status').addEventListener('click',e=>{const b=e.target.closest('[data-roster-status]');if(!b)return;rosterStatus=b.dataset.rosterStatus;rosterExpanded=false;roster.querySelectorAll('[data-roster-status]').forEach(x=>{const selected=x===b;x.classList.toggle('is-selected',selected);x.setAttribute('aria-pressed',String(selected))});renderRoster()});
+ roster.querySelector('#rosterShowAll').addEventListener('click',()=>{rosterExpanded=true;renderRoster()});
+ rosterList.addEventListener('toggle',e=>{if(e.target.tagName!=='DETAILS'||!e.target.open)return;rosterList.querySelectorAll('details[open]').forEach(d=>{if(d!==e.target)d.open=false})},true);
+}
+
 const paths={home,players,matches,rivals,more},alias={overview:'home',players:'players',matches:'matches',rivalry:'rivals',more:'more','app-home':'home','app-rivals':'rivals'};
 let current='';
 function show(id,opt={}){
@@ -51,6 +121,7 @@ function update(data){
 if(!data||!Array.isArray(data.members))return;
 const users=data.members.filter(m=>m&&m.name),types=[['goals','goals','득점왕','골'],['assists','assists','도움왕','도움'],['mvp','manOfTheMatch','MVP','회']];
 $('#homeLeaderGrid').innerHTML=types.map(([tab,key,label,unit])=>{const p=[...users].sort((a,b)=>(Number(b[key])||0)-(Number(a[key])||0))[0];return '<button type="button" class="home-leader" data-lead="'+tab+'"><span class="hl-label">'+label+'</span><strong>'+(p?(Number(p[key])||0):'—')+'<small>'+unit+'</small></strong><span class="hl-name">'+esc(p?.name||'기록 없음')+'</span></button>'}).join('');
+updateRoster(users);
 const n=Number(data.league?.currentDivision),division=Number.isInteger(n)&&n>=1&&n<=6?(n===1?'엘리트':(n-1)+'부'):'FC27';const label=$('#appDivisionText');if(label)label.textContent=division+' 리그';
 }
 document.addEventListener('dokdo:ready',()=>update(window.__dokdoData));
