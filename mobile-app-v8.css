@@ -326,3 +326,27 @@ main.shell{padding-bottom:calc(124px + env(safe-area-inset-bottom,0px))}footer.f
  .roster-member-details b{font-size:16px}
  .roster-status button{font-size:10px;padding:6px 7px}
 }
+
+/* V8.5 match scorer summary: brief, readable goal and assist credits */
+.inline-match-review .match-contributors{display:flex;flex-direction:column;gap:9px;padding:13px 18px 15px;background:linear-gradient(110deg,#17362f,#122935);border-bottom:1px solid #405c5d}
+.match-contribution-row{display:grid;grid-template-columns:67px minmax(0,1fr);gap:9px;align-items:start}
+.match-contribution-label{display:flex;align-items:center;gap:5px;white-space:nowrap;color:#d1e9d7;font-size:13px;font-weight:950;line-height:1.8}
+.match-contributor-values{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-width:0}
+.match-contributor-chip{display:inline-flex;align-items:center;gap:8px;max-width:100%;min-width:0;padding:6px 10px;border:1px solid #537762;border-radius:9px;background:#25473f;color:#f0faf5;font-size:12px;line-height:1.4}
+.match-contributor-chip strong{font-weight:900;overflow-wrap:anywhere;min-width:0}
+.match-contributor-chip b{color:#d0fc78;white-space:nowrap;font-size:12px;font-weight:950;flex:none}
+.match-contributor-empty{display:block;color:#c0d2d8;font-size:12px;line-height:1.65}
+.match-contributor-note{margin:0 0 0 76px;color:#a9c4c7;font-size:11px;line-height:1.6}
+@media(max-width:800px){
+ .inline-match-review .match-contributors{padding:12px 13px;gap:9px}
+ .match-contribution-row{grid-template-columns:59px minmax(0,1fr);gap:6px}
+ .match-contribution-label{font-size:12px}
+ .match-contributor-chip{padding:6px 8px;gap:6px;font-size:12px}
+ .match-contributor-chip b{font-size:12px}
+ .match-contributor-note{margin-left:65px;font-size:10px}
+}
+@media(max-width:360px){
+ .match-contribution-row{grid-template-columns:53px minmax(0,1fr);gap:5px}
+ .match-contributor-chip{font-size:11px}
+ .match-contributor-note{margin-left:58px}
+}
