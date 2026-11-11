@@ -280,6 +280,42 @@ main{padding-top:24px;padding-bottom:50px}.hero{display:grid;grid-template-colum
 }
 @media(max-width:360px){.metric-wdl .wdl-values strong{font-size:19px}}
 
+
+/* V7.2: latest match -> useful recent results; complete archive remains directly accessible */
+.hero-recent-card{min-height:0!important;display:flex;flex-direction:column;gap:9px;padding:17px 16px!important}
+.hero-recent-card .hero-right-top{padding:0 2px 5px;gap:8px;letter-spacing:.6px}
+.hero-recent-list{display:flex;flex-direction:column;gap:3px;flex:1}
+.hero-recent-list .match-item{grid-template-columns:27px 54px minmax(0,1fr) auto;gap:6px;padding:7px 6px;border-color:#294651;background:#132b38aa}
+.hero-recent-list .match-item .wl{width:25px;height:25px;font-size:12px}
+.hero-recent-list .match-item .match-logos{min-width:52px;gap:0}
+.hero-recent-list .match-item .match-logos .crest-frame{width:26px;height:29px}
+.hero-recent-list .match-item .match-logos .mini-logo{width:27px;height:30px}
+.hero-recent-list .match-item .title{font-size:11px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.hero-recent-list .match-item .date{margin-top:1px;font-size:9px}
+.hero-recent-list .match-item .score{font-size:14px;font-variant-numeric:tabular-nums}
+.hero-recent-all{display:flex;align-items:center;justify-content:space-between;padding:8px 11px;border:1px solid #4a705e;background:#183e38aa;border-radius:8px;color:var(--lime);font-weight:900;font-size:11px}
+.hero-recent-all:hover{background:#285244}
+.hero-loading{padding:20px;color:#9cbbc2}
+.archive-filter{padding:12px 14px 0;display:flex;gap:7px;flex-wrap:wrap}
+.archive-filter button{border-radius:7px;padding:7px 11px;border:1px solid #32505c;background:#182b39;color:#c6d9df;font-size:11px;font-weight:850}
+.archive-filter button.active{background:var(--lime);border-color:var(--lime);color:#152523}
+.archive-actions{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 14px 13px;font-size:10px;color:#9eb7be}
+.archive-show-all{border:1px solid #71955d;background:#204039;color:#d9fac6;font-size:11px;border-radius:8px;padding:9px 12px;font-weight:900}
+.archive-show-all[hidden]{display:none}
+.archive-total{font-size:11px;color:var(--lime);margin-left:4px}
+.archive-original{font-size:10px;color:#add3c0;white-space:nowrap}
+.match-archive .match-list{padding-bottom:5px}
+.match-archive .match-item .match-type{color:#95bac5;font-size:9px;font-weight:700}
+@media(max-width:650px){
+ .hero-recent-card{padding:14px 13px!important;gap:7px}
+ .hero-recent-list .match-item{grid-template-columns:25px 55px minmax(0,1fr) auto;gap:5px;padding:8px 6px}
+ .hero-recent-list .match-item .score{font-size:14px}
+ .archive-original{font-size:9px}
+ .archive-filter{padding:10px 10px 0;gap:4px}
+ .archive-filter button{font-size:10px;padding:7px 8px}
+ .archive-actions{padding:9px 11px}
+}
+
 </style>
 </head>
 <body>
@@ -298,11 +334,10 @@ main{padding-top:24px;padding-bottom:50px}.hero{display:grid;grid-template-colum
   <small>최신 경기 → 과거 경기 · 보관된 리그 경기 기준</small>
 </div></div>
 <div class="hero-chips"><span class="chip"><b>CLUB ID</b> 331042</span><span class="chip"><b>DIVISION</b> 수집된 EA 기준*</span><span class="chip"><b>FC 27</b> PRO CLUBS</span></div></div>
-<div class="hero-right"><div class="hero-right-top"><span>RECENT RESULT / LATEST MATCH</span><span class="win">● FINAL · W</span></div><div class="scoreline"><div class="sideclub"><div class="team-mark"><svg class="mini-logo"><use href="#dfc-crest"/></svg></div><div class="name">DOKDO FC</div><small>HOME</small></div><div class="score-number">1<span>:</span>0</div><div class="sideclub"><div class="team-mark" id="heroOpponentLogo"><div class="fallback-mark">RB</div></div><div class="name" id="heroOpponentName">RockaBye FC</div><small>OPPONENT</small></div></div><div class="hero-last-stats" aria-label="최근 경기 주요 기록 · 수집된 우리 팀 선수 기준">
-  <div><span>슈팅</span><strong>15</strong></div>
-  <div><span>유효슈팅</span><strong>8</strong></div>
-  <div><span>패스 성공률</span><strong>80%</strong></div>
-</div><div class="hero-right-foot"><span>2026.11.11 · 01:26</span><span><strong>승리</strong> · 저장된 최근 리그 경기</span></div></div>
+<div class="hero-right hero-recent-card" aria-label="최근 경기 목록">
+ <div class="hero-right-top"><span>RECENT MATCHES / 최근 경기</span><span id="heroRecentCount" class="win">기록 조회 중</span></div>
+ <div class="hero-recent-list" id="heroRecentMatches"><p class="hero-loading">최근 경기 불러오는 중</p></div>
+ <a href="#matches" class="hero-recent-all">전체 경기 기록 보기 <span aria-hidden="true">↗</span></a></div>
 </section>
 <div class="metric-strip" aria-label="전체 팀 성적">
 <div class="metric"><div class="metric-icon"><svg><use href="#i-football"/></svg></div><div><h3>시즌 전체 경기</h3><b>171<span class="accent" style="font-size:14px"> G</span></b><small>누적 경기 수</small></div></div>
@@ -329,9 +364,9 @@ main{padding-top:24px;padding-bottom:50px}.hero{display:grid;grid-template-colum
 <div class="panel highlight-panel"><div class="symbol">🛡️</div><div><h3>수비 기록은 DF 출장만 집계</h3><p>FW/MF로 뛴 태클은 수비 랭킹에 넣지 않습니다.<br>태클·인터셉트·공중볼 세 분야를 유지합니다.</p></div></div>
 <div class="panel highlight-panel"><div class="symbol">🧤</div><div><h3>GK 기록은 별도 트랙</h3><p>골키퍼 클린시트와 보관 경기 선방을 분리합니다.<br>시즌 기록과 경기 이벤트를 합산하지 않습니다.</p></div></div>
 </div></section>
-<section id="matches"><div class="section-title"><div><span class="no">02 / MATCH CENTER</span><h2>최근 경기 기록</h2></div><p>최근 결과 · 상대전적 · 주요 통계<br>상대팀 데이터 수집 범위 안내</p></div>
+<section id="matches"><div class="section-title"><div><span class="no">02 / MATCH CENTER</span><h2>경기 기록 · 전체 아카이브</h2></div><p>최근 결과 · 상대전적 · 주요 통계<br>상대팀 데이터 수집 범위 안내</p></div>
 <div class="match-section">
-<section class="panel"><div class="panel-head"><div><small>RECENT GAMES</small><h3>최근 리그 5경기</h3></div><span class="minor">누르면 기록 전환</span></div><div class="match-list" id="matchList"></div><p class="crest-data-note"><b>●</b> EA 경기 엠블럼 적용 · 이미지 미제공 시 기본 배지로 표시</p></section>
+<section class="panel match-archive"><div class="panel-head"><div><small>MATCH ARCHIVE / 전체 기록</small><h3>보관된 모든 경기 <span id="archiveTotal" class="archive-total"></span></h3></div><a href="./legacy.html#matches" class="archive-original" title="기존 경기 아카이브 열기">기존 기록 화면 ↗</a></div><div class="archive-filter" id="archiveFilters" role="group" aria-label="경기 종류 선택"><button type="button" class="active" data-archive-kind="all">전체</button><button type="button" data-archive-kind="leagueMatch">리그</button><button type="button" data-archive-kind="friendlyMatch">친선</button><button type="button" data-archive-kind="playoffMatch">플레이오프</button></div><div class="match-list" id="matchList"></div><div class="archive-actions"><span id="archiveVisible">저장된 경기를 불러오는 중</span><button id="archiveShowAll" class="archive-show-all" type="button" hidden>모든 기록 보기</button></div><p class="crest-data-note"><b>●</b> 보관된 경기만 표시 · 결과를 누르면 상세 비교 기록이 바뀝니다.</p></section>
 <section class="panel"><div class="match-center-head"><div><div class="games-title">MATCH REVIEW · <span id="gameDate">2026.11.11</span></div><div class="game-team-display" id="gameTeamDisplay"><svg class="mini-logo" width="30" height="34"><use href="#dfc-crest"/></svg><span class="team-name-pair" id="gameVs">DOKDO FC <span>VS</span> RockaBye FC</span></div></div><div class="score"><b id="scoreUs">1</b> : <span id="scoreThem">0</span></div></div>
 <div class="center-body"><div class="head2head-inline" id="inlineH2H" aria-live="polite">상대전적 확인 중</div><div class="compare-title"><span>DOKDO FC · 수집된 선수</span><span>상대팀 · 수집된 선수</span></div><div id="compareRows"></div><div class="coverage" id="coverage">수집 범위 안내</div><div class="match-footer"><div class="comparison-mini"><small>우리 팀 패스 성공률</small><b id="ourPass">80%</b></div><div class="comparison-mini"><small>상대 수집 선수 패스 성공률</small><b id="theirPass">66%</b></div><div class="comparison-mini"><small>볼 점유율</small><b>— <em>원본 없음</em></b></div></div><p class="muted-tip">슈팅·패스·태클·인터셉트는 수집된 사람 선수의 합계로, AI를 포함한 전체 팀 공식 수치와 다를 수 있습니다.</p></div></section>
 </div>
