@@ -11,8 +11,8 @@ on:
       - 'requirements.txt'
       - 'tests/**'
   schedule:
-    # Stagger outside the top of each UTC hour; updating cron also refreshes the schedule actor.
-    - cron: '3,13,23,33,43,53 * * * *'
+    # Every 5 minutes (UTC minute 03, 08, 13, ..., 58); avoid top-of-hour load.
+    - cron: '3-58/5 * * * *'
 permissions:
   contents: write
   pages: write
