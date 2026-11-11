@@ -153,4 +153,5 @@ window.addEventListener('scroll',syncBackButton,{passive:true});syncBackButton()
 backButton.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 
 const modal=$('methodModal');$('methodBtn').addEventListener('click',()=>modal.showModal());$('methodClose').addEventListener('click',()=>modal.close());modal.addEventListener('click',e=>{if(e.target===modal)modal.close()});
+window.__dokdoData=data;document.dispatchEvent(new Event('dokdo:ready'));
 })();
