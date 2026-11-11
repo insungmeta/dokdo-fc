@@ -259,6 +259,27 @@ main{padding-top:24px;padding-bottom:50px}.hero{display:grid;grid-template-colum
  .header .nav a{flex:0 0 auto;font-size:10px;padding:7px 9px}
  .header .live{display:none}
 }
+
+/* V7.1: full-width W/D/L figures, no accidental mobile number wrap */
+.metric-wdl .metric-body{min-width:0;flex:1}
+.metric-wdl .wdl-values{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin:7px 0 5px}
+.metric-wdl .wdl-values>span{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.metric-wdl .wdl-values strong{display:block;white-space:nowrap;font:900 23px/1 Arial,sans-serif;letter-spacing:-.8px;color:#eff8f8}
+.metric-wdl .wdl-values small{font-size:10px;font-weight:800;color:#99b2bb}
+.metric-wdl .wdl-rate{display:block;white-space:nowrap;font-size:10px}
+@media(max-width:650px){
+ .metric-wdl{display:grid;grid-template-columns:36px minmax(0,1fr);grid-template-rows:36px auto auto;align-items:center;column-gap:8px;row-gap:2px}
+ .metric-wdl .metric-icon{grid-column:1;grid-row:1}
+ .metric-wdl .metric-body{display:contents}
+ .metric-wdl h3{grid-column:2;grid-row:1;margin:0}
+ .metric-wdl .wdl-values{grid-column:1/-1;grid-row:2;gap:5px;margin:3px 0 0}
+ .metric-wdl .wdl-values>span{align-items:center;gap:3px}
+ .metric-wdl .wdl-values strong{font-size:21px;letter-spacing:-.6px}
+ .metric-wdl .wdl-values small{font-size:9px}
+ .metric-wdl .wdl-rate{grid-column:1/-1;grid-row:3;font-size:9px;margin-top:1px;text-align:center}
+}
+@media(max-width:360px){.metric-wdl .wdl-values strong{font-size:19px}}
+
 </style>
 </head>
 <body>
@@ -285,7 +306,7 @@ main{padding-top:24px;padding-bottom:50px}.hero{display:grid;grid-template-colum
 </section>
 <div class="metric-strip" aria-label="전체 팀 성적">
 <div class="metric"><div class="metric-icon"><svg><use href="#i-football"/></svg></div><div><h3>시즌 전체 경기</h3><b>171<span class="accent" style="font-size:14px"> G</span></b><small>누적 경기 수</small></div></div>
-<div class="metric"><div class="metric-icon"><svg><use href="#i-trophy"/></svg></div><div><h3>승 / 무 / 패</h3><b>60 / 34 / 77</b><small>승률 약 35.1%</small></div></div>
+<div class="metric metric-wdl"><div class="metric-icon"><svg><use href="#i-trophy"/></svg></div><div class="metric-body"><h3>승 / 무 / 패</h3><div class="wdl-values" aria-label="시즌 전체 승무패"><span><strong>60</strong><small>승</small></span><span><strong>34</strong><small>무</small></span><span><strong>77</strong><small>패</small></span></div><small class="wdl-rate">승률 약 35.1%</small></div></div>
 <div class="metric"><div class="metric-icon"><svg><use href="#i-stats"/></svg></div><div><h3>팀 전체 득점</h3><b>211</b><small>실점 263 · EA 누적</small></div></div>
 <div class="metric"><div class="metric-icon"><svg><use href="#i-shield"/></svg></div><div><h3>스킬 레이팅</h3><b>1,485</b><small>EA 스킬 레이팅</small></div></div>
 </div>
