@@ -44,7 +44,7 @@ const games=[
 const num=v=>v===null||v===undefined||v===''||!Number.isFinite(Number(v))?null:Number(v);
 const api=new Function('members','matches','num','humanName','confirmedHuman',
  'matchStatsUnavailable','E','fmt','val','rank','$',
-  snippet+'\\nreturn {defenderStats,defenseList,defenseHelp};')(
+  snippet+';return {defenderStats,defenseList,defenseHelp};')(
  ()=>players,()=>games,num,p=>!!p.name,p=>p.playerId>0,
  m=>m.dnf===true,x=>String(x),v=>String(v),v=>String(v),'goals',()=>null
 );
