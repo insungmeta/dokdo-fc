@@ -5,6 +5,8 @@ on:
       - main
     paths:
       - 'index.html'
+      - 'legacy.html'
+      - 'live-dashboard-v7.js'
       - 'assets/**'
       - 'push/**'
       - 'site.webmanifest'
