@@ -31,7 +31,7 @@ bottom.innerHTML=Object.entries(labels).map(([id,label])=>'<button type="button"
 
 
 /* Squad: compact rankings and complete EA-observed member directory, no extra main menu. */
-let updateRoster=()=>{};
+let updateRoster=()=>{},selectSquad=()=>{};
 const squadHeading=players.querySelector('.section-title');
 const squadStars=players.querySelector('.star-grid');
 const squadStats=players.querySelector('.squad-layout');
@@ -91,6 +91,7 @@ if(squadHeading&&squadStars&&squadStats&&squadNotes){
    const yes=button.dataset.squadView===view;button.classList.toggle('is-selected',yes);button.setAttribute('aria-pressed',String(yes));
   });
  };
+ selectSquad=setSquadView;
  switcher.addEventListener('click',e=>{const b=e.target.closest('[data-squad-view]');if(b)setSquadView(b.dataset.squadView)});
  rosterSearch.addEventListener('input',()=>{rosterExpanded=false;renderRoster()});
  rosterPosition.addEventListener('change',()=>{rosterExpanded=false;renderRoster()});
@@ -126,7 +127,7 @@ const n=Number(data.league?.currentDivision),division=Number.isInteger(n)&&n>=1&
 }
 document.addEventListener('dokdo:ready',()=>update(window.__dokdoData));
 if(window.__dokdoData)update(window.__dokdoData);
-$('#homeLeaderGrid').addEventListener('click',e=>{const x=e.target.closest('[data-lead]');if(!x)return;show('players',{scroll:true});const tab=document.querySelector('[data-leader="'+x.dataset.lead+'"]');if(tab)tab.click()});
+$('#homeLeaderGrid').addEventListener('click',e=>{const x=e.target.closest('[data-lead]');if(!x)return;show('players',{scroll:true});selectSquad('ranking');const tab=document.querySelector('[data-leader="'+x.dataset.lead+'"]');if(tab)tab.click()});
 show(alias[location.hash.slice(1)]||'home',{hash:false});
 };
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
