@@ -1,8 +1,18 @@
 name: Refresh DOKDO FC and publish
 on:
   workflow_dispatch:
+  # A collector/config change starts a refresh immediately, in addition to the scheduled runs.
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/update-and-publish.yml'
+      - 'collect.py'
+      - 'requirements.txt'
+      - 'tests/**'
   schedule:
-    - cron: '7,17,27,37,47,57 * * * *'
+    # Stagger outside the top of each UTC hour; updating cron also refreshes the schedule actor.
+    - cron: '3,13,23,33,43,53 * * * *'
 permissions:
   contents: write
   pages: write
