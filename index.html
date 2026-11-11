@@ -250,6 +250,15 @@ main{padding-top:24px;padding-bottom:50px}.hero{display:grid;grid-template-colum
  .h2h-rival-brand .mini-logo{width:30px;height:34px}
  .h2h-rival-brand .crest-frame{width:30px;height:34px}
 }
+
+/* Responsive navigation: preserve Player, Match, Archive, Board without overlap. */
+@media(max-width:650px){
+ .header .shell{height:auto;min-height:76px;padding-top:12px;padding-bottom:10px;align-content:center;row-gap:7px}
+ .header .nav{order:3;flex-basis:100%;width:100%;display:flex;overflow-x:auto;scrollbar-width:none;white-space:nowrap;gap:3px;padding-bottom:2px}
+ .header .nav::-webkit-scrollbar{display:none}
+ .header .nav a{flex:0 0 auto;font-size:10px;padding:7px 9px}
+ .header .live{display:none}
+}
 </style>
 </head>
 <body>
