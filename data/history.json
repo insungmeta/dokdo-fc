@@ -65510,6 +65510,32 @@
           ]
         }
       ]
+    },
+    {
+      "at": "2026-11-11T23:58:28.226265+00:00",
+      "kind": "data-change",
+      "career": [
+        {
+          "name": "IIIIIIIIIIIIxD_I",
+          "position": "forward",
+          "gamesPlayed": 90,
+          "goals": 140,
+          "assists": 63,
+          "averageRating": 8.2,
+          "manOfTheMatch": 28,
+          "ratingAve": 8.2
+        },
+        {
+          "name": "natural-shaper53",
+          "position": "forward",
+          "gamesPlayed": 35,
+          "goals": 32,
+          "assists": 33,
+          "averageRating": 8.3,
+          "manOfTheMatch": 6,
+          "ratingAve": 8.3
+        }
+      ]
     }
   ]
 }

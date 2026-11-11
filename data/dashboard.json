@@ -878,11 +878,11 @@
     {
       "name": "IIIIIIIIIIIIxD_I",
       "position": "forward",
-      "gamesPlayed": 88,
-      "goals": 132,
-      "assists": 62,
+      "gamesPlayed": 90,
+      "goals": 140,
+      "assists": 63,
       "averageRating": 8.2,
-      "manOfTheMatch": 26,
+      "manOfTheMatch": 28,
       "ratingAve": 8.2
     },
     {
@@ -988,12 +988,12 @@
     {
       "name": "natural-shaper53",
       "position": "forward",
-      "gamesPlayed": 33,
-      "goals": 31,
-      "assists": 26,
-      "averageRating": 8.2,
+      "gamesPlayed": 35,
+      "goals": 32,
+      "assists": 33,
+      "averageRating": 8.3,
       "manOfTheMatch": 6,
-      "ratingAve": 8.2
+      "ratingAve": 8.3
     },
     {
       "name": "keledek_diecast",
@@ -48868,8 +48868,8 @@
     }
   ],
   "sync": {
-    "lastAttempt": "2026-11-11T23:15:19.570992+00:00",
-    "lastSuccess": "2026-11-11T23:15:19.570992+00:00",
+    "lastAttempt": "2026-11-11T23:58:28.226265+00:00",
+    "lastSuccess": "2026-11-11T23:58:28.226265+00:00",
     "error": null
   },
   "archiveVersion": 1,
