@@ -7,6 +7,8 @@ on:
       - 'index.html'
       - 'legacy.html'
       - 'live-dashboard-v7.js'
+      - 'mobile-app-v8.css'
+      - 'mobile-app-v8.js'
       - 'assets/**'
       - 'push/**'
       - 'site.webmanifest'
