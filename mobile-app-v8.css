@@ -109,3 +109,12 @@ footer.foot{padding-bottom:calc(91px + env(safe-area-inset-bottom,0px));font-siz
 }
 @media(max-width:350px){.shell{padding-left:10px!important;padding-right:10px!important}.hero-left{padding:13px!important}.division-digit{font-size:75px}.metric{padding:10px 7px}.home-leader{padding:9px 7px}}
 @media(prefers-reduced-motion:reduce){.app-screen.is-active{animation:none}}
+
+
+/* Wide layouts: use available space without changing mobile navigation. */
+@media(min-width:1001px){
+#players .star{flex:1 1 0;min-width:0}
+#players .squad-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(310px,.78fr);align-items:start}
+#players .player-detail-panel{margin-top:0}
+#players .category-strip{flex-wrap:wrap;overflow:visible}
+}
