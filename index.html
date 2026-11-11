@@ -7,7 +7,7 @@
 <meta property="og:title" content="DOKDO FC | EA FC27 프로클럽 기록">
 <meta property="og:description" content="디비전, 선수 랭킹, 경기 결과, 상대전적과 최근 10경기 흐름">
 <meta property="og:image" content="https://insungmeta.github.io/dokdo-fc/assets/og-dokdo-fc.png">
-<title>DOKDO FC | FC27 프로클럽 선수·팀 기록</title>
+<title>DOKDO FC | 팀 허브 · EA FC27 프로클럽</title>
 <meta name="description" content="DOKDO FC 현재 디비전, 선수 기록, 최근 경기 분석, 상대전적을 실시간으로 확인하세요.">
 <style>
 :root{--bg:#080e16;--panel:#111d2a;--panel2:#152432;--ink:#eff6f8;--soft:#b7c7d1;--muted:#8298a8;--line:#263949;--lime:#c6f24d;--green:#9ccf39;--cyan:#69d7e8;--gold:#f4c86d;--red:#ef7e83}
@@ -373,6 +373,10 @@ details[open]>.fold-summary em{transform:rotate(180deg)}
 @media(prefers-reduced-motion:reduce){.match-item .match-chevron,.fold-summary em{transition:none}}
 
 </style>
+<link rel="stylesheet" href="./mobile-app-v8.css?v=20261111" media="all">
+<meta name="theme-color" content="#0b1723">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
 <!-- Small reusable version of the team's existing crest, embedded to work offline -->
@@ -448,5 +452,6 @@ details[open]>.fold-summary em{transform:rotate(180deg)}
 <div class="data-disclaimer"><strong>디자인 시안 V6 · 현재 운영 홈페이지는 변경하지 않았습니다.</strong> 2026년 11월 11일에 확인한 DOKDO FC EA 수집 데이터의 일부를 화면 설계용으로 사용했습니다. 선수 시즌 누적, 보관된 DF 경기 통계, 골키퍼 시즌 기록은 서로 집계 범위가 달라 각각 명시했습니다. <b>현재 4부</b>는 당시 EA division 코드 5를 기존 홈페이지 규칙으로 해석한 값이며, 시즌 최고 2부는 코드 3 기준입니다. 상대전적은 수집된 경기 21건만 반영합니다. 상대팀 엠블럼은 EA 경기 데이터의 이미지 주소를 사용하고, 접속 불가·미제공 시 기본 배지를 보여줍니다. 더 자세한 수집 범위는 <button class="method-btn" type="button" id="methodBtn">데이터 표시 기준</button>에서 확인할 수 있습니다.</div>
 </main><button type="button" class="back-to-top" id="backToTop" hidden aria-label="맨 위로 이동">↑ 맨 위로</button><footer class="foot">DOKDO FC · PLAYER FIRST DESIGN CONCEPT V5 · FAN PROJECT / NOT AFFILIATED WITH EA</footer>
 <dialog id="methodModal" class="modal"><h3>통계 표시 기준 및 한계</h3><p>선수 누적 득점·도움 및 골키퍼 클린시트는 EA 선수 누적 통계로 표시합니다. 수비수 태클·인터셉트·공중볼과 옐로·레드카드는 홈페이지에 보관된 경기별 이벤트만 활용합니다.</p><ul><li>수비 랭킹은 해당 경기에 DF로 등록된 사람 선수 이벤트만 합산합니다. FW/MF/GK 기록은 제외합니다.</li><li>경기 분석은 EA가 반환한 사람 선수 기록의 합계이며, AI 선수 기록이 빠질 수 있습니다. 상대팀 사람 선수 기록은 불완전한 경우가 있습니다.</li><li>패스 성공률은 수집된 선수의 패스 성공 합계 ÷ 시도 합계입니다. 볼 점유율, xG, 정확한 슈팅 좌표는 원본에 없어 생성하지 않습니다.</li><li>DNF에서 선수 기록이 미집계된 경기는 0으로 표시해 잘못된 비교를 만들지 않습니다.</li><li>상대전적은 보관된 경기에서 상대팀 ID가 같은 대상을 묶고, 같은 경기 ID의 중복을 제외하여 승·무·패를 계산합니다. 저장 이전 경기는 포함되지 않습니다.</li><li>EA division 코드 5는 사이트 기준 4부, 최고 코드 3은 2부로 표시합니다. 기준이 바뀌거나 데이터 수집에 실패하면 마지막 확인 시각을 함께 보여야 합니다.</li><li>실제 서비스 적용 전 최근 갱신 시각, 경기 중복 여부, 집계 구간을 추가 검증해야 합니다.</li></ul><button type="button" id="methodClose">닫기</button></dialog>
-<script src="./live-dashboard-v7.js" defer></script>
+<script src="./live-dashboard-v7.js?v=20261111-v8" defer></script>
+<script src="./mobile-app-v8.js?v=20261111-v8" defer></script>
 </body></html>
