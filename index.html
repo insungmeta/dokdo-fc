@@ -235,7 +235,7 @@
 </section>
 <div class="cards">
 <section class="panel"><header class="panel-title"><div><span>LATEST RESULTS</span><h3>최근 리그 경기</h3></div><button class="linkbtn" data-go="matches">전체 기록 ↗</button></header><div id="recentMatches"></div></section>
-<section class="panel"><header class="panel-title"><div><span>STAR PERFORMERS</span><h3>우리 팀 TOP 5</h3></div><button class="linkbtn" data-go="players">선수 전체 ↗</button></header><div class="tabs" role="group" aria-label="랭킹 기준"><button class="active" data-rank="goals">득점왕</button><button data-rank="assists">도움왕</button><button data-rank="ratingAve">평점왕</button><button data-rank="manOfTheMatch">MVP</button><button data-rank="cleanSheetsDef">🛡️ 무실점왕</button><button data-rank="tacklesMade">🦶 태클왕</button><button data-rank="tackleSuccessRate">🎯 태클 성공률</button><button data-rank="archivedInterceptions">🧱 인터셉트왕</button><button data-rank="archivedAerial">🪂 수비 공중볼왕</button></div><p id="rankScope" class="rank-scope" hidden></p><div id="topPlayers"></div></section>
+<section class="panel"><header class="panel-title"><div><span>STAR PERFORMERS</span><h3>우리 팀 TOP 5</h3></div><button class="linkbtn" data-go="players">선수 전체 ↗</button></header><div class="tabs" role="group" aria-label="랭킹 기준"><button class="active" data-rank="goals">득점왕</button><button data-rank="assists">도움왕</button><button data-rank="ratingAve">평점왕</button><button data-rank="manOfTheMatch">MVP</button><button data-rank="archivedTackles">🦶 태클왕</button><button data-rank="archivedInterceptions">🧱 인터셉트왕</button><button data-rank="archivedAerial">🪂 수비 공중볼왕</button></div><p id="rankScope" class="rank-scope" hidden></p><div id="topPlayers"></div></section>
 </div>
 </section>
 <section id="view-matches" class="section-page">
@@ -244,7 +244,7 @@
 </section>
 <section id="view-players" class="section-page">
 <div class="title-row"><div><div class="kicker">03 / THE SQUAD</div><h2>선수 랭킹</h2></div><span class="subtitle" id="playerCount">0 PLAYERS</span></div>
-<section class="panel"><div class="filters"><button class="active" data-sort="goals">득점순</button><button data-sort="assists">도움순</button><button data-sort="ratingAve">평점순</button><button data-sort="gamesPlayed">출전순</button><button data-sort="manOfTheMatch">🏅 MVP순</button><button data-sort="goalkeeper">🧤 GK 기록</button><button data-sort="defenseCleanSheets">🛡️ 수비 클린시트</button><button data-sort="defenseTackles">🦶 수비 태클</button><button data-sort="defenseRate">🎯 태클 성공률</button><button data-sort="defenseInterceptions">🧱 인터셉트</button><button data-sort="defenseAerial">🪂 수비 공중볼</button></div><p id="playerScope" class="rank-scope" hidden></p><div class="table-scroll"><table class="data-table"><thead id="playerThead"><tr><th>선수</th><th>출전</th><th>득점</th><th>도움</th><th>평점</th><th>MVP</th></tr></thead><tbody id="playerTable"></tbody></table></div></section>
+<section class="panel"><div class="filters"><button class="active" data-sort="goals">득점순</button><button data-sort="assists">도움순</button><button data-sort="ratingAve">평점순</button><button data-sort="gamesPlayed">출전순</button><button data-sort="manOfTheMatch">🏅 MVP순</button><button data-sort="goalkeeper">🧤 GK 기록</button><button data-sort="defenseTackles">🦶 수비 태클</button><button data-sort="defenseInterceptions">🧱 인터셉트</button><button data-sort="defenseAerial">🪂 수비 공중볼</button></div><p id="playerScope" class="rank-scope" hidden></p><div class="table-scroll"><table class="data-table"><thead id="playerThead"><tr><th>선수</th><th>출전</th><th>득점</th><th>도움</th><th>평점</th><th>MVP</th></tr></thead><tbody id="playerTable"></tbody></table></div></section>
 <details class="stat-history" id="statHistory">
   <summary>📈 과거 팀·선수 통계 변화 이력 <span>삭제하지 않고 누적 보관</span></summary>
   <p>득점·도움·MVP·평점·GK 클린시트·팀 전적 등 기록이 변할 때마다 그 시점의 데이터가 남습니다. 예전 선수가 명단에서 사라져도 과거 통계를 보관합니다.</p>
@@ -304,53 +304,48 @@ function renderMatches(){const league=matches().filter(m=>m.matchType==='leagueM
 function ranked(field){return [...members()].sort((a,b)=>(num(b[field])??-Infinity)-(num(a[field])??-Infinity)||String(a.name).localeCompare(String(b.name)))}
 function isDefender(p){return /^(defender|def|df)$/i.test(String(p?.position||p?.favoritePosition||p?.proPos||'').trim())}
 function defenderStats(){
- // Use EA member stats for accumulated totals and archived match events only from DF appearances.
- // Never sum EA member totals and archived events; a saved game may already be inside the member totals.
- const rows=members().filter(p=>isDefender(p)&&humanName(p)).map(p=>({
-  ...p,archivedInterceptions:0,archivedAerial:0,archivedBlocks:0,archivedDefMatches:0
- }));
- const byName=new Map(rows.map(p=>[String(p.name||'').toLowerCase(),p]));
+ // Count only archived DOKDO FC games where this player actually appeared as DF.
+ // Do not mix season-wide EA member totals (which may include games in other roles).
+ // Former members remain eligible when their archived human-player records are available.
+ const byId=new Map();
  matches().forEach(m=>{
   if(matchStatsUnavailable(m))return;
+  const seen=new Set();
   (Array.isArray(m.players)?m.players:[]).forEach(p=>{
-   if(!confirmedHuman(p,'ours')||!isDefender(p))return;
-   const row=byName.get(String(p.name||'').toLowerCase());
-   if(!row)return;
+   if(!isDefender(p)||!humanName(p)||!(Number(p.playerId)>0))return;
+   const id=String(p.playerId),name=String(p.name||p.playerName||'').trim();
+   if(!name||seen.has(id))return;
+   seen.add(id);
+   let row=byId.get(id);
+   if(!row){
+    const member=members().find(x=>String(x.name||'').toLowerCase()===name.toLowerCase());
+    row={...(member||{}),name,playerId:p.playerId,archivedDefMatches:0,archivedTackles:0,archivedInterceptions:0,archivedAerial:0};
+    byId.set(id,row);
+   }
    row.archivedDefMatches++;
+   row.archivedTackles+=num(p.tacklesMade)??0;
    row.archivedInterceptions+=num(p.interceptions)??0;
    row.archivedAerial+=num(p.aerialDuelsWonDefending)??0;
-   row.archivedBlocks+=num(p.crossesBlocked)??0;
   });
  });
- return rows;
+ return [...byId.values()];
 }
-const DEFENSE_FIELDS={cleanSheetsDef:'defenseCleanSheets',tacklesMade:'defenseTackles',tackleSuccessRate:'defenseRate',archivedInterceptions:'defenseInterceptions',archivedAerial:'defenseAerial'};
-const DEFENSE_SORTS={
- defenseCleanSheets:'cleanSheetsDef',defenseTackles:'tacklesMade',defenseRate:'tackleSuccessRate',
- defenseInterceptions:'archivedInterceptions',defenseAerial:'archivedAerial'
-};
-const DEFENSE_HELP='🛡️ EA 현재 포지션이 수비수(DF)인 선수만 집계 · ';
-const ARCHIVED_HELP='홈페이지가 보관한 경기 중 DF로 출장한 경기의 기록만 합산(시즌 전체 기록 아님) · DNF 미집계 경기 제외';
-const SEASON_HELP='EA 선수 누적 통계 기준 · 최근 저장 경기 수치와 합산하지 않음';
+const DEFENSE_FIELDS={archivedTackles:'defenseTackles',archivedInterceptions:'defenseInterceptions',archivedAerial:'defenseAerial'};
+const DEFENSE_SORTS={defenseTackles:'archivedTackles',defenseInterceptions:'archivedInterceptions',defenseAerial:'archivedAerial'};
+const DEFENSE_HELP='🛡️ 보관된 경기에서 실제 DF로 출전한 기록만 집계 · FW/MF/GK 출전 기록 제외 · DNF 선수 기록 미집계 경기 제외 · 시즌 전체 통계 아님';
 function defenseList(field){
- const rows=defenderStats().filter(p=>num(p[field])!==null);
- const filtered=field==='tackleSuccessRate'?rows.filter(p=>(num(p.tacklesMade)??0)>=10&&(num(p.gamesPlayed)??0)>=10):rows;
- return filtered.sort((a,b)=>(num(b[field])??0)-(num(a[field])??0)||
-                      (num(b.gamesPlayed)??0)-(num(a.gamesPlayed)??0)||
+ return defenderStats().filter(p=>p.archivedDefMatches>0).sort((a,b)=>(num(b[field])??0)-(num(a[field])??0)||
+                      (num(b.archivedDefMatches)??0)-(num(a.archivedDefMatches)??0)||
                       String(a.name).localeCompare(String(b.name)));
 }
 function isDefenseField(field){return Object.prototype.hasOwnProperty.call(DEFENSE_FIELDS,field)}
-function defenseHelp(field){
- const archived=field==='archivedInterceptions'||field==='archivedAerial';
- return DEFENSE_HELP+(archived?ARCHIVED_HELP:SEASON_HELP)+
- (field==='tackleSuccessRate'?' · 최소 출전 10경기·태클 10회 이상':'');
-}
-function rankValue(p,field){return fmt(p[field],field==='ratingAve'||field==='tackleSuccessRate'?1:0)+(field==='tackleSuccessRate'?'%':'')}
+function defenseHelp(){return DEFENSE_HELP}
+function rankValue(p,field){return fmt(p[field],field==='ratingAve'?1:0)}
 function renderRank(){
  const defense=isDefenseField(rank);
  const top=(defense?defenseList(rank):ranked(rank)).slice(0,5);
  const note=$('rankScope');note.hidden=!defense;if(defense)note.textContent=defenseHelp(rank);
- $('topPlayers').innerHTML=top.length?top.map((m,i)=>'<button class="player-row" data-player="'+E(encodeURIComponent(String(m.name||'')))+'"><span class="place">'+String(i+1).padStart(2,'0')+'</span><span class="avatar">'+E(String(m.name||'?').slice(0,1).toUpperCase())+'</span><span class="pn">'+E(val(m.name,'선수 이름 미상'))+'<small>'+(defense?E(isDefenseField(rank)&&(rank==='archivedInterceptions'||rank==='archivedAerial')?'보관 DF '+fmt(m.archivedDefMatches)+'경기':'EA 누적 '+fmt(m.gamesPlayed)+'경기'):E(val(m.favoritePosition||m.proPos,'DOKDO FC PLAYER')))+'</small></span><span class="pv">'+rankValue(m,rank)+'</span></button>').join(''):empty('해당 수비 기록 없음',defense?'EA 수비수 기록이 확인되면 표시됩니다.':'연동 후 득점왕·도움왕·평점왕 순위가 자동 계산됩니다.');
+ $('topPlayers').innerHTML=top.length?top.map((m,i)=>'<button class="player-row" data-player="'+E(encodeURIComponent(String(m.name||'')))+'"><span class="place">'+String(i+1).padStart(2,'0')+'</span><span class="avatar">'+E(String(m.name||'?').slice(0,1).toUpperCase())+'</span><span class="pn">'+E(val(m.name,'선수 이름 미상'))+'<small>'+(defense?E('보관 DF '+fmt(m.archivedDefMatches)+'경기'):E(val(m.favoritePosition||m.proPos,'DOKDO FC PLAYER')))+'</small></span><span class="pv">'+rankValue(m,rank)+'</span></button>').join(''):empty('해당 수비 기록 없음',defense?'EA 수비수 기록이 확인되면 표시됩니다.':'연동 후 득점왕·도움왕·평점왕 순위가 자동 계산됩니다.');
 }
 function isGoalkeeper(p){return /^(goalkeeper|gk)$/i.test(String(p.position||p.favoritePosition||p.proPos||'').trim())}
 function humanName(p){return !!String(p?.name||p?.playerName||'').trim()&&!/^(AI|CPU|COM|BOT|VIRTUAL PRO AI)$/i.test(String(p.name||p.playerName||'').trim())}
@@ -374,25 +369,20 @@ function renderPlayers(){
  const ms=isGK?gkList():isDF?defenseList(defField):ranked(sort);
  const info=$('playerScope');info.hidden=!isDF;if(isDF)info.textContent=defenseHelp(defField);
  $('playerCount').textContent=ms.length+(isGK?' HUMAN GKs':isDF?' DEFENDERS':' PLAYERS');
- const archive=defField==='archivedInterceptions'||defField==='archivedAerial';
  if(isGK){
   $('playerThead').innerHTML='<tr><th>선수</th><th>출전</th><th>클린시트</th><th>기록된 선방</th><th>평점</th><th>MVP</th></tr>';
  }else if(isDF){
-  $('playerThead').innerHTML=archive?
-   '<tr><th>수비수</th><th>보관 DF 경기</th><th>인터셉트</th><th>공중볼 수비 승리</th><th>크로스 차단</th><th>EA 출전</th></tr>':
-   '<tr><th>수비수</th><th>EA 출전</th><th>수비 클린시트</th><th>태클 기록</th><th>태클 성공률</th><th>평점</th></tr>';
+  $('playerThead').innerHTML='<tr><th>수비수</th><th>DF 출전</th><th>태클 성공</th><th>인터셉트</th><th>수비 공중볼 승리</th></tr>';
  }else{
   $('playerThead').innerHTML='<tr><th>선수</th><th>출전</th><th>득점</th><th>도움</th><th>평점</th><th>MVP</th></tr>';
  }
  $('playerTable').innerHTML=ms.length?ms.map((m,i)=>{
   const start='<tr data-player="'+E(encodeURIComponent(String(m.name||'')))+'"><td><span class="index">'+String(i+1).padStart(2,'0')+'</span><strong>'+E(val(m.name,'이름 없음'))+'</strong></td>';
   if(isDF){
-   return start+(archive?
-    '<td>'+fmt(m.archivedDefMatches)+'</td><td>'+fmt(m.archivedInterceptions)+'</td><td>'+fmt(m.archivedAerial)+'</td><td>'+fmt(m.archivedBlocks)+'</td><td>'+fmt(m.gamesPlayed)+'</td></tr>':
-    '<td>'+fmt(m.gamesPlayed)+'</td><td>'+fmt(m.cleanSheetsDef)+'</td><td>'+fmt(m.tacklesMade)+'</td><td>'+fmt(m.tackleSuccessRate,1)+'%</td><td>'+fmt(m.ratingAve,1)+'</td></tr>');
+   return start+'<td>'+fmt(m.archivedDefMatches)+'</td><td>'+fmt(m.archivedTackles)+'</td><td>'+fmt(m.archivedInterceptions)+'</td><td>'+fmt(m.archivedAerial)+'</td></tr>';
   }
   return start+'<td>'+fmt(m.gamesPlayed)+'</td><td>'+fmt(isGK?m.cleanSheetsGK:m.goals)+'</td><td>'+fmt(isGK?m.archivedSaves:m.assists)+'</td><td>'+fmt(m.ratingAve,1)+'</td><td>'+fmt(m.manOfTheMatch)+'</td></tr>';
- }).join(''):'<tr><td colspan="6">'+empty(isDF?'수비수 기록 없음':'선수 기록 없음',isDF?'EA 수비수 기록이 아직 없거나 성공률 집계 최소 표본을 충족하지 않았습니다.':'EA에서 확인된 선수 데이터를 기다리고 있습니다.')+'</td></tr>';
+ }).join(''):'<tr><td colspan="'+(isDF?'5':'6')+'">'+empty(isDF?'수비수 기록 없음':'선수 기록 없음',isDF?'보관된 경기에서 확인된 DF 출전 기록이 없습니다.':'EA에서 확인된 선수 데이터를 기다리고 있습니다.')+'</td></tr>';
 }
 function renderSpotlight(){
   const league=matches().filter(m=>m.matchType==='leagueMatch').sort((a,b)=>Number(b.timestamp||0)-Number(a.timestamp||0));
@@ -469,12 +459,14 @@ function matchPlayerDetails(encoded,side){
 }
 function playerDetails(encoded){
  let name;try{name=decodeURIComponent(encoded)}catch{return}
- const m=members().find(x=>String(x.name||'')===name);if(!m)return;
+ const defender=defenderStats().find(x=>String(x.name||'')===name);
+ const m=members().find(x=>String(x.name||'')===name)||defender;if(!m)return;
  const career=(Array.isArray(data.career)?data.career:[]).find(x=>x.name===name)||{};
  const gk=isGoalkeeper(m),keeper=gkList().find(x=>x.name===name);
  const vals=[['출전',m.gamesPlayed],['골',m.goals],['도움',m.assists],['평점',m.ratingAve],['MVP',m.manOfTheMatch],['커리어 득점',career.goals]];
  if(gk){vals.splice(1,0,['시즌 클린시트',m.cleanSheetsGK]);vals.push(['최근 저장 경기 선방',keeper?.archivedSaves]);vals.push(['저장 경기 방향 예측 선방',keeper?.archivedCorrectDives]);}
- const related=matches().flatMap(x=>(x.players||[]).filter(p=>p.name===name&&confirmedHuman(p,'ours')).map(p=>({m:x,p})));
+ if(defender){vals.push(['보관 DF 출전',defender.archivedDefMatches],['보관 DF 태클',defender.archivedTackles],['보관 DF 인터셉트',defender.archivedInterceptions],['보관 DF 공중볼',defender.archivedAerial]);}
+ const related=matches().flatMap(x=>(x.players||[]).filter(p=>p.name===name&&Number(p.playerId)>0&&humanName(p)).map(p=>({m:x,p})));
  const body='<div class="detail-grid">'+vals.map(([k,v])=>'<div><small>'+E(k)+'</small><strong>'+fmt(v,k==='평점'?1:0)+'</strong></div>').join('')+'</div>'+
  (gk?'<p class="stats-note">🧤 시즌 클린시트는 EA 멤버 통계 기준이고, 선방 기록은 현재 저장된 경기에서만 합산했습니다. AI의 기록은 제외합니다.</p>':'')+
  '<h3 class="detail-heading">최근 경기에서 기록된 포지션과 이벤트</h3>'+
