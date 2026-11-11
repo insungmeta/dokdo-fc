@@ -144,3 +144,105 @@ main.shell{padding-bottom:calc(124px + env(safe-area-inset-bottom,0px))}footer.f
  .header .nav{display:none!important}
  .app-bottom-nav{display:grid!important}
 }
+
+
+/* V8.3 readable statistics labels: numbers remain prominent; descriptions carry meaning */
+:root{--stat-label:#e3eef0;--stat-context:#b5cbd3}
+.app-screen .screen-head .eyebrow{font-size:11px;letter-spacing:1.1px}
+.app-screen .screen-head small,.app-screen .screen-head a{font-size:12px;color:#b8ccd4}
+.app-screen .panel-head small{font-size:11px;color:#b8ccd4;letter-spacing:.3px}
+.app-screen .panel-head .minor{font-size:11px;color:#b5c6cc}
+.division-copy strong{color:var(--stat-label)}
+.division-subline span,.division-subline b{color:#d1e3e7;font-weight:800}
+.division-form-top strong,.division-form-top span{color:#e2eff0;font-weight:900}
+.division-form>small{font-size:11px;color:var(--stat-context);line-height:1.5}
+.hero-recent-card .hero-right-top{font-size:12px;letter-spacing:.6px;color:#d0e3e5}
+.hero-recent-list .match-item .title{font-size:13px;color:#f2f8fa}
+.hero-recent-list .match-item .date{font-size:11px;color:#a8bfcc}
+.metric h3{font-size:13px;font-weight:900;color:var(--stat-label);letter-spacing:-.3px}
+.metric small{font-size:11px;color:var(--stat-context);font-weight:700;line-height:1.4}
+.metric b{color:#f4fbfa}
+.metric-wdl .wdl-rate{color:#b9cfd5;font-size:11px}
+.home-leaders .screen-head h2{font-size:21px}
+.home-leader .hl-label{font-size:13px;color:#d8e6eb;font-weight:950}
+.home-leader .hl-name{font-size:12px;color:#bfd4dc;font-weight:800}
+#players .star .star-top{font-size:11px;color:#c5d6df;letter-spacing:.25px}
+#players .star .person{font-size:13px}
+#players .star .detail{font-size:11px;color:#b4cad3;line-height:1.4}
+#players .category-strip button{font-size:12px;font-weight:900}
+#players .standing-row .who strong{font-size:14px}
+#players .standing-row .who span{font-size:11px;color:#a8c2cb}
+#players .standing-row .amount{font-size:18px}
+#players .note{font-size:12px;color:#aec4ce;line-height:1.6}
+#players .profile-top small,#players .profile-stat span{font-size:12px;color:#b9cdd5}
+#players .profile-hint{font-size:12px;color:#b8cbd3}
+#matches .match-item .title{font-size:14px}
+#matches .match-item .date{font-size:11px;color:#abc3ce}
+#matches .archive-actions,#matches .crest-data-note{font-size:11px;color:#b9cbd5}
+#matches .archive-filter button{font-size:12px;font-weight:900}
+#matches .compare-title,#matches .dual .label{font-size:11px;color:#c2d5dc}
+#matches .coverage,#matches .muted-tip{font-size:11px;line-height:1.6;color:#bed1d4}
+#matches .comparison-mini small{font-size:11px;color:#bfd2d9}
+#app-rivals .h2h-head p,#app-rivals .h2h-head h3 span{font-size:12px;color:#b9cbd3}
+#app-rivals .h2h-select-wrap label{font-size:12px;color:#d0e1e4}
+#app-rivals .h2h-wdl span{font-size:12px;color:#c1d3d8}
+#app-rivals .h2h-desc,#app-rivals .h2h-foot{font-size:11px;line-height:1.6;color:#a9c0c8}
+#more .form-summary{font-size:13px;color:#cbdde2}
+#more .card-row .name{font-size:14px}
+#more .card-row .sub{font-size:11px;color:#b2c7ce}
+#more .muted-tip,#more .notice-ribbon{font-size:11px;line-height:1.6;color:#b7cbd2}
+@media(max-width:800px){
+ .division-copy strong{font-size:17px}
+ .division-copy small{font-size:10px}
+ .division-subline span{font-size:11px}
+ .division-subline .season-wdl span{font-size:11px!important}
+ .division-subline .season-wdl b{font-size:11px}
+ .division-form-top{font-size:12px}
+ .division-form-top strong,.division-form-top span,.division-form-top b{font-size:12px}
+ .hero-recent-card .hero-right-top{font-size:12px}
+ .hero-recent-list .match-item .title{font-size:13px}
+ .hero-recent-list .match-item .date{font-size:11px}
+ .hero-recent-list .match-item .score{font-size:16px}
+ .metric-strip{gap:9px}
+ .metric{display:block!important;position:relative;min-height:128px;padding:15px 12px!important}
+ .metric .metric-icon{position:absolute!important;top:11px;right:11px;left:auto;width:30px;height:30px}
+ .metric>div:last-child:not(.metric-icon){display:block;min-width:0;width:100%}
+ .metric h3{font-size:13px!important;line-height:1.4;min-height:20px;padding-right:27px;margin:0}
+ .metric b{font-size:29px!important;line-height:1.1;margin:14px 0 6px;white-space:nowrap}
+ .metric small{font-size:11px!important}
+ .metric-wdl{display:block!important}
+ .metric-wdl .metric-body{display:block!important}
+ .metric-wdl .metric-icon{grid-column:auto;grid-row:auto}
+ .metric-wdl h3{grid-column:auto;grid-row:auto}
+ .metric-wdl .wdl-values{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;margin:13px 0 4px}
+ .metric-wdl .wdl-values>span{display:flex;flex-direction:column;align-items:center;gap:3px}
+ .metric-wdl .wdl-values strong{font-size:23px!important;line-height:1;color:#f0f8f8}
+ .metric-wdl .wdl-values small{font-size:11px!important;color:#c1d4db}
+ .metric-wdl .wdl-rate{grid-column:auto;grid-row:auto;font-size:11px!important;text-align:center;line-height:1.4;margin-top:5px}
+ .home-leader .hl-label{font-size:12px}
+ .home-leader .hl-name{font-size:11px}
+ .home-leader strong{font-size:28px}
+ .home-leader-grid{gap:8px}
+ .home-leader{padding:11px 10px;min-height:98px}
+ #players .star .star-top{font-size:11px}
+ #players .star .detail{font-size:11px}
+ #players .star .person{font-size:12px}
+ #players .category-strip button{font-size:12px;padding:11px 13px}
+ #players .standing-row .who strong{font-size:13px}
+ #players .standing-row .who span{font-size:11px}
+ #players .standing-row .amount{font-size:17px}
+ #matches .match-item .title{font-size:13px}
+ #matches .match-item .date{font-size:11px}
+ #matches .archive-filter button{font-size:11px}
+ #matches .comparison-mini small{font-size:11px}
+}
+@media(max-width:360px){
+ .metric{padding:13px 9px!important;min-height:128px}
+ .metric h3{font-size:12px!important}
+ .metric .metric-icon{right:8px;width:28px;height:28px}
+ .metric-wdl .wdl-values strong{font-size:20px!important}
+ .metric b{font-size:26px!important}
+ .home-leader{padding:10px 7px}
+ .home-leader .hl-label{font-size:11px}
+ .home-leader .hl-name{font-size:10px}
+}
