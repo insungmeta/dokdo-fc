@@ -29,11 +29,6 @@ const labels={home:'클럽 홈',players:'선수 랭킹',matches:'경기 기록',
 const bottom=document.createElement('nav');bottom.className='app-bottom-nav';bottom.setAttribute('aria-label','주요 화면');
 bottom.innerHTML=Object.entries(labels).map(([id,label])=>'<button type="button" data-screen="'+id+'" aria-label="'+label+' 메뉴"><span class="app-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true">'+icons[id]+'</svg></span><span class="app-nav-label">'+label+'</span></button>').join('');document.body.append(bottom);
 
-const quick=document.createElement('section');quick.className='app-quick-menu';quick.setAttribute('aria-label','주요 메뉴 바로가기');
-const quickActions=[['players','선수 랭킹','득점왕 · MVP'],['matches','경기 기록','전체 경기 · 매치 리뷰'],['rivals','상대전적','팀별 맞대결 기록'],['more','팀 흐름','최근 10경기 · 카드']];
-quick.innerHTML='<div class="app-quick-heading"><strong>메뉴 바로가기</strong><small>항목을 눌러 이동하세요</small></div><div class="app-quick-grid">'+quickActions.map(([id,label,desc])=>'<button type="button" class="app-quick-action" data-go="'+id+'"><span class="app-quick-icon"><svg viewBox="0 0 24 24" aria-hidden="true">'+icons[id]+'</svg></span><span class="app-quick-copy"><strong>'+label+'</strong><small>'+desc+'</small></span><span class="app-quick-arrow" aria-hidden="true">›</span></button>').join('')+'</div>';
-home.insertBefore(quick,hero);
-quick.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)show(b.dataset.go,{scroll:true})});
 const paths={home,players,matches,rivals,more},alias={overview:'home',players:'players',matches:'matches',rivalry:'rivals',more:'more','app-home':'home','app-rivals':'rivals'};
 let current='';
 function show(id,opt={}){
