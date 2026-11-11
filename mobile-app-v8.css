@@ -131,3 +131,16 @@ footer.foot{padding-bottom:calc(91px + env(safe-area-inset-bottom,0px));font-siz
 main.shell{padding-bottom:calc(124px + env(safe-area-inset-bottom,0px))}footer.foot{padding-bottom:calc(113px + env(safe-area-inset-bottom,0px))}
 }
 @media(max-width:360px){.app-bottom-nav{gap:3px;padding-left:5px;padding-right:5px}.app-bottom-nav button{font-size:9.2px;letter-spacing:-.45px}}
+
+
+/* V8.2: one primary navigation per device, no duplicate home shortcuts */
+.app-quick-menu{display:none!important}
+@media(min-width:801px){
+ .app-bottom-nav{display:none!important}
+ .header .nav{display:flex!important}
+ .header .nav a[href^="./legacy"]{display:none!important}
+}
+@media(max-width:800px){
+ .header .nav{display:none!important}
+ .app-bottom-nav{display:grid!important}
+}
