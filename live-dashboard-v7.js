@@ -102,7 +102,7 @@ const metrics=document.querySelectorAll('.metric-strip .metric');if(metrics.leng
 const stars=document.querySelectorAll('.star-grid .star');['goals','assists','mvp','interceptions','goalkeepers'].forEach((k,i)=>{if(!stars[i])return;const x=boards[k].rows[0];stars[i].querySelector('.hero-number').textContent=x?x[1]:'—';stars[i].querySelector('.person').textContent=x?x[0]:'기록 없음';if(i===3)stars[i].querySelector('.detail').textContent='보관 DF 출전 경기 · 인터셉트'});
 if(games.length)game(0);
 if(rivals.length)h2h(rivals[0].key);
-leader('mvp');
+leader('goals');
 const cards=document.querySelector('.cards-board');if(cards)cards.innerHTML=boards.cards.rows.slice(0,3).map(x=>'<div class="card-row"><div><div class="name">'+E(x[0])+'</div><div class="sub">보관된 경기 카드 기록</div></div><div class="card-count">'+E(x[2])+'</div></div>').join('')+'<div class="notice-ribbon"><b>집계 기준</b> · 보관 경기 카드만 표시 · 시즌 누적과 혼합하지 않음</div>';
 document.querySelector('.data-disclaimer').innerHTML='<strong>EA 자동 수집 데이터 연동 · 운영 홈페이지</strong> 현재 '+E(dv)+' 리그, 선수 시즌 누적과 보관 경기 수비·상대전적을 집계합니다. 보관된 '+matches.length+'경기만 상대전적에 반영되며, 패스·태클 비교는 수집된 선수 기록이므로 팀 전체 공식 수치와 다를 수 있습니다. 볼 점유율은 원본이 없어 표시하지 않습니다. <button class="method-btn" type="button" id="methodBtn">데이터 표시 기준</button> · <a href="./legacy.html#matches">전체 경기 아카이브</a> · <a href="./legacy.html#board">게시판</a>';
 document.querySelector('.h2h-foot').textContent='상대전적은 상대팀 ID와 경기 ID를 기준으로 계산하며 보관된 '+matches.length+'경기만 포함합니다.';
