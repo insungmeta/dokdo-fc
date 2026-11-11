@@ -118,3 +118,25 @@ footer.foot{padding-bottom:calc(91px + env(safe-area-inset-bottom,0px));font-siz
 #players .player-detail-panel{margin-top:0}
 #players .category-strip{flex-wrap:wrap;overflow:visible}
 }
+
+
+/* V8.1 prominent navigation */
+@media(min-width:801px){.header .nav{gap:5px}.header .nav a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 12px;border:1px solid #3c5863;border-radius:10px;background:#182e3a;color:#e6f0f0;font-size:12px;font-weight:900}.header .nav a.selected,.header .nav a[aria-current=page]{background:#c8f35d!important;border-color:#e7ffad!important;color:#13251a!important}}
+.app-quick-menu{margin:0 0 16px}
+.app-quick-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 9px;padding:0 3px}.app-quick-heading strong{font-size:14px;color:#f1f8f6}.app-quick-heading small{font-size:10px;color:#a9bdc6}
+.app-quick-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.app-quick-action{display:flex;align-items:center;min-width:0;gap:8px;min-height:65px;padding:10px;background:linear-gradient(125deg,#1f423b,#152b37);border:1px solid #52765e;border-radius:12px;color:#f3f9f7;text-align:left;cursor:pointer}
+.app-quick-action:active,.app-quick-action:hover{border-color:#c8f35d;background:#264f43}
+.app-quick-icon{width:31px;height:32px;flex:none;display:grid;place-items:center;border-radius:9px;background:#34564b;color:#c8f35d}
+.app-quick-icon svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.app-quick-copy{display:flex;min-width:0;flex-direction:column;gap:2px}.app-quick-copy strong{font-size:12px;font-weight:900;white-space:nowrap}.app-quick-copy small{font-size:9px;color:#b2c9ce}.app-quick-arrow{margin-left:auto;font-size:21px;color:#c8f35d}
+@media(min-width:801px) and (max-width:1100px){.app-quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.header .nav a{padding:9px;font-size:11px}}
+@media(max-width:800px){
+.app-quick-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.app-quick-action{min-height:70px;padding:9px}
+.app-bottom-nav{gap:4px;padding:8px 7px calc(8px + env(safe-area-inset-bottom,0px));background:#071522fc;border-top:2px solid #638768;box-shadow:0 -8px 28px #000a}
+.app-bottom-nav button{min-height:68px;gap:5px;padding:6px 1px 5px;border:1px solid #3e5b65;background:#172d3b;border-radius:11px;color:#e7f0f2;font-size:clamp(9px,2.65vw,11px);font-weight:950;letter-spacing:-.35px}
+.app-bottom-nav button .app-nav-icon{display:grid;place-items:center;width:33px;height:29px;border-radius:8px;background:#2a4552}.app-bottom-nav button .app-nav-label{display:block}.app-bottom-nav button svg{height:22px;width:22px;stroke-width:2.1}
+.app-bottom-nav button.active{background:#c8f35d!important;border-color:#e5ffa4!important;color:#122519!important;box-shadow:0 1px 13px #7cae465c}.app-bottom-nav button.active .app-nav-icon{background:#254b3225}
+main.shell{padding-bottom:calc(124px + env(safe-area-inset-bottom,0px))}footer.foot{padding-bottom:calc(113px + env(safe-area-inset-bottom,0px))}
+}
+@media(max-width:360px){.app-bottom-nav{gap:3px;padding-left:5px;padding-right:5px}.app-bottom-nav button{font-size:9.2px;letter-spacing:-.45px}.app-quick-action{gap:5px;padding:8px 6px}.app-quick-copy strong{font-size:11px}.app-quick-copy small{font-size:8px}}
