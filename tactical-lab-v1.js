@@ -12,11 +12,13 @@ const escape=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>'
 const avg=n=>Number(n).toFixed(2);
 const formations={
  '4-2-3-1':[['GK',50,91],['LB',17,77],['LCB',39,77],['RCB',61,77],['RB',83,77],['LCDM',38,58],['RCDM',62,58],['LW',17,38],['CAM',50,38],['RW',83,38],['ST',50,15]],
- '4-3-3':[['GK',50,91],['LB',17,77],['LCB',39,77],['RCB',61,77],['RB',83,77],['CDM',50,60],['LCM',29,48],['RCM',71,48],['LW',17,29],['ST',50,15],['RW',83,29]]
+ '4-3-3':[['GK',50,91],['LB',17,77],['LCB',39,77],['RCB',61,77],['RB',83,77],['CDM',50,60],['LCM',29,48],['RCM',71,48],['LW',17,29],['ST',50,15],['RW',83,29]],
+ '4-4-2':[['GK',50,91],['LB',17,76],['LCB',39,76],['RCB',61,76],['RB',83,76],['LM',17,49],['LCM',39,53],['RCM',61,53],['RM',83,49],['ST',38,19],['ST2',62,19]]
 };
 const allocations={
  '4-2-3-1':{5:['ST','LW','CAM','RW','LCDM'],7:['ST','LW','CAM','RW','LCDM','RCDM','LCB'],9:['ST','LW','CAM','RW','LCDM','RCDM','LCB','LB','RB']},
- '4-3-3':{5:['ST','LW','RW','LCM','CDM'],7:['ST','LW','RW','LCM','RCM','CDM','LCB'],9:['ST','LW','RW','LCM','RCM','CDM','LCB','LB','RB']}
+ '4-3-3':{5:['ST','LW','RW','LCM','CDM'],7:['ST','LW','RW','LCM','RCM','CDM','LCB'],9:['ST','LW','RW','LCM','RCM','CDM','LCB','LB','RB']},
+ '4-4-2':{5:['ST','ST2','LM','RM','LCM'],7:['ST','ST2','LM','RM','LCM','RCM','LCB'],9:['ST','ST2','LM','RM','LCM','RCM','LCB','RCB','LB']}
 };
 let people=5,selected=null,model=null,lineupMode=false;
 const isValid=m=>m&&m.matchType==='leagueMatch'&&m.matchId&&
@@ -54,7 +56,7 @@ function compute(data){
  const delta=now.n===10&&before.n===10?now.pts-before.pts:null;
  // These are editorial tactical heuristics, not validated EA formation recommendations.
  const suggested=now.n>=5&&now.gaAvg<1.3&&now.gfAvg<1.2?'4-3-3':'4-2-3-1';
- return {now,before,pass,delta,suggested,updated:data?.sync?.lastSuccess||null,roster:Array.isArray(data?.members)?data.members:[],history:archivedRoleHistory(data?.matches)};
+ return {now,before,pass,delta,suggested,updated:data?.sync?.lastSuccess||null,roster:Array.isArray(data?.members)?data.members:[],history:archivedRoleHistory(data?.matches),league};
 }
 function diagnoses(r){
  const {now,pass,delta}=r;
@@ -83,7 +85,7 @@ function diagnoses(r){
  * specialists, online availability, or player intent.
  */
 const roleCategory=pos=>pos==='GK'?'goalkeeper':
- ['ST','LW','RW'].includes(pos)?'forward':
+ ['ST','ST2','LW','RW'].includes(pos)?'forward':
  ['LB','LCB','RCB','RB'].includes(pos)?'defender':'midfielder';
 const roleNames={
  forward:['공격수','Forward'],midfielder:['미드필더','Midfielder'],
@@ -135,7 +137,7 @@ function candidateScore(p,role){
  const goals=Math.max(0,Number(p.goals)||0),assists=Math.max(0,Number(p.assists)||0),mvp=Math.max(0,Number(p.manOfTheMatch)||0);
  // Explicit heuristic, not an EA rating formula. For ST, verified season scoring
  // has priority; for other attackers use a combined goals/assists contribution.
- if(role==='ST')return goals*.8+(goals/games)*35+rating*4+assists*.13+Math.min(games,100)*.12;
+ if(role==='ST'||role==='ST2')return goals*.8+(goals/games)*35+rating*4+assists*.13+Math.min(games,100)*.12;
  if(role==='LW'||role==='RW')return goals*.3+assists*.55+goals/games*12+assists/games*15+rating*6+Math.min(games,90)*.1;
  if(role==='GK')return Math.max(0,Number(p.cleanSheetsGK)||0)*8+Math.min(games,60)*.15+rating*5;
  if(roleCategory(role)==='midfielder')return rating*7+assists*.38+goals*.12+Math.min(games,90)*.12+(mvp/games)*10;
@@ -149,6 +151,8 @@ function bestXI(roster,formation,history={}){
  // by midfield when EA's last listed position says MF.
  const priority=formation==='4-3-3'
  ? ['ST','LW','RW','GK','LCB','RCB','LB','RB','CDM','LCM','RCM']
+ : formation==='4-4-2'
+ ? ['ST','ST2','GK','LCB','RCB','LB','RB','LM','RM','LCM','RCM']
  : ['ST','LW','RW','GK','LCB','RCB','LB','RB','LCDM','RCDM','CAM'];
  for(const role of priority){
   const category=roleCategory(role);
@@ -189,6 +193,9 @@ function pitch(formation,count,lineup){
 }
 const descriptions={
  ST:['등지고 연결한 후 박스 진입','Hold up play, combine, then attack the box'],
+ ST2:['두 번째 공격수로 침투, 세컨드볼 압박','Second striker: make runs and press for second balls'],
+ LM:['좌측에서 폭 확보, 수비 시 미드필드 복귀','Keep left width, track back in defense'],
+ RM:['우측에서 폭 확보, 수비 시 미드필드 복귀','Keep right width, track back in defense'],
  LW:['터치라인 폭 유지 → 침투 또는 컷백','Stay wide, run in behind or cut back'],
  RW:['반대쪽 폭 유지 → 뒷공간 침투','Maintain opposite-side width and make runs in behind'],
  CAM:['ST 주변 연계, 세컨드볼, 역압박','Link with ST, recover second balls and counter-press'],
