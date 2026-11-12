@@ -43,7 +43,14 @@
       if (original.length < 3 && out.trim() !== original) continue;
       out = out.split(original).join(target);
     }
-    // Counts and division tiers are numerical and not part of player names.
+    // Dynamic EA labels include short Korean units joined to numbers; those
+    // cannot be handled safely by the static dictionary alone.
+    out = out.replace(/최근\s*(\d+)\s*경기/g, 'Latest $1 Matches');
+    out = out.replace(/(?<=^|[\\s·,:])리그(?=$|[\\s·,:.!?])/g, 'League');
+    out = out.replace(/(?<=^|[\\s·,:])친선(?=$|[\\s·,:.!?])/g, 'Friendly');
+    out = out.replace(/(?<=^|[\\s·,:])갱신(?=$|[\\s·,:.!?])/g, 'Updated');
+    out = out.replace(/(\d+(?:\.\d+)?)\s*골(?=$|[\\s·,:.!?])/g, '$1 goals');
+    out = out.replace(/(\d+)\s*회(?=$|[\\s·,:.!?])/g, '$1 times');
     out = out.replace(/(\d+)\s*부(?:\s*리그)?(?=[\s·,:.!?)]|$)/g, 'Division $1');
     out = out.replace(/(\d+)\s*승\s*(?:[·,\/]\s*)?(\d+)\s*무\s*(?:[·,\/]\s*)?(\d+)\s*패/g, '$1W · $2D · $3L');
     out = out.replace(/(\d+)\s*경기(?=[\s·,.!)]|$)/g, '$1 matches');
