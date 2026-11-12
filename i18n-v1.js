@@ -45,7 +45,7 @@
     }
     // Counts and division tiers are numerical and not part of player names.
     out = out.replace(/(\d+)\s*부(?:\s*리그)?(?=[\s·,:.!?)]|$)/g, 'Division $1');
-    out = out.replace(/(\d+)\s*승\s*[·,\/]\s*(\d+)\s*무\s*[·,\/]\s*(\d+)\s*패/g, '$1W · $2D · $3L');
+    out = out.replace(/(\d+)\s*승\s*(?:[·,\/]\s*)?(\d+)\s*무\s*(?:[·,\/]\s*)?(\d+)\s*패/g, '$1W · $2D · $3L');
     out = out.replace(/(\d+)\s*경기(?=[\s·,.!)]|$)/g, '$1 matches');
     out = out.replace(/승점\s*(\d+(?:\.\d+)?)\s*점?/g, '$1 pts');
     out = out.replace(/(\d+(?:\.\d+)?)\s*점(?=[\s·,.!)]|$)/g, '$1 pts');
