@@ -317,3 +317,44 @@ main{padding-top:15px}
  .dfc-board-leaders .home-leader{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:3px!important;padding:6px!important}
  .dfc-board-leaders .home-leader strong{font-size:21px!important}
 }
+
+/* DOKDO FC identity / reference-faithful dense scoreboard, final cascade. */
+.dfc-banner-title{max-width:64%;gap:0!important;filter:drop-shadow(0 2px 7px #020713)}
+.dfc-banner-title span{font:700 10px/1.4 Arial,sans-serif!important;letter-spacing:2.5px!important;color:#c9f02e!important}
+.dfc-banner-title strong{font:italic 900 clamp(40px,7.2vw,86px)/.98 Impact,'Arial Narrow',Arial,sans-serif!important;letter-spacing:-1.5px!important;white-space:nowrap!important;color:#fff!important}
+.dfc-banner-title small{font:700 10px/1.6 Arial,sans-serif!important;letter-spacing:2px!important;color:#d9e2f0!important}
+.dfc-banner-title small i{display:inline-block;width:14px;height:1px;background:#c8ed39;vertical-align:middle;margin:0 5px}
+.dfc-photo-banner{background-color:#08152a!important;background-image:linear-gradient(90deg,#061222 0%,#061222f4 22%,#061222d9 38%,#06122250 66%,#06122216 100%),url('./assets/reference-match-photo.svg')!important;background-size:cover,auto 100%!important;background-position:center,right center!important;min-height:160px!important;isolation:isolate}
+.dfc-photo-banner:before{z-index:0!important}
+.dfc-photo-banner .dfc-banner-title{z-index:2!important}
+.dfc-summary-grid>.dfc-board-card{position:relative!important;box-sizing:border-box!important}
+.dfc-summary-grid .division-primary{max-width:100%!important;overflow:hidden!important}
+.dfc-summary-grid .division-showcase{min-height:0!important}
+.dfc-summary-grid .division-copy{overflow:hidden!important}
+.dfc-summary-grid .division-copy strong{white-space:normal!important;line-height:1.05!important}
+.dfc-summary-grid .division-digit{white-space:nowrap!important}
+.dfc-summary-form .division-form-results{overflow:hidden!important}
+.dfc-summary-form .division-form-results span{min-width:0!important}
+.dfc-board-card .metric-strip{width:100%!important}
+.dfc-board-leaders .home-leader-grid{min-width:0!important}
+.dfc-board-leaders .home-leader .hl-name{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+@media(min-width:701px){
+.dfc-photo-banner{height:clamp(150px,21vw,210px)!important;max-height:210px!important}
+.dfc-banner-title strong{font-size:clamp(43px,7vw,80px)!important}
+.dfc-summary-grid>.dfc-board-card{height:88px!important;overflow:hidden!important}
+.dfc-summary-grid .division-showcase{align-items:center!important}
+.dfc-summary-grid .division-digit{font-size:39px!important}
+}
+@media(max-width:700px){
+.dfc-photo-banner{height:140px!important;min-height:140px!important;max-height:140px!important;background-size:cover,auto 100%!important;background-position:center,65% center!important}
+.dfc-banner-title{max-width:68%!important}
+.dfc-banner-title span{font-size:8px!important;letter-spacing:1.1px!important}
+.dfc-banner-title strong{font-size:clamp(31px,9vw,49px)!important;letter-spacing:-1px!important}
+.dfc-banner-title small{font-size:7px!important;letter-spacing:.7px!important}
+.dfc-summary-grid>.dfc-board-card{height:105px!important;max-height:105px!important}
+.dfc-summary-grid .division-digit{font-size:34px!important}
+.dfc-summary-grid .division-copy strong{font-size:10px!important}
+.dfc-summary-grid .division-showcase{gap:3px!important}
+.dfc-summary-rating .metric b{font-size:30px!important}
+.dfc-board-leaders .home-leader-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
