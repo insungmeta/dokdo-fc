@@ -27,7 +27,7 @@ def validate(driver, lang, width):
     WebDriverWait(driver, 10).until(
         lambda d: script(d, """
             const tabs = document.querySelectorAll('.app-bottom-nav [data-screen]');
-            return tabs.length === 5 && document.querySelector('.dfc-lang-switch');
+            return tabs.length === 6 && document.querySelector('.dfc-lang-switch');
         """)
     )
     # MutationObserver localization runs in microtasks after all dynamically rendered cards.
@@ -56,9 +56,9 @@ def validate(driver, lang, width):
         checks.switcher=Boolean(visible(switcher));
         if(checks.lang!==arguments[0])issues.push('wrong language '+checks.lang);
         if(!checks.switcher)issues.push('language switch hidden');
-        if(nav.length!==(innerWidth>800?5:0))issues.push('wrong top nav count: '+nav.length);
-        if(bottom.length!==(innerWidth<=800?5:0))issues.push('wrong bottom nav count: '+bottom.length);
-        const expected=checks.lang==='en'?['Home','Players','Matches','Rivals','Trends']:['클럽 홈','선수 랭킹','경기 기록','상대전적','팀 흐름'];
+        if(nav.length!==(innerWidth>800?6:0))issues.push('wrong top nav count: '+nav.length);
+        if(bottom.length!==(innerWidth<=800?6:0))issues.push('wrong bottom nav count: '+bottom.length);
+        const expected=checks.lang==='en'?['Home','Players','Matches','Rivals','Trends','Tactics']:['클럽 홈','선수 랭킹','경기 기록','상대전적','팀 흐름','전술판'];
         if(innerWidth>800&&JSON.stringify(checks.navLabels)!==JSON.stringify(expected))issues.push('nav labels incorrect');
         if(innerWidth<=800&&JSON.stringify(checks.bottomLabels)!==JSON.stringify(expected))issues.push('bottom labels incorrect');
         for(let i=0;i<nav.length;i++){
@@ -88,13 +88,13 @@ def validate(driver, lang, width):
     # Go beyond the home card: verify each of the five screens and the full
     # squad view at representative mobile and desktop sizes.
     if width in (390, 1280):
-        for screen in ("players", "matches", "rivals", "more"):
+        for screen in ("players", "matches", "rivals", "more", "tactics"):
             driver.execute_script(
                 "document.querySelector('.app-bottom-nav [data-screen=\"' + arguments[0] + '\"]').click()", screen
             )
             section = {
                 "players": "#players", "matches": "#matches",
-                "rivals": "#app-rivals", "more": "#more"
+                "rivals": "#app-rivals", "more": "#more", "tactics": "#tactics"
             }[screen]
             WebDriverWait(driver, 6).until(
                 lambda d: d.execute_script(
@@ -127,10 +127,23 @@ def validate(driver, lang, width):
                 }
                 return {active:active.id,issues,headings:headings.slice(0,20),untranslated:untranslated.slice(0,30)};
             """)
+            if screen=="tactics":
+                view=script(driver, """
+                    const el=document.querySelector('#tactics'),lab=document.querySelector('#tacticalLab');
+                    const rect=el.getBoundingClientRect();
+                    return {display:getComputedStyle(el).display,visible:rect.width>0&&rect.height>100,
+                      ancestors:Array.from((function*(){let p=el.parentElement;while(p){yield {tag:p.tagName,id:p.id,display:getComputedStyle(p).display};p=p.parentElement;}})()),
+                      heading:el.querySelector('h2')?.textContent,
+                      labVisible:Boolean(lab&&lab.getBoundingClientRect().height>100),
+                      location:window.location.hash};
+                """)
+                print(json.dumps({"lang":lang,"width":width,"screen":"tactics-route",**view},ensure_ascii=False),flush=True)
+                if not view["visible"] or not view["labVisible"] or view["location"]!="#tactics":
+                    info["issues"].append("tactics route shows active tab but page invisible: "+str(view))
             print(json.dumps({"lang":lang,"width":width,"screen":screen,**details},ensure_ascii=False),flush=True)
             driver.save_screenshot(str(OUT / f"dfc-{lang}-{width}-{screen}.png"))
             info["issues"].extend(screen+": "+x for x in details["issues"])
-            if screen=="more":
+            if screen=="tactics":
                 WebDriverWait(driver,12).until(
                     lambda d: d.execute_script("return Boolean(document.querySelector('#tlPitch svg'))")
                 )
