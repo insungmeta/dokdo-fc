@@ -144,3 +144,54 @@ main{padding-top:15px}
  .app-bottom-nav button{border-radius:4px!important;background:#122034!important;border:1px solid #30445a!important;color:#c9d6e2!important}
  .app-bottom-nav button.active{background:#c5f126!important;color:#091522!important;border-color:#c5f126!important}
 }
+
+/* Reference-layout homepage: top action banner / 4 KPIs / 3-column match dashboard. */
+#app-home{display:block}
+#app-home>.screen-head{display:none!important}
+.dfc-photo-banner{position:relative;min-height:172px;overflow:hidden;border-radius:5px;border:1px solid #2e425b;background:linear-gradient(90deg,#061021 0%,#061021e8 29%,#06102155 62%,#0714261c 100%),url('./assets/match-duel.svg') center 51%/cover no-repeat;display:flex;align-items:center;padding:20px 6%}
+.dfc-photo-banner:before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(112deg,transparent 0 5%,#a9d72155 5.2%,transparent 6.4% 93%,#c5f126 93.2% 94%,transparent 94.2%)}
+.dfc-banner-title{position:relative;z-index:1;display:flex;flex-direction:column;text-shadow:0 2px 12px #02060d}
+.dfc-banner-title span{font:italic 900 17px/1.1 Arial,sans-serif;color:#f5f8ff}
+.dfc-banner-title strong{font:italic 900 clamp(36px,5.5vw,64px)/1 Impact,'Arial Narrow',Arial,sans-serif;letter-spacing:-1px;color:#fff}
+.dfc-banner-title small{font:700 9px/1.8 Arial,sans-serif;letter-spacing:3px;color:#d7e5f4}
+.dfc-match-board{display:grid;gap:10px;margin-top:10px}
+.dfc-summary-grid{display:grid;grid-template-columns:1.2fr .9fr 1.12fr 1.08fr;gap:9px;min-width:0}
+.dfc-board-card{min-width:0;overflow:hidden;border:1px solid #253b56;border-radius:5px;background:linear-gradient(150deg,#14233b,#091426);box-shadow:inset 0 1px #ffffff0c;padding:12px}
+.dfc-card-title{font:900 11px/1.2 Arial,sans-serif;color:#cbd9e8;margin-bottom:8px}
+.dfc-summary-grid .division-primary{padding:0!important;margin:0!important;background:none!important}
+.dfc-summary-grid .division-showcase{gap:8px!important}
+.dfc-summary-grid .division-digit{font-size:clamp(38px,4vw,57px)!important;color:#fff}
+.dfc-summary-grid .division-copy strong{font-size:13px!important}
+.dfc-summary-grid .division-subline{font-size:10px!important}
+.dfc-summary-rating .metric{padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;min-height:0!important}
+.dfc-summary-rating .metric-icon{display:none!important}
+.dfc-summary-rating .metric b{font-size:clamp(25px,3vw,37px)!important;color:#fff}
+.dfc-summary-rating .rating-heading h3{display:none}
+.dfc-summary-rating .rating-caption{font-size:9px!important}
+.dfc-summary-form .division-form{padding:0!important;margin:0!important;background:none!important;border:0!important;box-shadow:none!important}
+.dfc-summary-form .division-form-top strong{display:none}
+.dfc-summary-form .division-form-results{display:flex!important;gap:3px!important;flex-wrap:nowrap!important}
+.dfc-summary-form .division-form-results span{min-width:0!important;flex:1!important;height:23px!important;font-size:10px!important}
+.dfc-summary-stat .metric-strip{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:5px!important;margin:0!important}
+.dfc-summary-stat .metric{min-height:0!important;padding:4px!important;background:transparent!important;border:0!important;display:block!important}
+.dfc-summary-stat .metric-icon{display:none!important}
+.dfc-summary-stat .metric h3{font-size:9px!important;line-height:1.2}
+.dfc-summary-stat .metric b{font-size:21px!important;color:#c5f126}
+.dfc-summary-stat .metric small{display:none!important}
+.dfc-summary-stat .metric-wdl .wdl-values strong{font-size:14px!important}
+.dfc-lower-grid{display:grid;grid-template-columns:1.12fr 1.15fr .9fr;gap:9px;align-items:stretch}
+.dfc-lower-grid>.dfc-board-card{min-height:238px}
+.dfc-board-matches .hero-right{padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+.dfc-board-matches .hero-right-top{padding-bottom:8px;border-bottom:1px solid #344760}
+.dfc-board-matches .hero-recent-list .match-item{padding:7px 3px!important}
+.dfc-board-trend .division-trend{display:block!important;background:none!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important}
+.dfc-board-trend .division-trend-chart{height:135px!important;max-height:135px!important;width:100%!important}
+.dfc-board-leaders .home-leaders{margin:0!important}
+.dfc-board-leaders .home-leaders>.screen-head{display:none!important}
+.dfc-board-leaders .home-leader-grid{display:grid!important;grid-template-columns:1fr!important;gap:4px!important}
+.dfc-board-leaders .home-leader{min-height:0!important;padding:7px 8px!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:3px!important;border-radius:3px!important}
+.dfc-board-leaders .home-leader strong{font-size:18px!important}
+.dfc-board-leaders .home-leader .hl-name{font-size:11px!important}
+.dfc-legacy-hero{display:none!important}
+@media(max-width:900px){.dfc-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dfc-lower-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dfc-board-leaders{grid-column:span 2}}
+@media(max-width:600px){.dfc-photo-banner{min-height:145px;padding:17px 19px}.dfc-banner-title strong{font-size:42px}.dfc-summary-grid{gap:6px}.dfc-board-card{padding:9px}.dfc-summary-grid .division-digit{font-size:44px!important}.dfc-summary-stat .metric b{font-size:18px!important}.dfc-lower-grid{grid-template-columns:1fr;gap:7px}.dfc-board-leaders{grid-column:auto}.dfc-lower-grid>.dfc-board-card{min-height:0}.dfc-board-trend .division-trend-chart{height:110px!important}.dfc-summary-form .division-form-results span{font-size:8px!important}}
