@@ -78,7 +78,7 @@ class DashboardUIContract(unittest.TestCase):
         self.assertIn("data-tl-people=\"5\"", self.html)
         self.assertIn("data-tl-people=\"9\"", self.html)
         self.assertIn("#more .tl-columns", styling)
-        self.assertIn("5+ matches", tactical)
+        self.assertIn("Fewer than 5 matches", tactical)
         self.assertEqual(self.html.count('id="tacticalLab"'), 1)
 
     def test_mobile_five_sections_remain(self):
