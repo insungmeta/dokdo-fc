@@ -339,6 +339,7 @@ function render(){
  id('tlLegend').textContent=lineupMode?
    t('연두색: 실제 기록 있는 선발 후보 '+assigned+'명 · 나머지 AI (현재 접속 여부 미확인)','Lime: '+assigned+' candidates with saved stats · others AI (online status unverified)'):
    t('연두색: 직접 조작 '+people+'명 · 회색: AI '+(11-people)+'명 (골키퍼 AI 포함)','Lime: '+people+' human-controlled · Grey: '+(11-people)+' AI (including GK)');
+ id('tlBestXI').textContent=lineupMode?t('베스트11 닫기','Close Best XI'):t('베스트11 보기','View Best XI');
  id('tlBestXI').classList.toggle('is-selected',lineupMode);
  id('tlBestXI').setAttribute('aria-pressed',String(lineupMode));
  id('tlBestXIPanel').hidden=!lineupMode;
@@ -391,7 +392,6 @@ function render(){
 }
 id('tlBestXI').addEventListener('click',()=>{
  lineupMode=!lineupMode;
- if(lineupMode)selected=null;
  id('tlShareStatus').textContent='';
  render();
 });
