@@ -466,7 +466,7 @@ id('tlRecommendFormation').addEventListener('click',()=>{
  selected=null;
  id('tlShareStatus').textContent='';
  render();
- id('tlFormationFeedback').textContent=(prior===model.suggested?
+ id('tlFormationFeedback').textContent=(prior===proposed?
   t('현재 추천 전술은 ','Current suggested formation: '):
   t('선택한 전술에서 추천 전술로 전환했습니다. ','Switched to the suggested formation. '))+
   proposed+t(' · 게임 안에서는 직접 포메이션을 설정해야 합니다.',' · This does not change settings inside EA FC.');
