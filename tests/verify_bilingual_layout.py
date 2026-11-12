@@ -237,6 +237,32 @@ def validate(driver, lang, width):
                     info["issues"].append('best xi duplicated a player in multiple positions')
                 if best["usedWidth"]>width+4:
                     info["issues"].append('best xi panel horizontally overflows')
+                forecast=script(driver, """
+                    const lab=document.querySelector('#tacticalLab');
+                    const cards=Array.from(lab.querySelectorAll('#tlForecastOptions [data-tl-forecast]'));
+                    const ids=cards.map(c=>c.dataset.tlForecast);
+                    const text=lab.querySelector('#tlForecastFoot')?.textContent||'';
+                    const trialBefore=lab.querySelector('#tlTrialStatus')?.textContent||'';
+                    const option=cards.find(c=>c.dataset.tlForecast==='4-4-2');
+                    option?.click();
+                    const altSelected=lab.querySelector('[data-tl-formation="4-4-2"]')?.getAttribute('aria-pressed');
+                    const line=lab.querySelectorAll('#tlPitch svg rect').length;
+                    lab.querySelector('#tlTrialStart')?.click();
+                    const startHidden=lab.querySelector('#tlTrialStart').hidden;
+                    const trialStarted=lab.querySelector('#tlTrialStatus')?.textContent||'';
+                    lab.querySelector('#tlTrialStop')?.click();
+                    const stopped=lab.querySelector('#tlTrialStart').hidden===false;
+                    return {options:ids,forecastNotes:text,trialBefore,altSelected,line,startHidden,
+                            trialStarted,stopped,width:document.documentElement.scrollWidth};
+                """)
+                print(json.dumps({"lang":lang,"width":width,"screen":"forecast-and-trial",**forecast},ensure_ascii=False),flush=True)
+                driver.save_screenshot(str(OUT / f"dfc-{lang}-{width}-forecasts.png"))
+                if sorted(forecast["options"])!=["4-2-3-1","4-3-3","4-4-2"]:
+                    info["issues"].append("forecast does not offer all three experimental formations")
+                if forecast["altSelected"]!="true" or not forecast["line"] or not forecast["startHidden"] or not forecast["stopped"]:
+                    info["issues"].append("forecasts, new formation or trial controls not functioning")
+                if forecast["width"]>width+4:
+                    info["issues"].append("forecast cards horizontal overflow")
                 striker=script(driver, """
                    const root=document.querySelector('#tacticalLab');
                    const player=(window.__dokdoData?.members||[]).find(p=>p.name==='dududada3472');
