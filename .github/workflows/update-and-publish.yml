@@ -22,6 +22,11 @@ concurrency:
   cancel-in-progress: false
 jobs:
   refresh-and-publish:
+    # Legal-rights safeguard: the unofficial EA endpoint is NOT an approved
+    # community API. Do not make new EA requests unless verified permission
+    # has been obtained and the repository variable is deliberately enabled.
+    # Existing local archive files remain available to the published website.
+    if: ${{ vars.DFC_EA_DATA_LICENSE_CONFIRMED == 'true' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
