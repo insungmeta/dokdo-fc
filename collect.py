@@ -8,7 +8,7 @@ from __future__ import annotations
 import copy
 import json
 import logging
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 CLUB_ID = 331042
@@ -260,6 +260,64 @@ def archive_updates(original, current, history, now):
 
 
 
+
+def rating_trend(overall, history, now):
+    """Return a real archived rating comparison without pretending we have a full week.
+
+    History stores overall snapshots only when EA data changes. If a complete
+    seven-day window exists, use the most recent observation on/before its start.
+    Until then, compare against the preceding *different* recorded rating.
+    """
+    current = (overall or {}).get("skillRating")
+    if isinstance(current, bool) or current in (None, ""):
+        return None
+    try:
+        current = int(current)
+    except (ValueError, TypeError, OverflowError):
+        return None
+    try:
+        reference = datetime.fromisoformat(str(now).replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return None
+    if reference.tzinfo is None:
+        reference = reference.replace(tzinfo=timezone.utc)
+    points = []
+    for change in history.get("changes", []):
+        rating = (change.get("overall") or {}).get("skillRating")
+        if rating is None or rating == "" or isinstance(rating, bool):
+            continue
+        try:
+            number = int(rating)
+            stamp = datetime.fromisoformat(str(change["at"]).replace("Z", "+00:00"))
+            if stamp.tzinfo is None:
+                stamp = stamp.replace(tzinfo=timezone.utc)
+        except (TypeError, ValueError, OverflowError, KeyError):
+            continue
+        if stamp <= reference:
+            points.append((stamp, number))
+    if not points:
+        return None
+    points.sort(key=lambda x: x[0])
+    cutoff = reference - timedelta(days=7)
+    old_enough = [p for p in points if p[0] <= cutoff]
+    if old_enough:
+        baseline_at, baseline = old_enough[-1]
+        period = "7d"
+    else:
+        different = [p for p in points if p[1] != current]
+        if not different:
+            return None
+        baseline_at, baseline = different[-1]
+        period = "previous"
+    return {
+        "current": current,
+        "baseline": baseline,
+        "delta": current - baseline,
+        "period": period,
+        "baselineAt": baseline_at.isoformat(),
+    }
+
+
 def get_verified_league(api, club_name, club_id, scope="current_season"):
     """Fetch one verified club row. Current-season and all-time are distinct.
 
@@ -397,6 +455,7 @@ def collect(api_factory=None, path=OUT):
     # Keep a permanent, append-only revision log of all team, season, career,
     # per-player and both-sides match details. Old data is never deleted.
     archive_updates(original, d, history, now)
+    d["ratingTrend"] = rating_trend(d.get("overall"), history, now)
     d["archiveVersion"] = 1
 
     path.parent.mkdir(parents=True, exist_ok=True)
