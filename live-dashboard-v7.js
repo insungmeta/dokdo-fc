@@ -305,11 +305,13 @@ function renderHealth(status){
  const league=formatSource(sources.league),match=formatSource(sources.leagueMatch),members=formatSource(sources.members);
  const checked=status?.checkedAt||status?.lastSuccess||data.sync?.lastSuccess;
  const stamped=checked?date(checked):'시각 미확인';
- healthText.textContent='리그 '+league+' · 경기 '+match+' · 선수 '+members+' · 확인 '+stamped;
- const warn=[league,match,members].some(x=>x!=='정상');
+ const minutes=checked&&!Number.isNaN(new Date(checked).getTime())?Math.max(0,Math.floor((Date.now()-new Date(checked).getTime())/60000)):null;
+ const delayed=minutes===null||minutes>=12;
+ healthText.textContent=(delayed?'예약 실행 지연 · ':'')+'마지막 성공 '+stamped+(minutes===null?'':' · '+minutes+'분 전')+' · 리그 '+league+' · 경기 '+match+' · 선수 '+members;
+ const warn=delayed||[league,match,members].some(x=>x!=='정상');
  healthDot.className='sync-health-dot '+(warn?'is-warn':'is-ok');
  if([league,match,members].includes('조회 실패'))healthDot.className='sync-health-dot is-error';
- healthText.title='각 EA 데이터의 마지막 수집 성공 기준이며, 현재 EA 서버를 실시간 조회하는 기능은 아닙니다.';
+ healthText.title='GitHub Actions 예약 수집은 보통 5분 간격으로 요청하지만 GitHub 환경에 따라 지연되거나 누락될 수 있습니다. 버튼은 이미 저장된 기록만 확인합니다.';
 }
 function showCheckFeedback(message,state){
  syncFeedback.hidden=false;
