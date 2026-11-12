@@ -350,6 +350,25 @@ def main():
                     all_issues.append(f"legacy {lang} {width}px language switch out of viewport")
                 if view["pageWidth"]>width+4:
                     all_issues.append(f"legacy {lang} {width}px page horizontal overflow {view['pageWidth']}")
+        # Rights/privacy must be readable in both languages on phone and desktop.
+        for page in ("privacy.html","legal.html"):
+            for lang in ("ko","en"):
+                for width in (390,1280):
+                    driver.set_window_size(width,930)
+                    driver.get(BASE+page+"?lang="+lang)
+                    result=script(driver, """
+                        const lang=document.documentElement.lang;
+                        const visible=Array.from(document.querySelectorAll('[data-language]'))
+                           .filter(x=>x.getBoundingClientRect().height>0).map(x=>x.dataset.language);
+                        return {lang,visible,width:document.documentElement.scrollWidth,
+                          heading:document.querySelector('[data-language="'+lang+'"] h1')?.textContent};
+                    """)
+                    print(json.dumps({"page":page,"lang":lang,"viewport":width,**result},ensure_ascii=False),flush=True)
+                    driver.save_screenshot(str(OUT / f"dfc-{page}-{lang}-{width}.png"))
+                    if result["lang"]!=lang or result["visible"]!=[lang] or not result["heading"]:
+                        all_issues.append(f"{page} {lang} {width}px wrong visible language")
+                    if result["width"]>width+4:
+                        all_issues.append(f"{page} {lang} {width}px horizontal overflow")
         if all_issues:
             print("\nFAILURES:\n"+"\n".join(all_issues),flush=True)
             raise SystemExit(1)
