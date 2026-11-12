@@ -78,7 +78,7 @@ class DashboardUIContract(unittest.TestCase):
         self.assertIn("data-tl-people=\"5\"", self.html)
         self.assertIn("data-tl-people=\"9\"", self.html)
         self.assertIn("#tactics .tl-columns", styling)
-        self.assertIn("Fewer than 5 matches", tactical)
+        self.assertIn("Limited records: this is an exploratory trial idea.", tactical)
         self.assertIn('id="tlRoles"', self.html)
         self.assertIn('id="tlCopy"', self.html)
         self.assertIn('id="tlBestXI"', self.html)
