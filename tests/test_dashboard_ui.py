@@ -18,7 +18,7 @@ class DashboardUIContract(unittest.TestCase):
     def test_active_scripts_syntax(self):
         if shutil.which("node") is None:
             self.skipTest("Node.js unavailable")
-        for name in ("live-dashboard-v7.js", "mobile-app-v8.js"):
+        for name in ("live-dashboard-v7.js", "mobile-app-v8.js", "tactical-lab-v1.js"):
             with self.subTest(file=name):
                 result = subprocess.run(
                     ["node", "--check", str(ROOT / name)],
@@ -78,7 +78,9 @@ class DashboardUIContract(unittest.TestCase):
         self.assertIn("data-tl-people=\"5\"", self.html)
         self.assertIn("data-tl-people=\"9\"", self.html)
         self.assertIn("#tactics .tl-columns", styling)
-        self.assertIn("Limited records: this is an exploratory trial idea.", tactical)
+        self.assertIn("function topIssue(r)", tactical)
+        self.assertIn("function observedPairs(r)", tactical)
+        self.assertIn("Co-appearances do not establish chemistry", tactical)
         self.assertIn('id="tlRoles"', self.html)
         self.assertIn('id="tlCopy"', self.html)
         self.assertIn('id="tlBestXI"', self.html)
