@@ -9,7 +9,7 @@ hero.before(home);home.append(hero,metrics);
 const lead=document.createElement('div');lead.className='home-leaders';lead.innerHTML='<div class="screen-head"><div><span class="eyebrow">SQUAD LEADERS</span><h2>우리 팀 주인공</h2></div><a href="#players">전체 랭킹 ↗</a></div><div class="home-leader-grid" id="homeLeaderGrid"><p class="loading">선수 기록을 불러오는 중</p></div>';home.append(lead);
 /* Editorial homepage: keep original live data nodes, change only their layout. */
 const banner=document.createElement('div');banner.className='dfc-photo-banner';
-banner.innerHTML='<div class="dfc-banner-title"><span>DOKDO FC</span><strong>PRO CLUBS</strong><small>TEAM / RECORD / ANALYSIS</small></div>';
+banner.innerHTML='<div class="dfc-banner-title"><span>OFFICIAL CLUB DASHBOARD</span><strong>DOKDO FC</strong><small>PRO CLUBS <i></i> TEAM / RECORD / ANALYSIS</small></div>';
 home.insertBefore(banner,hero);
 const board=document.createElement('div');board.className='dfc-match-board';
 const summary=document.createElement('div');summary.className='dfc-summary-grid';
