@@ -477,59 +477,78 @@ details[open]>.fold-summary em{transform:rotate(180deg)}
 <section id="tactics" class="app-screen" aria-label="DOKDO FC 전술판">
 <div class="screen-head"><div><span class="eyebrow">DFC TACTICAL LAB</span><h2>전술판</h2></div><small>포메이션 · 팀 전술 · 출전 역할</small></div>
 <section class="panel tactical-lab" id="tacticalLab" aria-label="DOKDO FC 팀 전술 분석">
-<div class="panel-head tl-head"><div><small class="tl-eyebrow">DFC TACTICAL LAB</small><h3>팀 분석 · 추천 전술판</h3></div><span class="minor">EA 보관 리그 경기 기준 · 전술 실험안</span></div>
-<div class="tl-contents">
-<p class="tl-evidence" id="tlEvidence" role="status">경기 결과를 분석하고 있습니다.</p>
-<div class="tl-stats" id="tlStats" aria-label="최근 경기 핵심 지표"><span class="tl-note">통계 확인 중</span></div>
-<section class="tl-predictions" aria-label="다음 경기 가설 및 전술 실험">
-  <div class="tl-predictions-head">
-    <div><span class="tl-eyebrow">TACTICAL FORECAST</span><h4>다음 경기 예상 전술 · 새로운 포메이션 포함</h4></div>
-    <span class="tl-forecast-tag" id="tlForecastConfidence">분석 중</span>
-  </div>
-  <p class="tl-predictions-intro" id="tlForecastIntro">실제 경기 결과와 선수 기록을 바탕으로 아직 쓰지 않은 포메이션도 시험 후보로 제안합니다.</p>
-  <div class="tl-forecast-options" id="tlForecastOptions" aria-label="추천 전술 비교"></div>
-  <p class="tl-forecast-foot" id="tlForecastFoot">승률 예측이 아니라 전술 실험의 우선순위입니다.</p>
-  <div class="tl-trial">
-    <div><strong>전술 실험 기록</strong><p>실제로 이 전술을 사용할 때 시험을 시작하세요. 이후 저장되는 5경기와 직전 기록을 비교합니다.</p></div>
-    <div class="tl-trial-controls">
-      <button type="button" id="tlTrialStart">선택 전술 5경기 시험 시작</button>
-      <button type="button" id="tlTrialStop" hidden>시험 기록 종료</button>
+  <div class="tl-contents">
+    <div class="tl-quick-head">
+      <div class="tl-main-pick">
+        <span class="tl-eyebrow">DFC · NEXT MATCH</span>
+        <h3 id="tlTitle">추천 포메이션</h3>
+        <p id="tlReason">최근 경기 기준 추천 전술</p>
+      </div>
+      <p class="tl-evidence" id="tlEvidence" role="status">기록 확인 중</p>
     </div>
-    <p id="tlTrialStatus" role="status" aria-live="polite"></p><div id="tlTrialMatches" class="tl-trial-matches" aria-label="실제 전술을 사용한 경기 확인"></div>
+
+    <div class="tl-forecast-options" id="tlForecastOptions" role="group" aria-label="포메이션 추천 및 비교"></div>
+    <p class="tl-formation-feedback" id="tlFormationFeedback" role="status" aria-live="polite"></p>
+
+    <div class="tl-columns">
+      <section class="tl-display" aria-label="추천 전술 배치">
+        <div class="tl-input-row tl-player-count">
+          <strong>출전 인원</strong>
+          <div class="tl-switch" role="group" aria-label="사람 선수 출전 인원 선택">
+            <button type="button" data-tl-people="5" aria-pressed="true">5명</button>
+            <button type="button" data-tl-people="7" aria-pressed="false">7명</button>
+            <button type="button" data-tl-people="9" aria-pressed="false">9명</button>
+          </div>
+        </div>
+        <div class="tl-pitch-wrap" id="tlPitch" aria-live="polite"></div>
+        <div class="tl-legend" id="tlLegend"></div>
+        <div class="tl-recommend-actions">
+          <button type="button" id="tlBestXI" aria-pressed="false">베스트11 보기</button>
+          <button type="button" id="tlCopy" aria-describedby="tlShareStatus">전술 공유</button>
+        </div>
+        <p class="tl-share-status" id="tlShareStatus" role="status" aria-live="polite"></p>
+        <section class="tl-xi-choices" id="tlBestXIPanel" hidden aria-label="베스트11 포지션별 추천 명단">
+          <div class="tl-xi-heading"><strong>베스트11 후보</strong><span id="tlBestXICount"></span></div>
+          <div class="tl-xi-list" id="tlXIList"></div>
+          <p class="tl-xi-note" id="tlXIExplanation"></p>
+        </section>
+      </section>
+      <div class="tl-quick-side">
+        <section class="tl-box tl-plan">
+          <h4>이번 경기 핵심 전술</h4>
+          <ul id="tlActions"></ul>
+        </section>
+        <div class="tl-stats" id="tlStats" aria-label="최근 경기 핵심 지표"><span class="tl-note">통계 확인 중</span></div>
+      </div>
+    </div>
+
+    <details class="tl-more-details">
+      <summary>분석 근거 · 상세 보기</summary>
+      <div class="tl-more-content">
+        <p class="tl-predictions-intro" id="tlForecastIntro"></p>
+        <span class="tl-forecast-tag" id="tlForecastConfidence"></span>
+        <div class="tl-forecast-details" id="tlForecastDetails"></div>
+        <p class="tl-forecast-foot" id="tlForecastFoot"></p>
+        <div class="tl-input-row tl-extra-formations">
+          <strong>포메이션 직접 선택</strong>
+          <div class="tl-switch" role="group" aria-label="포메이션 선택">
+            <button type="button" data-tl-formation="4-2-3-1" aria-pressed="true">4-2-3-1</button>
+            <button type="button" data-tl-formation="4-3-3" aria-pressed="false">4-3-3</button>
+            <button type="button" data-tl-formation="4-4-2" aria-pressed="false">4-4-2</button>
+          </div>
+        </div>
+        <div class="tl-list-grid">
+          <section class="tl-box"><h4>기록상 강점</h4><ul id="tlStrengths"></ul></section>
+          <section class="tl-box tl-watch"><h4>보완할 부분</h4><ul id="tlRisks"></ul></section>
+          <section class="tl-box tl-roles"><h4>선수별 역할</h4><ul id="tlRoles"></ul><p class="tl-ai-summary" id="tlAIPositions"></p></section>
+        </div>
+        <p class="tl-method" id="tlMethod"></p>
+      </div>
+    </details>
   </div>
 </section>
-<div class="tl-columns">
-<div class="tl-display">
-<div class="tl-inputs">
-<div class="tl-input-row"><strong>포메이션</strong><div class="tl-switch" role="group" aria-label="포메이션 선택"><button type="button" data-tl-formation="4-2-3-1" aria-pressed="true">4-2-3-1</button><button type="button" data-tl-formation="4-3-3" aria-pressed="false">4-3-3</button><button type="button" data-tl-formation="4-4-2" aria-pressed="false">4-4-2</button></div></div>
-<div class="tl-input-row"><strong>사람 선수 출전 인원</strong><div class="tl-switch" role="group" aria-label="사람 선수 출전 인원 선택"><button type="button" data-tl-people="5" aria-pressed="true">5명</button><button type="button" data-tl-people="7" aria-pressed="false">7명</button><button type="button" data-tl-people="9" aria-pressed="false">9명</button></div></div>
-</div>
-<div class="tl-recommend-actions" role="group" aria-label="전술 추천 기능">
-<button type="button" id="tlBestXI" aria-pressed="false">기록 기반 베스트11 추천</button>
-<button type="button" id="tlRecommendFormation">추천 포메이션 보기</button>
-</div>
-<p class="tl-formation-feedback" id="tlFormationFeedback" role="status" aria-live="polite"></p>
-<h4 id="tlTitle">추천 포메이션 분석 중</h4>
-<div class="tl-pitch-wrap" id="tlPitch" aria-live="polite"></div>
-<div class="tl-legend" id="tlLegend"></div><section class="tl-xi-choices" id="tlBestXIPanel" hidden aria-label="베스트11 포지션별 추천 명단">
-<div class="tl-xi-heading"><strong>포지션별 베스트11 후보</strong><span id="tlBestXICount"></span></div>
-<div class="tl-xi-list" id="tlXIList"></div>
-<p class="tl-xi-note" id="tlXIExplanation"></p>
 </section>
-<p class="tl-reason" id="tlReason"></p>
-</div>
-<div class="tl-list-grid">
-<section class="tl-box"><h4>강점 · 최근 기록</h4><ul id="tlStrengths"></ul></section>
-<section class="tl-box tl-watch"><h4>보완할 부분</h4><ul id="tlRisks"></ul></section>
-<section class="tl-box tl-plan"><h4>다음 경기 전술 솔루션</h4><ul id="tlActions"></ul></section>
-<section class="tl-box tl-roles"><h4>출전 인원별 포지션 역할</h4><ul id="tlRoles"></ul><p class="tl-ai-summary" id="tlAIPositions"></p></section>
-<div class="tl-share"><button type="button" id="tlCopy" aria-describedby="tlShareStatus">전술 요약 복사</button><span id="tlShareStatus" role="status" aria-live="polite"></span></div>
-</div>
-</div>
-<p class="tl-method" id="tlMethod">EA 기록으로 확인된 수치와 전술 제안을 구분합니다.</p>
-</div></section>
-</section>
-<div class="data-disclaimer"><strong>EA 데이터 표시 기준</strong> 2026년 11월 11일에 확인한 DOKDO FC EA 수집 데이터의 일부를 화면 설계용으로 사용했습니다. 선수 시즌 누적, 보관된 DF 경기 통계, 골키퍼 시즌 기록은 서로 집계 범위가 달라 각각 명시했습니다. <b>현재 4부</b>는 당시 EA division 코드 5를 기존 홈페이지 규칙으로 해석한 값이며, 시즌 최고 2부는 코드 3 기준입니다. 상대전적은 수집된 경기 21건만 반영합니다. 상대팀 엠블럼은 EA 경기 데이터의 이미지 주소를 사용하고, 접속 불가·미제공 시 기본 배지를 보여줍니다. 더 자세한 수집 범위는 <button class="method-btn" type="button" id="methodBtn">데이터 표시 기준</button>에서 확인할 수 있습니다.</div>
+<details class="site-data-note"><summary>데이터 집계 기준·주의사항</summary><div class="data-disclaimer"><strong>EA 데이터 표시 기준</strong> 2026년 11월 11일에 확인한 DOKDO FC EA 수집 데이터의 일부를 화면 설계용으로 사용했습니다. 선수 시즌 누적, 보관된 DF 경기 통계, 골키퍼 시즌 기록은 서로 집계 범위가 달라 각각 명시했습니다. <b>현재 4부</b>는 당시 EA division 코드 5를 기존 홈페이지 규칙으로 해석한 값이며, 시즌 최고 2부는 코드 3 기준입니다. 상대전적은 수집된 경기 21건만 반영합니다. 상대팀 엠블럼은 EA 경기 데이터의 이미지 주소를 사용하고, 접속 불가·미제공 시 기본 배지를 보여줍니다. 더 자세한 수집 범위는 <button class="method-btn" type="button" id="methodBtn">데이터 표시 기준</button>에서 확인할 수 있습니다.</div></details>
 </main><button type="button" class="back-to-top" id="backToTop" hidden aria-label="맨 위로 이동">↑ 맨 위로</button><footer class="foot">DOKDO FC · EA FC27 · FAN PROJECT / NOT AFFILIATED WITH EA</footer>
 <dialog id="methodModal" class="modal"><h3>통계 표시 기준 및 한계</h3><p>선수 누적 득점·도움 및 골키퍼 클린시트는 EA 선수 누적 통계로 표시합니다. 수비수 태클·인터셉트·공중볼과 옐로·레드카드는 홈페이지에 보관된 경기별 이벤트만 활용합니다.</p><ul><li>수비 랭킹은 해당 경기에 DF로 등록된 사람 선수 이벤트만 합산합니다. FW/MF/GK 기록은 제외합니다.</li><li>경기 분석은 EA가 반환한 사람 선수 기록의 합계이며, AI 선수 기록이 빠질 수 있습니다. 상대팀 사람 선수 기록은 불완전한 경우가 있습니다.</li><li>패스 성공률은 수집된 선수의 패스 성공 합계 ÷ 시도 합계입니다. 볼 점유율, xG, 정확한 슈팅 좌표는 원본에 없어 생성하지 않습니다.</li><li>DNF에서 선수 기록이 미집계된 경기는 0으로 표시해 잘못된 비교를 만들지 않습니다.</li><li>상대전적은 보관된 경기에서 상대팀 ID가 같은 대상을 묶고, 같은 경기 ID의 중복을 제외하여 승·무·패를 계산합니다. 저장 이전 경기는 포함되지 않습니다.</li><li>EA division 코드 5는 사이트 기준 4부, 최고 코드 3은 2부로 표시합니다. 기준이 바뀌거나 데이터 수집에 실패하면 마지막 확인 시각을 함께 보여야 합니다.</li><li>실제 서비스 적용 전 최근 갱신 시각, 경기 중복 여부, 집계 구간을 추가 검증해야 합니다.</li></ul><button type="button" id="methodClose">닫기</button></dialog>
 <script src="./live-dashboard-v7.js?v=20261112-forecast-qa-final" defer></script>
