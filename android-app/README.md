@@ -1,6 +1,6 @@
 # DOKDO FC — Android / Google Play preparation
 
-**Status: Android Studio source project implemented; Play publication is ON HOLD pending rights clearance.**
+**Status: Android Studio source project implemented and compiling; ALL app distribution / Play publication is ON HOLD pending rights, privacy, branding and user-permission clearance.**
 
 This package is an independent fan-made DOKDO FC website companion, not affiliated with or endorsed by EA or its licensors. It does not request EA login credentials or access the EA game.
 
@@ -8,7 +8,7 @@ This package is an independent fan-made DOKDO FC website companion, not affiliat
 
 - Open the `android-app/` folder as a Gradle project in Android Studio.
 - Java 17 or newer, Android SDK 36, Android Gradle Plugin 8.13.2 and Gradle 8.13.
-- If you have Gradle installed, run `gradle -p android-app :app:assembleDebug` from the repository root. The GitHub Android-build workflow also validates that the app compiles; it does NOT release the app.
+- If you have Gradle installed, run `gradle -p android-app :app:assembleDebug` from the repository root. The GitHub Android-build workflow also validates that the app compiles, temporarily stores an unsigned release AAB and debug APK for one day for private backup, and does NOT release the app.
 - Package / application ID: `io.github.insungmeta.dokdofc` (choose carefully before the first Play submission).
 - Android minimum API: 26; target API: 36, compliant with the August 2026 new-app target API requirement at the time this project was prepared.
 - The app uses Android's WebView to display `https://insungmeta.github.io/dokdo-fc/`. It has its own loading/error screen and opens non-DFC external links in the system browser.
@@ -17,7 +17,7 @@ This package is an independent fan-made DOKDO FC website companion, not affiliat
 
 ## Before uploading to Google Play
 
-1. **EA data rights (BLOCKER):** the website historically uses an unofficial FC Clubs API. A public fan-site statement or the package's MIT license does not grant EA data collection/republication rights. New automated collection is paused until written permission is verified; app release must await this, or the source must be replaced with properly licensed/team-volunteered data. See `../COMPLIANCE_REVIEW.md`.
+1. **EA data rights (BLOCKER):** the website historically uses an unofficial FC Clubs API. A public fan-site statement or the package's MIT license does not grant EA data collection/republication rights. The club owner separately resumed unofficial best-effort 5-minute website collection while seeking EA's response. This is **NOT EA authorization** and does not resolve the licensing concern; **app distribution remains on hold** until written permission clarifies website/API/app use or the source is replaced with properly licensed/team-volunteered data. See `../COMPLIANCE_REVIEW.md`.
 2. **Privacy and gamer tags (BLOCKER):** resolve public gamer tag retention, objections, data deletion and permissions. Provide a legitimate private operator privacy contact. Public GitHub issues must never request sensitive identity evidence.
 3. **Store account:** the owner signs in at https://play.google.com/console/signup and pays Google's one-time US$25 registration fee with an accepted payment card. Complete identity/address verification according to Play Console instructions.
 4. **App signing:** use Android Studio > Build > Generate Signed Bundle / APK > Android App Bundle. Generate and safeguard your own upload keystore, never commit or share `.jks` or private passwords. The source repository intentionally has **no release signing key**.
@@ -36,3 +36,10 @@ References:
 - https://support.google.com/googleplay/android-developer/answer/11926878
 - https://support.google.com/googleplay/android-developer/answer/10144311
 - https://support.google.com/googleplay/android-developer/answer/18265346
+
+## Preservation plan (no distribution yet)
+
+- Source is committed in `android-app/` on the DOKDO FC GitHub repository and stays available for future changes.
+- A CI run compiles a **debug APK** and **unsigned release AAB**; the GitHub Actions artifact expires after one day and is only a transfer mechanism for a separately controlled private backup.
+- Do not install or publicly share the debug APK until the operator's rights/privacy review. This is a development build, not a signed production release.
+- EA Korea has been asked by email for clarification on non-commercial team apps, private APK/PWA use and eventual free Google Play distribution. A reply is not a substitute for reviewing Google Play policies and teammate privacy rights.
