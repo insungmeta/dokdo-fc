@@ -138,6 +138,51 @@ document.querySelector('.hero-recent-all').addEventListener('click',()=>{archive
 const recent=leagues.slice(0,10),forms=recent.map(m=>num(m.goals)>num(m.goalsAgainst)?'w':num(m.goals)<num(m.goalsAgainst)?'l':'d');const w=forms.filter(x=>x==='w').length,d=forms.filter(x=>x==='d').length,l=forms.length-w-d,points=w*3+d;
 for(const id of ['formLine','heroFormLine'])$(id).innerHTML=forms.map((x,i)=>'<span class="'+x+'" title="'+num(recent[i].goals)+':'+num(recent[i].goalsAgainst)+'">'+x.toUpperCase()+'</span>').join('');
 $('formSummary').textContent=w+'승 · '+d+'무 · '+l+'패 · 승점 '+points+'점';$('heroFormRecord').textContent=w+'승 · '+d+'무 · '+l+'패';$('heroFormPoints').textContent='승점 '+points;$('formW').style.width=(forms.length?w/forms.length*100:0)+'%';$('formD').style.width=(forms.length?d/forms.length*100:0)+'%';$('formL').style.width=(forms.length?l/forms.length*100:0)+'%';
+
+/* Rolling form: last ten five-league-match windows (oldest -> newest).
+   Use real saved EA scores, not made-up rating or division history. */
+function renderDivisionTrend(){
+ const chart=$('divisionTrendChart'),caption=$('divisionTrendCaption'),value=$('divisionTrendValue');
+ if(!chart||!caption||!value)return;
+ const valid=leagues.filter(m=>m.timestamp&&!Number.isNaN(new Date(m.timestamp).getTime())&&m.goals!==null&&m.goals!==undefined&&m.goalsAgainst!==null&&m.goalsAgainst!==undefined&&Number.isFinite(Number(m.goals))&&Number.isFinite(Number(m.goalsAgainst))).slice(0,14).reverse();
+ const trend=[];
+ for(let i=4;i<valid.length;i++){
+  const five=valid.slice(i-4,i+1),wins=five.filter(m=>Number(m.goals)>Number(m.goalsAgainst)).length,draws=five.filter(m=>Number(m.goals)===Number(m.goalsAgainst)).length,losses=5-wins-draws;
+  trend.push({at:valid[i].timestamp,wins,draws,losses,average:(wins*3+draws)/5});
+ }
+ if(trend.length<2){
+  chart.innerHTML='<text x="140" y="54" text-anchor="middle" fill="#b4cbcd" font-size="12">추세 데이터 수집 중</text><text x="140" y="71" text-anchor="middle" fill="#8ea7ae" font-size="10">리그 결과 6경기 이상 필요</text>';
+  value.textContent=trend.length?trend[0].average.toFixed(2)+'점':'—';
+  caption.textContent='최근 5경기 평균 승점 · 보관된 리그 경기 기준';
+  return;
+ }
+ const plot=trend.map((p,i)=>({...p,x:+(12+256*i/(trend.length-1)).toFixed(2),y:+(94-p.average*76/3).toFixed(2)}));
+ const coords=plot.map(p=>p.x+','+p.y).join(' ');
+ const area='M '+plot[0].x+' 94 L '+plot.map(p=>p.x+' '+p.y).join(' L ')+' L '+plot[plot.length-1].x+' 94 Z';
+ const lines=[0,1.5,3].map(n=>'<line x1="9" y1="'+(94-n*76/3)+'" x2="271" y2="'+(94-n*76/3)+'" stroke="#a5c5c5" stroke-opacity=".19" stroke-dasharray="3 5"/>').join('');
+ const dots=plot.map((p,i)=>{
+  const label=date(p.at)+' 기준, 최근 5경기 '+p.wins+'승 '+p.draws+'무 '+p.losses+'패, 평균 승점 '+p.average.toFixed(2)+'점';
+  return '<g class="division-trend-point" data-trend-index="'+i+'" role="button" tabindex="0" aria-label="'+E(label)+'"><circle class="trend-hit" cx="'+p.x+'" cy="'+p.y+'" r="12"/><circle class="trend-dot" cx="'+p.x+'" cy="'+p.y+'" r="4"/><title>'+E(label)+'</title></g>';
+ }).join('');
+ chart.innerHTML='<title>저장된 리그 경기의 최근 5경기 이동평균 승점 추세</title>'+lines+'<path d="'+area+'" fill="#c7f459" fill-opacity=".11"/><polyline points="'+coords+'" fill="none" stroke="#bcec63" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>'+dots+'<text x="9" y="110" font-size="9" fill="#a6bbbd">과거</text><text x="271" y="110" text-anchor="end" font-size="9" fill="#a6bbbd">최근</text>';
+ let pinned=null;
+ function inspect(index){
+  const p=plot[index]||plot[plot.length-1];
+  value.textContent=p.average.toFixed(2)+'점';
+  caption.textContent=date(p.at)+' 기준 · '+p.wins+'승 '+p.draws+'무 '+p.losses+'패 · 5경기 평균';
+  chart.querySelectorAll('.division-trend-point').forEach((node,i)=>node.classList.toggle('is-selected',i===index));
+ }
+ const original=()=>inspect(pinned===null?plot.length-1:pinned);
+ chart.addEventListener('pointerover',event=>{const dot=event.target.closest('.division-trend-point');if(dot)inspect(Number(dot.dataset.trendIndex))});
+ chart.addEventListener('pointerleave',original);
+ chart.addEventListener('focusin',event=>{const dot=event.target.closest('.division-trend-point');if(dot)inspect(Number(dot.dataset.trendIndex))});
+ chart.addEventListener('focusout',original);
+ chart.addEventListener('click',event=>{const dot=event.target.closest('.division-trend-point');if(dot){pinned=Number(dot.dataset.trendIndex);inspect(pinned)}});
+ chart.addEventListener('keydown',event=>{const dot=event.target.closest('.division-trend-point');if(dot&&(event.key==='Enter'||event.key===' ')){event.preventDefault();pinned=Number(dot.dataset.trendIndex);inspect(pinned)}});
+ original();
+}
+renderDivisionTrend();
+
 /* Rating changes are shown only when the collector supplied a verified archived baseline. */
 const ratingSummary=(raw,trend)=>{
  const current=raw!==null&&raw!==undefined&&raw!==''&&Number.isFinite(Number(raw))?Number(raw):null;
