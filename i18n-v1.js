@@ -47,9 +47,13 @@
     out = out.replace(/(\d+)\s*부(?:\s*리그)?(?=[\s·,:.!?)]|$)/g, 'Division $1');
     out = out.replace(/(\d+)\s*승\s*[·,\/]\s*(\d+)\s*무\s*[·,\/]\s*(\d+)\s*패/g, '$1W · $2D · $3L');
     out = out.replace(/(\d+)\s*경기(?=[\s·,.!)]|$)/g, '$1 matches');
-    out = out.replace(/승점\s*(\d+(?:\.\d+)?)/g, '$1 pts');
+    out = out.replace(/승점\s*(\d+(?:\.\d+)?)\s*점?/g, '$1 pts');
     out = out.replace(/(\d+(?:\.\d+)?)\s*점(?=[\s·,.!)]|$)/g, '$1 pts');
     out = out.replace(/(\d+)\s*명(?=[\s·,.!)]|$)/g, '$1 players');
+    out = out.replace(/전체\s+(\d+)\s*matches?\s*중\s*(\d+)\s*matches?\s*표시/g, 'Showing $2 of $1 matches');
+    out = out.replace(/(\d+)\s*전(?=[\s·,.!)]|$)/g, '$1 fixtures');
+    out = out.replace(/\s*기준\s*[·,]/g, ' ·');
+    out = out.replace(/^현재\s+(?=Division)/, 'Current ');
     if (cache.size > 3500) cache.clear();
     cache.set(str, out);
     return out;
@@ -78,6 +82,13 @@
       var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
       var n;
       while ((n = walker.nextNode())) translateText(n);
+      // A large numeric division card already says "Current Division" beside the number.
+      // Avoid rendering "4Division" from separately translated Korean suffixes.
+      var digit = document.querySelector('.division-digit');
+      if (digit) {
+        var match = digit.textContent.trim().match(/^(\d+)/);
+        if (match && digit.textContent.trim() !== match[1]) digit.textContent = match[1];
+      }
       var elements = document.body.querySelectorAll('[aria-label],[title],[placeholder],[alt]');
       for (var i = 0; i < elements.length; i++) translateAttrs(elements[i]);
       if (/[가-힣]/.test(document.title)) document.title = translate(document.title);
