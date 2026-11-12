@@ -115,7 +115,7 @@
       for (var k = 0; k < links.length; k++) {
         if (links[k].closest('.dfc-lang-switch')) continue;
         var href = links[k].getAttribute('href');
-        if (!href || !/^\.\/(?:legacy|index)\.html(?:\?|#|$)/.test(href)) continue;
+        if (!href || !/^\.\/(?:legacy|index|privacy|legal)\.html(?:\?|#|$)/.test(href)) continue;
         var dest = new URL(href, location.href);
         if (dest.searchParams.get('lang') === 'en') continue;
         dest.searchParams.set('lang', 'en');
