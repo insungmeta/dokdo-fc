@@ -1,0 +1,45 @@
+name: Validate DOKDO FC Android app (not for public release)
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'android-app/**'
+      - '.github/workflows/build-android-app.yml'
+permissions:
+  contents: read
+concurrency:
+  group: dokdo-android-build
+  cancel-in-progress: true
+jobs:
+  compile-and-lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Install Android SDK 36
+        run: sdkmanager --install "platforms;android-36" "build-tools;36.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+      - name: Compile Android app (debug only; do not publish EA data)
+        run: gradle -p android-app :app:assembleDebug --no-daemon --stacktrace
+      - name: Android lint
+        run: gradle -p android-app :app:lintDebug --no-daemon --stacktrace
+      - name: Confirm manifest uses only Internet permission
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          manifest=Path('android-app/app/src/main/AndroidManifest.xml').read_text()
+          assert manifest.count('<uses-permission')==1
+          assert 'android.permission.INTERNET' in manifest
+          assert 'android:usesCleartextTraffic="false"' in manifest
+          assert 'android:allowBackup="false"' in manifest
+          print('Manifest permissions and backup checks passed')
+          PY
+      # No public release artifact or upload signing key is generated.
