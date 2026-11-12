@@ -3,6 +3,7 @@
 'use strict';
 const $=id=>document.getElementById(id),E=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=v=>v==null||v===''||!Number.isFinite(Number(v))?0:Number(v);
+const EN=()=>document.documentElement.lang==='en';
 const name=p=>String(p?.name||p?.playerName||'').trim();
 const human=p=>Number(p?.playerId)>0&&!!name(p)&&!/^(AI|CPU|COM|BOT|VIRTUAL PRO AI)$/i.test(name(p));
 const df=p=>/^(defender|def|df)$/i.test(String(p?.position||p?.favoritePosition||p?.proPos||'').trim());
@@ -116,7 +117,7 @@ function matchContributors(m){
 function game(i){const m=games[i];if(!m)return;$('gameDate').textContent=m.time;$('gameTeamDisplay').innerHTML=dfc('detail-crest')+'<span class="team-name-pair">DOKDO FC <span>VS</span> '+E(m.opp)+'</span>'+crest(m.id,m.opp,'small');$('scoreUs').textContent=m.score[0];$('scoreThem').textContent=m.score[1];$('matchContributors').innerHTML=matchContributors(m);updateH2H(m.raw);
 if(m.dnf){$('compareRows').innerHTML='<div class="coverage">이 경기의 선수별 세부 기록이 미집계되었습니다.</div>';$('coverage').textContent='세부 통계가 제공되지 않아 0으로 표시하지 않습니다.';$('ourPass').textContent='—';$('theirPass').textContent='—';return}
 $('compareRows').innerHTML=[['슈팅','shots'],['유효슈팅','onTarget'],['태클 성공','tackles'],['인터셉트','interceptions']].map(([label,k])=>{const a=m[k][0],b=m[k][1],mx=Math.max(a,b,1);return '<div class="dual"><strong>'+a+'</strong><div class="lane"><i style="width:'+Math.round(a/mx*100)+'%"></i></div><span class="label">'+label+'</span><div class="lane r"><i style="width:'+Math.round(b/mx*100)+'%"></i></div><strong>'+b+'</strong></div>'}).join('');
-$('coverage').innerHTML='수집된 사람 선수 기록 · DOKDO FC <b>'+m.counts[0]+'</b>명 / 상대 <b>'+m.counts[1]+'</b>명. AI 및 누락된 상대팀 기록은 제외합니다.';$('ourPass').textContent=m.attempts[0]?Math.round(m.passes[0]/m.attempts[0]*100)+'%':'—';$('theirPass').textContent=m.attempts[1]?Math.round(m.passes[1]/m.attempts[1]*100)+'%':'—'}
+$('coverage').innerHTML=EN()?('Collected human-player stats · DOKDO FC <b>'+m.counts[0]+'</b> players / Opponent <b>'+m.counts[1]+'</b> players. AI and unavailable opponent stats are excluded.'):('수집된 사람 선수 기록 · DOKDO FC <b>'+m.counts[0]+'</b>명 / 상대 <b>'+m.counts[1]+'</b>명. AI 및 누락된 상대팀 기록은 제외합니다.');$('ourPass').textContent=m.attempts[0]?Math.round(m.passes[0]/m.attempts[0]*100)+'%':'—';$('theirPass').textContent=m.attempts[1]?Math.round(m.passes[1]/m.attempts[1]*100)+'%':'—'}
 
 const matchItem=(m,i)=>{const st=m.score[0]>m.score[1]?'w':m.score[0]<m.score[1]?'l':'d';const type=({leagueMatch:'리그',friendlyMatch:'친선',playoffMatch:'플레이오프'})[m.raw.matchType]||'경기';return '<button type="button" class="match-item '+({w:'win',l:'loss',d:'draw'}[st])+'" data-game="'+i+'" aria-expanded="false" aria-controls="matchReviewPanel"><span class="wl">'+st.toUpperCase()+'</span><span class="match-logos">'+dfc()+crest(m.id,m.opp,'small')+'</span><span style="min-width:0"><div class="title">'+E(m.opp)+'</div><div class="date">'+E(m.time)+' · '+E(type)+(m.raw.dnf?' · DNF':'')+'</div></span><span class="score">'+m.score[0]+' : '+m.score[1]+'<span class="match-chevron" aria-hidden="true">⌄</span></span></button>'};
 const topGames=games.map((m,i)=>({m,i})).slice(0,5);
@@ -133,11 +134,11 @@ function renderArchive(){
   return archiveResult==='all'||archiveResult===state;
  });
  const selected=indices.slice(0,archiveVisibleCount);
- $('archiveTotal').textContent='('+games.length+'경기)';
+ $('archiveTotal').textContent=EN()?'('+games.length+' matches)':'('+games.length+'경기)';
  $('matchList').innerHTML=selected.length?selected.map(x=>matchItem(x.m,x.i)).join(''):'<p style="padding:16px;color:#98b5bf">이 종류로 보관된 경기는 아직 없습니다.</p>';
- $('archiveVisible').textContent='전체 '+indices.length+'경기 중 '+selected.length+'경기 표시';
+ $('archiveVisible').textContent=EN()?'Showing '+selected.length+' of '+indices.length+' matches':'전체 '+indices.length+'경기 중 '+selected.length+'경기 표시';
  const more=$('archiveShowAll');more.hidden=selected.length>=indices.length;
- if(!more.hidden)more.textContent='다음 '+Math.min(20,indices.length-selected.length)+'경기 더 보기';
+ if(!more.hidden)more.textContent=EN()?'Show '+Math.min(20,indices.length-selected.length)+' more matches':'다음 '+Math.min(20,indices.length-selected.length)+'경기 더 보기';
  $('archiveFilters').querySelectorAll('[data-archive-kind]').forEach(btn=>{const on=btn.dataset.archiveKind===archiveKind;btn.classList.toggle('active',on);btn.setAttribute('aria-pressed',String(on))});
 }
 renderArchive();
@@ -210,11 +211,11 @@ function renderPeriodComparison(){
  const calc=a=>{const wins=a.filter(m=>Number(m.goals)>Number(m.goalsAgainst)).length,draws=a.filter(m=>Number(m.goals)===Number(m.goalsAgainst)).length;
   return {wins,draws,losses:a.length-wins-draws,points:wins*3+draws,for:a.reduce((n,m)=>n+Number(m.goals),0),against:a.reduce((n,m)=>n+Number(m.goalsAgainst),0)}};
  const recent=calc(valid.slice(0,10)),prior=calc(valid.slice(10,20));
- const card=(label,r)=>'<div class="compare-period-card"><strong>'+label+'</strong><span class="compare-period-points">'+(r.points/10).toFixed(2)+'<small style="display:inline">점/경기</small></span><small>'+r.wins+'승 · '+r.draws+'무 · '+r.losses+'패</small><small>득점 '+r.for+' · 실점 '+r.against+' · 득실차 '+(r.for-r.against>0?'+':'')+(r.for-r.against)+'</small></div>';
+ const card=(label,r)=>'<div class="compare-period-card"><strong>'+label+'</strong><span class="compare-period-points">'+(r.points/10).toFixed(2)+'<small style="display:inline">'+(EN()?' pts/game':'점/경기')+'</small></span><small>'+(EN()?(r.wins+'W · '+r.draws+'D · '+r.losses+'L'):(r.wins+'승 · '+r.draws+'무 · '+r.losses+'패'))+'</small><small>'+(EN()?('GF '+r.for+' · GA '+r.against+' · GD '):('득점 '+r.for+' · 실점 '+r.against+' · 득실차 '))+(r.for-r.against>0?'+':'')+(r.for-r.against)+'</small></div>';
  const dp=(recent.points-prior.points)/10;
  target.innerHTML='<div class="compare-period-grid">'+card('최근 10경기',recent)+card('이전 10경기',prior)+'</div>'+
- '<div class="compare-difference">이전 10경기 대비 경기당 평균 승점 <b>'+(dp>0?'▲ +':dp<0?'▼ −':'→ ')+Math.abs(dp).toFixed(2)+'점</b> · 득실차 변화 '+((recent.for-recent.against)-(prior.for-prior.against)>0?'+':'')+((recent.for-recent.against)-(prior.for-prior.against))+'</div>'+
- '<div class="compare-period-note">최신 리그 20경기만 사용하며, 친선·플레이오프 및 EA 시즌 누적 기록은 포함하지 않습니다.</div>';
+ '<div class="compare-difference">'+(EN()?'Avg. points per game vs previous 10: ':'이전 10경기 대비 경기당 평균 승점 ')+'<b>'+(dp>0?'▲ +':dp<0?'▼ −':'→ ')+Math.abs(dp).toFixed(2)+(EN()?' pts':'점')+'</b> · '+(EN()?'Goal difference change ':'득실차 변화 ')+((recent.for-recent.against)-(prior.for-prior.against)>0?'+':'')+((recent.for-recent.against)-(prior.for-prior.against))+'</div>'+
+ '<div class="compare-period-note">'+(EN()?'Latest 20 archived league matches only · no friendlies, playoffs or season totals.':'최신 리그 20경기만 사용하며, 친선·플레이오프 및 EA 시즌 누적 기록은 포함하지 않습니다.')+'</div>';
 }
 renderPeriodComparison();
 
@@ -255,13 +256,15 @@ if(clubRating.delta===null){
  $('clubRatingReference').textContent='기준 '+date(clubRating.baselineAt)+' · '+clubRating.baseline.toLocaleString('ko-KR')+'점';
 }
 
-const stars=document.querySelectorAll('.star-grid .star');['goals','assists','mvp','interceptions','goalkeepers'].forEach((k,i)=>{if(!stars[i])return;const x=boards[k].rows[0];stars[i].querySelector('.hero-number').textContent=x?x[1]:'—';stars[i].querySelector('.person').textContent=x?x[0]:'기록 없음';if(i===3)stars[i].querySelector('.detail').textContent='보관 DF 출전 경기 · 인터셉트'});
+const stars=document.querySelectorAll('.star-grid .star');['goals','assists','mvp','interceptions','goalkeepers'].forEach((k,i)=>{if(!stars[i])return;const x=boards[k].rows[0];stars[i].querySelector('.hero-number').textContent=x?x[1]:'—';stars[i].querySelector('.person').textContent=x?x[0]:'기록 없음';if(i===3)stars[i].querySelector('.detail').textContent=EN()?'Archived DF Matches · Interceptions':'보관 DF 출전 경기 · 인터셉트'});
 /* Match reviews are collapsed by default. */
 if(rivals.length)h2h(rivals[0].key);
 leader('goals');
 const cards=document.querySelector('.cards-board');if(cards)cards.innerHTML=boards.cards.rows.slice(0,3).map(x=>'<div class="card-row"><div><div class="name">'+E(x[0])+'</div><div class="sub">보관된 경기 카드 기록</div></div><div class="card-count">'+E(x[2])+'</div></div>').join('')+'<div class="notice-ribbon"><b>집계 기준</b> · 보관 경기 카드만 표시 · 시즌 누적과 혼합하지 않음</div>';
-document.querySelector('.data-disclaimer').innerHTML='<strong>EA 자동 수집 데이터 연동 · 운영 홈페이지</strong> 현재 '+E(dv)+' 리그, 선수 시즌 누적과 보관 경기 수비·상대전적을 집계합니다. 보관된 '+matches.length+'경기만 상대전적에 반영되며, 패스·태클 비교는 수집된 선수 기록이므로 팀 전체 공식 수치와 다를 수 있습니다. 볼 점유율은 원본이 없어 표시하지 않습니다. <button class="method-btn" type="button" id="methodBtn">데이터 표시 기준</button> · <a href="./legacy.html#matches">전체 경기 아카이브</a> · <a href="./legacy.html#board">게시판</a>';
-document.querySelector('.h2h-foot').textContent='상대전적은 상대팀 ID와 경기 ID를 기준으로 계산하며 보관된 '+matches.length+'경기만 포함합니다.';
+document.querySelector('.data-disclaimer').innerHTML=EN()
+ ? '<strong>EA collected data · DOKDO FC</strong> '+(dv==='엘리트'?'Elite Division':dv.endsWith('부')?'Division '+E(dv.replace('부','')):'Division unverified')+' · Season player totals and archived defensive and head-to-head records. Only '+matches.length+' saved matches are used for head-to-head. Player-based passing and tackling stats may differ from full-team totals. Possession is unavailable. <button class="method-btn" type="button" id="methodBtn">Data Definitions</button> · <a href="./legacy.html#matches">Full Match Archive</a> · <a href="./legacy.html#board">Community Board</a>'
+ : '<strong>EA 자동 수집 데이터 연동 · 운영 홈페이지</strong> 현재 '+E(dv)+' 리그, 선수 시즌 누적과 보관 경기 수비·상대전적을 집계합니다. 보관된 '+matches.length+'경기만 상대전적에 반영되며, 패스·태클 비교는 수집된 선수 기록이므로 팀 전체 공식 수치와 다를 수 있습니다. 볼 점유율은 원본이 없어 표시하지 않습니다. <button class="method-btn" type="button" id="methodBtn">데이터 표시 기준</button> · <a href="./legacy.html#matches">전체 경기 아카이브</a> · <a href="./legacy.html#board">게시판</a>';
+document.querySelector('.h2h-foot').textContent=EN()?'Head-to-head uses opponent and match IDs and only '+matches.length+' archived matches.':'상대전적은 상대팀 ID와 경기 ID를 기준으로 계산하며 보관된 '+matches.length+'경기만 포함합니다.';
 document.querySelector('footer.foot').textContent='DOKDO FC · EA FC27 · FAN PROJECT / NOT AFFILIATED WITH EA';
 document.querySelector('.microtop .shell span:last-child').textContent='FC27 · LIVE TEAM DASHBOARD';
 document.querySelector('.live').innerHTML='<span class="demo">AUTO UPDATE</span> EA 자동 연동';
