@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 
 from collect import (
     CLUB_ID, PLATFORM, base, collect, key, merge, merge_members, _same,
+    rating_trend,
 )
 
 
@@ -148,6 +149,47 @@ class CollectorTests(unittest.TestCase):
             archive2 = json.loads(history_path.read_text(encoding="utf-8"))
             self.assertEqual(len(archive2["changes"]), 2)
             self.assertEqual(len(json.loads(path.read_text())["matches"]), 2)
+
+    def test_rating_change_uses_real_previous_value_until_week_exists(self):
+        history = {"changes": [
+            {"at": "2026-11-10T07:52:12Z", "overall": {"skillRating": 1425}},
+            {"at": "2026-11-11T17:23:03Z", "overall": {"skillRating": 1423}},
+            {"at": "2026-11-11T18:11:28Z", "overall": {"skillRating": 1408}},
+            {"at": "2026-11-11T23:58:28Z", "matches": [{"matchId": 1}]},
+        ]}
+        result = rating_trend(
+            {"skillRating": 1408}, history, "2026-11-12T00:40:00Z"
+        )
+        self.assertEqual(result["period"], "previous")
+        self.assertEqual(result["baseline"], 1423)
+        self.assertEqual(result["current"], 1408)
+        self.assertEqual(result["delta"], -15)
+        self.assertEqual(result["baselineAt"], "2026-11-11T17:23:03+00:00")
+
+    def test_rating_change_week_requires_full_observed_week(self):
+        history = {"changes": [
+            {"at": "2026-11-02T12:00:00Z", "overall": {"skillRating": 1220}},
+            {"at": "2026-11-05T12:00:00Z", "overall": {"skillRating": 1360}},
+            {"at": "2026-11-11T16:00:00Z", "overall": {"skillRating": 1395}},
+            {"at": "2026-11-12T00:00:00Z", "overall": {"skillRating": 1408}},
+        ]}
+        result = rating_trend(
+            {"skillRating": 1408}, history, "2026-11-12T12:00:00Z"
+        )
+        self.assertEqual(result["period"], "7d")
+        self.assertEqual(result["baseline"], 1360)
+        self.assertEqual(result["delta"], 48)
+        self.assertEqual(result["baselineAt"], "2026-11-05T12:00:00+00:00")
+
+    def test_rating_change_never_invents_a_baseline(self):
+        now = "2026-11-12T12:00:00Z"
+        self.assertIsNone(rating_trend({"skillRating": 1408}, {"changes": []}, now))
+        self.assertIsNone(rating_trend(
+            {"skillRating": 1408},
+            {"changes": [{"at": now, "overall": {"skillRating": 1408}}]},
+            now,
+        ))
+        self.assertIsNone(rating_trend({}, {"changes": []}, now))
 
     def test_archive_missing_fails_closed(self):
         with tempfile.TemporaryDirectory() as directory:
