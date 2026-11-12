@@ -223,6 +223,32 @@ def validate(driver, lang, width):
                     info["issues"].append('best xi duplicated a player in multiple positions')
                 if best["usedWidth"]>width+4:
                     info["issues"].append('best xi panel horizontally overflows')
+                striker=script(driver, """
+                   const root=document.querySelector('#tacticalLab');
+                   const player=(window.__dokdoData?.members||[]).find(p=>p.name==='dududada3472');
+                   const hits=(window.__dokdoData?.matches||[]).flatMap(m=>(m.players||[])
+                     .filter(p=>p.name==='dududada3472'&&Number(p.playerId)>0));
+                   const fw=hits.filter(p=>p.position==='forward').length,
+                         mf=hits.filter(p=>p.position==='midfielder').length;
+                   const st=Array.from(root.querySelectorAll('#tlXIList .tl-xi-row'))
+                     .find(r=>r.querySelector('strong')?.textContent==='ST');
+                   const chosen=st?.querySelector('.tl-xi-name')?.textContent.trim();
+                   const positions=Array.from(root.querySelectorAll('[data-tl-formation]'));
+                   const suggested=positions.find(b=>b.getAttribute('aria-pressed')==='true')?.dataset.tlFormation;
+                   const alternative=suggested==='4-3-3'?'4-2-3-1':'4-3-3';
+                   positions.find(b=>b.dataset.tlFormation===alternative)?.click();
+                   root.querySelector('#tlRecommendFormation').click();
+                   const selected=positions.find(b=>b.getAttribute('aria-pressed')==='true')?.dataset.tlFormation;
+                   return {player:player?.name,goals:player?.goals,latestPosition:player?.position,
+                     archivedFW:fw,archivedMF:mf,stChosen:chosen,suggested,selected,
+                     buttonFeedback:root.querySelector('#tlFormationFeedback')?.textContent.trim()};
+                """)
+                print(json.dumps({"lang":lang,"width":width,"screen":"top-scorer-role-and-recommend-reset",**striker},ensure_ascii=False),flush=True)
+                if striker["player"] and striker["archivedFW"]>=3 and striker["archivedFW"]>striker["archivedMF"]*2:
+                    if striker["stChosen"]!=striker["player"]:
+                        info["issues"].append("Primary archived FW and season top scorer incorrectly omitted from ST")
+                if striker["selected"]!=striker["suggested"] or not striker["buttonFeedback"]:
+                    info["issues"].append("Suggested formation button did not visibly reset and acknowledge selection")
             if screen=="matches":
                 driver.execute_script("document.querySelector('#matchList .match-item').click()")
                 detail=script(driver, """
