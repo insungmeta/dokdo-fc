@@ -63,6 +63,24 @@ class DashboardUIContract(unittest.TestCase):
         self.assertIn("#app-home .sync-check-feedback", self.css)
         self.assertIn("min-height:44px", self.css)
 
+    def test_tactical_lab_uses_archived_results_and_no_new_menu(self):
+        tactical = (ROOT / "tactical-lab-v1.js").read_text(encoding="utf-8")
+        styling = (ROOT / "tactical-lab-v1.css").read_text(encoding="utf-8")
+        self.assertIn('id="tacticalLab"', self.html)
+        self.assertIn('id="tlPitch"', self.html)
+        self.assertIn('id="tlEvidence"', self.html)
+        self.assertIn('src="./tactical-lab-v1.js', self.html)
+        self.assertIn('href="./tactical-lab-v1.css', self.html)
+        self.assertIn("matchType==='leagueMatch'", tactical)
+        self.assertIn("model=compute(window.__dokdoData)", tactical)
+        self.assertIn("formation==='4-3-3'", tactical)
+        self.assertIn("people=Number(btn.dataset.tlPeople)", tactical)
+        self.assertIn("data-tl-people=\"5\"", self.html)
+        self.assertIn("data-tl-people=\"9\"", self.html)
+        self.assertIn("#more .tl-columns", styling)
+        self.assertIn("5+ matches", tactical)
+        self.assertEqual(self.html.count('id="tacticalLab"'), 1)
+
     def test_mobile_five_sections_remain(self):
         for menu in ('home', 'players', 'matches', 'rivals', 'more'):
             self.assertIn(menu + ":'", self.mobile)
