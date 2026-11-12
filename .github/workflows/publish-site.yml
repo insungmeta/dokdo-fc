@@ -9,6 +9,7 @@ on:
       - 'live-dashboard-v7.js'
       - 'mobile-app-v8.css'
       - 'mobile-app-v8.js'
+      - 'i18n-*.js'
       - 'assets/**'
       - 'push/**'
       - 'site.webmanifest'
