@@ -283,11 +283,14 @@ backButton.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'
 
 const modal=$('methodModal');$('methodBtn').addEventListener('click',()=>modal.showModal());$('methodClose').addEventListener('click',()=>modal.close());modal.addEventListener('click',e=>{if(e.target===modal)modal.close()});
 
-/* Small server heartbeat; preserve an open match review or active player interaction. */
-const healthDot=$('syncHealthDot'),healthText=$('syncHealthText'),refreshButton=$('syncRefreshNow'),updateBanner=$('syncBanner');
+/* Small server heartbeat: check the published archive, not EA's live server.
+   Never suggest this button initiates an EA collector run. */
+const healthDot=$('syncHealthDot'),healthText=$('syncHealthText'),refreshButton=$('syncRefreshNow'),
+      syncFeedback=$('syncCheckFeedback'),updateBanner=$('syncBanner');
 const bannerText=$('syncBannerText'),applyButton=$('syncApplyUpdate');
-let lastActivity=Date.now(),knownRevision=data.sync?.revision||null,checking=false,seenUpdate=false;
-for(const event of ['pointerdown','keydown'])document.addEventListener(event,()=>{lastActivity=Date.now()},{passive:true});
+let lastActivity=Date.now(),knownRevision=data.sync?.revision||null,checking=false;
+for(const event of ['pointerdown','keydown'])
+ document.addEventListener(event,()=>{lastActivity=Date.now()},{passive:true});
 function formatSource(v){
  if(!v)return '미확인';
  const at=v.lastSuccess,valid=at&&!Number.isNaN(new Date(at).getTime()),age=valid?Date.now()-new Date(at).getTime():Infinity;
@@ -306,31 +309,66 @@ function renderHealth(status){
  const warn=[league,match,members].some(x=>x!=='정상');
  healthDot.className='sync-health-dot '+(warn?'is-warn':'is-ok');
  if([league,match,members].includes('조회 실패'))healthDot.className='sync-health-dot is-error';
- healthText.title='마지막 성공 수집 기준이며 EA API 일시 오류 시 기존 기록이 유지됩니다.';
+ healthText.title='각 EA 데이터의 마지막 수집 성공 기준이며, 현재 EA 서버를 실시간 조회하는 기능은 아닙니다.';
+}
+function showCheckFeedback(message,state){
+ syncFeedback.hidden=false;
+ syncFeedback.textContent=message;
+ syncFeedback.dataset.state=state||'info';
 }
 renderHealth({lastSuccess:data.sync?.lastSuccess,sources:data.sync?.sources});
-async function checkFreshness(){
- if(checking)return;checking=true;
+async function checkFreshness({manual=false}={}){
+ if(checking){
+  if(manual)showCheckFeedback('이미 확인 중입니다. 저장된 기록을 조회하고 있습니다.','info');
+  return;
+ }
+ checking=true;
+ if(manual){
+  refreshButton.disabled=true;
+  refreshButton.textContent='확인 중…';
+  showCheckFeedback('GitHub에 저장된 새 기록을 확인하고 있습니다.','info');
+ }
  try{
   const response=await fetch('./data/status.json?v='+Date.now(),{cache:'no-store'});
   if(!response.ok)throw Error('HTTP '+response.status);
   const status=await response.json();
-  if(!status||status.clubId!==331042||!status.revision)throw Error('status invalid');
+  if(!status||Number(status.clubId)!==331042||!status.revision)throw Error('status invalid');
   renderHealth(status);
-  if(!knownRevision){knownRevision=status.revision;return}
+  const latest=status.checkedAt||status.lastSuccess,stamp=latest?date(latest):'시각 미확인';
+  const stateSummary=[status.sources?.league,status.sources?.leagueMatch,status.sources?.members]
+    .map(formatSource);
+  const collectorDelayed=stateSummary.some(x=>x!=='정상');
+  if(!knownRevision){
+   knownRevision=status.revision;
+   if(manual)showCheckFeedback('확인 완료 · 저장된 기록을 읽었습니다. 마지막 자동 수집 '+stamp+' (EA 즉시 수집은 아닙니다).',collectorDelayed?'warn':'ok');
+   return;
+  }
   if(knownRevision!==status.revision){
-   seenUpdate=true;
-   const inUse=!document.hidden&&(Date.now()-lastActivity<60000||!matchReview.hidden||$('playerDetails').open);
+   const inUse=manual||(!document.hidden&&(Date.now()-lastActivity<60000||!matchReview.hidden||$('playerDetails').open));
    if(!inUse&&!document.hidden){window.location.reload();return}
    bannerText.textContent='새로운 리그·경기·선수 기록이 저장되었습니다.';
    updateBanner.hidden=false;
+   if(manual)showCheckFeedback('새 저장 기록이 있습니다. 아래의 ‘새 기록 적용’을 누르면 반영됩니다.','ok');
+  }else if(manual){
+   showCheckFeedback(collectorDelayed
+     ?'확인 완료 · 저장된 기록은 동일하지만 자동 수집이 지연되거나 일부 실패했습니다. 마지막 확인 '+stamp
+     :'확인 완료 · 새로 저장된 기록은 없습니다. 마지막 자동 수집 '+stamp,
+     collectorDelayed?'warn':'ok');
   }
  }catch(err){
-  if(!data.sync?.sources)healthText.textContent='자동 수집 상태 확인 지연 · 마지막 기록 '+(data.sync?.lastSuccess?date(data.sync.lastSuccess):'미확인');
+  if(!data.sync?.sources)healthText.textContent='자동 수집 상태 확인 실패 · 마지막 기록 '+(data.sync?.lastSuccess?date(data.sync.lastSuccess):'미확인');
   healthDot.className='sync-health-dot is-warn';
- }finally{checking=false}
+  if(manual)showCheckFeedback('확인 실패 · 저장된 데이터에 연결하지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.','error');
+  console.warn('DOKDO FC archive status check failed:',err);
+ }finally{
+  checking=false;
+  if(manual){
+   refreshButton.disabled=false;
+   refreshButton.textContent='새 기록 확인';
+  }
+ }
 }
-refreshButton.addEventListener('click',()=>checkFreshness());
+refreshButton.addEventListener('click',()=>checkFreshness({manual:true}));
 applyButton.addEventListener('click',()=>window.location.reload());
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkFreshness()});
 window.setInterval(()=>{if(!document.hidden)checkFreshness()},5*60*1000);
