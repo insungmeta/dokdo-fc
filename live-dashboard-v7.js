@@ -298,10 +298,10 @@ for(const event of ['pointerdown','keydown'])
 function formatSource(v){
  if(!v)return '미확인';
  const at=v.lastSuccess,valid=at&&!Number.isNaN(new Date(at).getTime()),age=valid?Date.now()-new Date(at).getTime():Infinity;
- if(v.state==='ok'&&age<75*60*1000)return '정상';
+ if(v.state==='ok'&&age<20*60*1000)return '정상';
  if(v.state==='partial')return '일부 누락';
  if(v.state==='error'||v.state==='unavailable')return '조회 실패';
- if(age>=75*60*1000)return '갱신 지연';
+ if(age>=20*60*1000)return '갱신 지연';
  return '확인 중';
 }
 function renderHealth(status){
@@ -310,12 +310,12 @@ function renderHealth(status){
  const checked=status?.checkedAt||status?.lastSuccess||data.sync?.lastSuccess;
  const stamped=checked?date(checked):'시각 미확인';
  const minutes=checked&&!Number.isNaN(new Date(checked).getTime())?Math.max(0,Math.floor((Date.now()-new Date(checked).getTime())/60000)):null;
- const delayed=minutes===null||minutes>=75;
+ const delayed=minutes===null||minutes>=12;
  healthText.textContent=(delayed?'예약 실행 지연 · ':'')+'마지막 성공 '+stamped+(minutes===null?'':' · '+minutes+'분 전')+' · 리그 '+league+' · 경기 '+match+' · 선수 '+members;
  const warn=delayed||[league,match,members].some(x=>x!=='정상');
  healthDot.className='sync-health-dot '+(warn?'is-warn':'is-ok');
  if([league,match,members].includes('조회 실패'))healthDot.className='sync-health-dot is-error';
- healthText.title='GitHub Actions 예약 수집은 약 30분 간격으로 시도하지만 GitHub 환경이나 EA 응답에 따라 지연되거나 누락될 수 있습니다. 버튼은 이미 저장된 기록만 확인합니다.';
+ healthText.title='GitHub Actions 예약 수집은 약 5분 간격으로 시도하지만 GitHub 환경이나 EA 응답에 따라 지연되거나 누락될 수 있습니다. 버튼은 이미 저장된 기록만 확인합니다.';
 }
 function showCheckFeedback(message,state){
  syncFeedback.hidden=false;
