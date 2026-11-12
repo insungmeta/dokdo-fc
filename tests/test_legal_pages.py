@@ -39,7 +39,7 @@ class LegalNoticeTests(unittest.TestCase):
     def test_no_false_live_source_approval(self):
         html = self.read("index.html")
         self.assertIn("rights-hold", html)
-        self.assertIn("자동 수집은 일시 중단", html)
+        self.assertIn("EA 데이터 이용 허가는 확인되지 않았으며 공식 문의 중입니다.", html)
         self.assertNotIn("FC27 · DESIGN CONCEPT V6", html)
         manifest = json.loads(self.read("site.webmanifest"))
         self.assertEqual(manifest["short_name"], "DOKDO FC")
