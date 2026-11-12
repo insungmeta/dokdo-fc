@@ -228,7 +228,7 @@ function shareText(){
   formations[formation].forEach(([role])=>lines.push(role+': '+(xi[role]?.name||'AI / Unverified')));
  }
  lines.push(t('주의: 경기 결과 기반 전술 실험안이며 EA 공식 추천이 아닙니다.','Note: These are experimental suggestions based on results, not official EA recommendations.'));
- lines.push('https://insungmeta.github.io/dokdo-fc/'+(en()?'?lang=en#more':'#more'));
+ lines.push('https://insungmeta.github.io/dokdo-fc/'+(en()?'?lang=en#tactics':'#tactics'));
  return lines.join('\n');
 }
 function render(){
@@ -284,7 +284,7 @@ function render(){
    'Primary position uses archived match roles when at least 3 appearances and 60% agree. Otherwise the latest EA roster position is provisional. Selection considers season goals, assists and rating, with ST weighted toward scoring. Specialist roles and online status are unknown. Human/AI slots remain separate.'
   );
  }
- id('tlRecommendFormation').textContent=t('추천 포메이션 적용','Apply Suggested Formation');
+ id('tlRecommendFormation').textContent=t('추천 포메이션 보기','View Suggested Formation');
  id('tlReason').textContent=!qualified
   ?t('5경기 미만이므로 실제 결과 기반 추천을 보류합니다. 4-2-3-1은 기본 예시일 뿐입니다.','Fewer than 5 matches: there is not enough evidence for a result-based recommendation.')
   :formation!==suggested
@@ -321,15 +321,28 @@ id('tlBestXI').addEventListener('click',()=>{
  render();
 });
 id('tlRecommendFormation').addEventListener('click',()=>{
+ if(!model){
+  id('tlFormationFeedback').textContent=t('경기 데이터가 로드된 뒤 추천 전술을 볼 수 있습니다.','Suggested formation is available after match data loads.');
+  return;
+ }
+ const prior=selected||model.suggested;
  selected=null;
  id('tlShareStatus').textContent='';
  render();
+ id('tlFormationFeedback').textContent=(prior===model.suggested?
+  t('현재 추천 전술은 ','Current suggested formation: '):
+  t('선택한 전술에서 추천 전술로 전환했습니다. ','Switched to the suggested formation. '))+
+  model.suggested+t(' · 게임 안에서는 직접 포메이션을 설정해야 합니다.',' · This does not change settings inside EA FC.');
 });
 root.addEventListener('click',event=>{
  const btn=event.target.closest('[data-tl-people],[data-tl-formation]');
  if(!btn)return;
  if(btn.dataset.tlPeople){people=Number(btn.dataset.tlPeople)||5;}
- if(btn.dataset.tlFormation){selected=btn.dataset.tlFormation;}
+ if(btn.dataset.tlFormation){
+  selected=btn.dataset.tlFormation;
+  id('tlFormationFeedback').textContent=t('선택한 포메이션 보기: ','Viewing formation: ')+selected+
+   t(' · 게임 안에서는 직접 설정해야 합니다.',' · Set this separately in EA FC.');
+ }
  id('tlShareStatus').textContent='';
  render();
 });
