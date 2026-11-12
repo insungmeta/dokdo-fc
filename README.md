@@ -2,7 +2,7 @@
 
 DOKDO FC's free fan-made match & player analytics dashboard for club ID `331042` / platform `common-gen5`.
 
-The site is hosted with **GitHub Pages**. Archived club records remain viewable, but **new automatic EA data collection is paused pending verification of the required data-access and redistribution permissions**. The historical collector uses the unofficial `fc-clubs-api` package; its open-source license does not authorize the underlying EA service.
+The site is hosted with **GitHub Pages**. Archived club records remain viewable, and the independent team has chosen to resume a **best-effort 30-minute automated refresh** while requesting clarification from EA. The collector uses the unofficial `fc-clubs-api` package; its open-source license does not authorize the underlying EA service. **EA permission has NOT been confirmed; continued collection may breach applicable terms, and must be stopped if EA disallows it.**
 
 ## Free hosting
 
@@ -27,7 +27,7 @@ The repository's GitHub Pages setting was enabled on November 10, 2026. Publicat
 - [Independent project / copyright / EA rights notice](./legal.html) · [Privacy notice](./privacy.html) (both KO and EN).
 - The website and its app concept are **not approved, endorsed or affiliated with EA or EA licensors**. DFC original branding is not an EA logo.
 - EA's fan content policy **does not** grant permission to use unofficial API endpoints, scrape proprietary services or redistribute collected data. EA announced an approved FC Community API for selected partners, but this is **not** evidence of approved FC Clubs API access for DOKDO FC.
-- `.github/workflows/update-and-publish.yml` is intentionally held with a **fail-closed permission gate**: the entire EA data collection job runs only if repository variable `DFC_EA_DATA_LICENSE_CONFIRMED` equals `true`. No such approval has been established in this review. Do **not** set this variable until documentary authorization actually covers FC Clubs API collection and redistribution; this is not a self-service licensing mechanism.
+- The repository owner requested a cautious **30-minute refresh** on 2026-11-12 while waiting for EA's written response on the website and private Android app. This is a risk acceptance, **not EA authorization or a legal clearance**. To halt the unofficial collector immediately, set Actions repository variable `DFC_PAUSE_COLLECTION` to `true` (or disable the `Refresh DOKDO FC and publish` workflow). Do not use the retired `DFC_EA_DATA_LICENSE_CONFIRMED` variable as a substitute for permission.
 - Previously archived stats are retained for continuity, **not** because their republication rights have been confirmed. If a player or rights holder objects, review the publication and remove affected data, including Git history/caches where feasible.
 - Public gamer tags can be personal data. A private privacy-contact route and club member agreement/opt-out process are needed before broader public app distribution.
 - EA-hosted opponent crest images have been removed from the active dashboard. The archived page and social banner use DFC-owned SVG artwork only; original rights to that artwork should still be confirmed by the maintainer.
