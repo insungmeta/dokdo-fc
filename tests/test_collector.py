@@ -150,6 +150,42 @@ class CollectorTests(unittest.TestCase):
             self.assertEqual(len(archive2["changes"]), 2)
             self.assertEqual(len(json.loads(path.read_text())["matches"]), 2)
 
+    def test_source_freshness_and_small_status_file(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "dashboard.json"
+            first_run = collect(FakeApi, path)
+            status_path = path.parent / "status.json"
+            self.assertTrue(status_path.exists())
+            status = json.loads(status_path.read_text(encoding="utf-8"))
+            self.assertEqual(status["clubId"], CLUB_ID)
+            self.assertEqual(status["revision"], first_run["sync"]["revision"])
+            self.assertEqual(status["sources"]["league"]["state"], "ok")
+            self.assertEqual(status["sources"]["members"]["state"], "ok")
+            self.assertEqual(status["sources"]["leagueMatch"]["state"], "ok")
+            self.assertEqual(status["sources"]["league"]["lastSuccess"],
+                             first_run["sync"]["sources"]["league"]["lastSuccess"])
+            next_run = collect(FakeApi, path)
+            self.assertEqual(next_run["sync"]["revision"], first_run["sync"]["revision"])
+
+    def test_failed_division_lookup_keeps_old_data_and_shows_warning(self):
+        class MissingLeague(FakeApi):
+            def search_club_by_name(self, *args, **kwargs):
+                raise RuntimeError("EA leaderboard unavailable")
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "dashboard.json"
+            initial = collect(FakeApi, path)
+            former_division = initial["league"]["currentDivision"]
+            former_success = initial["sync"]["sources"]["league"]["lastSuccess"]
+            updated = collect(MissingLeague, path)
+            self.assertEqual(updated["league"]["currentDivision"], former_division)
+            league_state = updated["sync"]["sources"]["league"]
+            self.assertEqual(league_state["state"], "error")
+            self.assertEqual(league_state["lastSuccess"], former_success)
+            status = json.loads((path.parent / "status.json").read_text(encoding="utf-8"))
+            self.assertTrue(status["partial"])
+            self.assertEqual(status["sources"]["league"]["state"], "error")
+
     def test_rating_change_uses_real_previous_value_until_week_exists(self):
         history = {"changes": [
             {"at": "2026-11-10T07:52:12Z", "overall": {"skillRating": 1425}},
