@@ -61,7 +61,27 @@ jobs:
           git add data/dashboard.json data/history.json data/push-state.json data/status.json
           if ! git diff --cached --quiet; then
             git commit -m "Update DOKDO FC stats [skip ci]"
-            git push origin HEAD:main
+            # A concurrent site edit can advance main after checkout. Never force-push
+            # or silently replace a newer archive: rebase, fail closed on conflicts.
+            pushed=false
+            for attempt in 1 2 3 4; do
+              git fetch origin main
+              if ! git rebase origin/main; then
+                git rebase --abort || true
+                echo "A newer archive conflicts with this run; refusing to overwrite it."
+                exit 1
+              fi
+              if git push origin HEAD:main; then
+                pushed=true
+                break
+              fi
+              echo "Remote advanced during push, retrying safe rebase ($attempt/4)"
+              sleep 3
+            done
+            if [ "$pushed" != true ]; then
+              echo "Could not publish the updated archive after 4 safe retries."
+              exit 1
+            fi
           fi
       - name: Render KakaoTalk preview card (1200 x 630)
         run: |
