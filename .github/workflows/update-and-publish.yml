@@ -39,6 +39,7 @@ jobs:
       - name: Verify collector archive integrity before data collection
         run: |
           python -m unittest discover -s tests -p 'test_collector.py' -v
+          python -m unittest discover -s tests -p 'test_dashboard_ui.py' -v
           python -m unittest discover -s tests -p 'test_push.py' -v
       - name: Collect live FC27 records
         run: python collect.py
