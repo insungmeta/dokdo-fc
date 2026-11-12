@@ -284,70 +284,6 @@ function forecastCandidates(r,count){
  hypotheses.sort((a,b)=>b.weight-a.weight||a.id.localeCompare(b.id));
  return hypotheses.map((p,i)=>({...p,rank:i+1,sample}));
 }
-const trialKey='dfc-tactical-trial-v1';
-let trial=null;
-try{
- const stored=JSON.parse(localStorage.getItem(trialKey)||'null');
- if(stored&&stored.version===1&&Array.isArray(stored.confirmed)&&typeof stored.formation==='string')
-  trial=stored;
-}catch(_){}
-function storeTrial(){
- try{
-  if(trial)localStorage.setItem(trialKey,JSON.stringify(trial));
-  else localStorage.removeItem(trialKey);
-  return true;
- }catch(_){return false}
-}
-function eligibleTrialMatches(r){
- if(!trial||!Array.isArray(r.league))return [];
- const stamp=Date.parse(trial.anchorTimestamp||'');
- if(!Number.isFinite(stamp))return [];
- return r.league.filter(m=>Date.parse(m.timestamp)>stamp &&
-   !trial.anchorIds.includes(String(m.matchId)));
-}
-function renderTrial(r){
- const start=id('tlTrialStart'),stop=id('tlTrialStop'),list=id('tlTrialMatches');
- stop.hidden=!trial;
- start.hidden=!!trial;
- start.textContent=t('선택 전술 5경기 시험 시작','Start 5-Match Tactical Trial');
- stop.textContent=t('시험 기록 종료','End Trial');
- if(!trial){
-  id('tlTrialStatus').textContent=t(
-   '아직 진행 중인 시험이 없습니다. 실제 경기에서 새 전술을 쓸 때 시작한 뒤, 해당 전술을 사용한 경기만 직접 체크하세요. 기록은 이 브라우저에만 저장됩니다.',
-   'No active trial. Start when you actually use the formation, then manually check the matches where it was used. Saved only in this browser.');
-  list.innerHTML='';return;
- }
- const matches=eligibleTrialMatches(r),confirmedSet=new Set(trial.confirmed);
- const verified=matches.filter(m=>confirmedSet.has(String(m.matchId))).sort(
-  (a,b)=>String(a.timestamp).localeCompare(String(b.timestamp))).slice(0,5);
- const base=trial.baseline||{pts:0,gfAvg:0,gaAvg:0,n:0};
- let status=t('시험 전술 ','Trial formation ')+trial.formation+
-  t(' · 직접 확인한 경기 ',' · manually verified matches ')+verified.length+'/5'+
-  t(' · 신규 보관 경기 ',' · new archived fixtures ')+matches.length;
- if(matches.length===0)status+=' · '+t('새 경기가 저장되면 여기에 표시됩니다.','New matches will appear when archived.');
- if(verified.length>=5){
-  const after=summary(verified);
-  status+='\n'+t('시험 전/후 비교 (확인한 5경기 기준): ','Before vs trial (5 confirmed matches): ')+
-   t('경기당 승점 ','points/match ')+avg(base.pts)+' → '+avg(after.pts)+
-   t(' · 득점 ',' · goals ')+avg(base.gfAvg)+' → '+avg(after.gfAvg)+
-   t(' · 실점 ',' · conceded ')+avg(base.gaAvg)+' → '+avg(after.gaAvg)+'.\n'+
-   t('결과가 좋아져도 전술의 인과 효과는 입증되지 않습니다. 상대 수준과 참여 인원이 다를 수 있습니다.',
-     'Better results do not prove the formation caused them. Opposition and player availability may differ.');
- } else status+='\n'+t('최소 5경기를 실제 사용했다고 표시해야 비교 결과가 나옵니다.',
-   'Confirm actual use in at least 5 matches to see the comparison.');
- id('tlTrialStatus').textContent=status;
- list.innerHTML=matches.slice(0,22).map(m=>{
-  const checked=confirmedSet.has(String(m.matchId)),key=escape(m.matchId);
-  const date=new Date(m.timestamp).toLocaleDateString(en()?'en-GB':'ko-KR',{timeZone:'Asia/Seoul',month:'2-digit',day:'2-digit'});
-  return '<label class="tl-trial-match"><input type="checkbox" data-tl-trial-match="'+key+'" '+(checked?'checked ':'')+
-   '/><span>'+escape(date)+' · '+escape(m.opponentName||t('상대팀','Opponent'))+' · '+
-   Number(m.goals)+':'+Number(m.goalsAgainst)+'</span><small>'+
-   t('이 전술 실제 사용','Actually used this tactic')+'</small></label>';
- }).join('');
- if(matches.length>22)list.insertAdjacentHTML('beforeend','<p>'+
-  t('최근 22경기만 표시됩니다.','Only the latest 22 matches are shown.')+'</p>');
-}
-
 function render(){
  if(!model)return;
  const {now,before,pass,delta,updated}=model,forecast=forecastCandidates(model,people),suggested=forecast[0].id,formation=selected||suggested;
@@ -370,22 +306,26 @@ function render(){
   t('초기 가설 · 표본 부족','Exploratory · small sample');
  id('tlForecastConfidence').textContent=band;
  id('tlForecastIntro').textContent=t(
-  '최근 리그 '+now.n+'경기: 경기당 득점 '+avg(now.gfAvg)+' · 실점 '+avg(now.gaAvg)+
-  '. 이 기록과 선수 주 포지션 분포에서 전술 가설을 도출했습니다. 실제 포메이션 사용 이력은 EA 데이터에 없습니다.',
-  'Last '+now.n+' league matches: '+avg(now.gfAvg)+' goals scored and '+avg(now.gaAvg)+
-  ' conceded per match. Formations below are hypotheses from results and positional coverage; EA does not supply historical formation choices.');
+  '최근 '+now.n+'경기 · 득점 '+avg(now.gfAvg)+' / 실점 '+avg(now.gaAvg)+' (경기당)',
+  'Last '+now.n+' matches · '+avg(now.gfAvg)+' scored / '+avg(now.gaAvg)+' conceded per match');
+
+ const names={
+  '4-2-3-1':t('중앙 안정','Central cover'),
+  '4-3-3':t('측면 공격','Wide attacks'),
+  '4-4-2':t('투톱 연계','Two strikers')
+ };
  id('tlForecastOptions').innerHTML=forecast.map((p,i)=>
   '<button type="button" class="tl-forecast-card'+(i===0?' is-first':'')+(formation===p.id?' is-selected':'')+
   '" data-tl-forecast="'+p.id+'" aria-pressed="'+(formation===p.id)+'">'+
-  '<div class="tl-forecast-top"><span class="tl-forecast-order">'+(i===0?t('우선 시험 1순위','First to trial'):
-   t('대안 실험 ','Alternative #')+(i+1))+'</span></div>'+
-  '<strong>'+p.id+'</strong><span>'+escape(p.expected)+'</span>'+
-  '<small class="tl-forecast-risk">'+escape(p.risk)+'</small>'+
-  '<small>'+escape(p.task)+'</small></button>').join('');
+  '<span class="tl-forecast-order">'+(i===0?t('1순위 추천','Top pick'):t('대안 ','Option ')+(i+1))+'</span>'+
+  '<strong>'+p.id+'</strong><span>'+escape(names[p.id])+'</span></button>').join('');
+ id('tlForecastDetails').innerHTML=forecast.map((p,i)=>
+  '<div class="tl-forecast-detail"><strong>'+escape(p.id)+'</strong>'+
+  '<p>'+escape(p.expected)+'</p><p>'+t('위험: ','Risk: ')+escape(p.risk)+'</p>'+
+  '<p>'+t('실행: ','Action: ')+escape(p.task)+'</p></div>').join('');
  id('tlForecastFoot').textContent=t(
   '순서는 득점·실점·패스 성공률·선수 포지션 분포·인원에 적용한 공개 규칙 기반의 실험 우선순위입니다. 승률 예측값이나 EA 공식 메타가 아니며, 기존에 이 포메이션을 사용했다는 뜻도 아닙니다.',
   'These are rule-based experiment priorities using scoring, concessions, collected passing, role mix and player count. They are not calibrated win probabilities, official EA meta, or claims that these formations were previously used.');
- renderTrial(model);
  id('tlStats').innerHTML=[
   [t('경기당 득점','Goals per Game'),avg(now.gfAvg)],
   [t('경기당 실점','Conceded per Game'),avg(now.gaAvg)],
@@ -423,7 +363,7 @@ function render(){
    'Primary position uses archived match roles when at least 3 appearances and 60% agree. Otherwise the latest EA roster position is provisional. Selection considers season goals, assists and rating, with ST weighted toward scoring. Specialist roles and online status are unknown. Human/AI slots remain separate.'
   );
  }
- id('tlRecommendFormation').textContent=t('추천 포메이션 보기','View Suggested Formation');
+
  id('tlReason').textContent=!qualified
   ?t('자료가 적어 초기 실험안으로만 제시합니다. 실제 경기에서 결과를 확인하세요.','Limited records: this is an exploratory trial idea. Test it in matches.')
   :forecast.find(x=>x.id===formation)?.expected||t('새로운 전술 실험안입니다.','Experimental tactical setup.');
@@ -431,15 +371,14 @@ function render(){
  id('tlStrengths').innerHTML=dx.strengths.map(s=>'<li>'+escape(s)+'</li>').join('');
  id('tlRisks').innerHTML=dx.risks.map(s=>'<li>'+escape(s)+'</li>').join('');
  const actions=[
- now.gaAvg>=1.6
- ?t('수비: CDM 한 명은 중앙을 지키고, 사람이 조작하는 양쪽 풀백의 동시 오버래핑을 피하세요.','Defense: keep one CDM central; avoid simultaneous forward runs from both human-controlled fullbacks.')
- :t('수비: 중앙 수비 보호 역할을 정하고 공을 잃으면 미드필더가 복귀하세요.','Defense: assign central cover and recover midfielders after losing possession.'),
- now.gfAvg<1.2
- ?t('공격: ST 등지기 → CAM 연결 → 측면 침투 또는 컷백을 반복 연습하세요.','Attack: practice ST hold-up → CAM layoff → winger run or cutback.')
- :t('공격: 기존 득점 패턴을 유지하되 ST와 CAM이 같은 공간을 차지하지 않게 조정하세요.','Attack: preserve working patterns while keeping ST and CAM in distinct spaces.'),
- pass.games>=4&&pass.ratio!==null&&pass.ratio<.7
- ?t('빌드업: 짧은 3각 패스로 압박을 벗어난 뒤 전진 패스를 시도하세요.','Build-up: escape pressure through short triangles before playing forward.')
- :t('빌드업: CDM을 안전한 후방 패스 옵션으로 남기고 윙어에게 폭을 유지하도록 역할을 지정하세요.','Build-up: keep a CDM as a safe outlet; ask wingers to maintain width.')
+  formation==='4-4-2'
+   ?t('공격: ST 1명 연계, ST 1명 침투','Attack: one ST links, the other runs')
+   :formation==='4-3-3'
+   ?t('공격: 윙어는 폭 유지, ST는 박스 침투','Attack: wingers wide, ST into the box')
+   :t('공격: ST 등지기 → CAM 연결 → 침투','Attack: ST hold-up → CAM → run'),
+  now.gaAvg>=1.6
+   ?t('수비: 중앙 보호, 양쪽 풀백 동시 전진 금지','Defense: protect center; no double fullback overlap')
+   :t('수비: CDM 중심 유지, 공을 잃으면 빠른 복귀','Defense: keep CDM central; recover quickly')
  ];
  id('tlActions').innerHTML=actions.map(a=>'<li>'+escape(a)+'</li>').join('');
  const roles=roleRows(formation,people);
@@ -456,21 +395,6 @@ id('tlBestXI').addEventListener('click',()=>{
  id('tlShareStatus').textContent='';
  render();
 });
-id('tlRecommendFormation').addEventListener('click',()=>{
- if(!model){
-  id('tlFormationFeedback').textContent=t('경기 데이터가 로드된 뒤 추천 전술을 볼 수 있습니다.','Suggested formation is available after match data loads.');
-  return;
- }
- const proposed=forecastCandidates(model,people)[0].id;
- const prior=selected||proposed;
- selected=null;
- id('tlShareStatus').textContent='';
- render();
- id('tlFormationFeedback').textContent=(prior===proposed?
-  t('현재 추천 전술은 ','Current suggested formation: '):
-  t('선택한 전술에서 추천 전술로 전환했습니다. ','Switched to the suggested formation. '))+
-  proposed+t(' · 게임 안에서는 직접 포메이션을 설정해야 합니다.',' · This does not change settings inside EA FC.');
-});
 root.addEventListener('click',event=>{
  const btn=event.target.closest('[data-tl-people],[data-tl-formation],[data-tl-forecast]');
  if(!btn)return;
@@ -478,12 +402,10 @@ root.addEventListener('click',event=>{
  if(btn.dataset.tlForecast){selected=btn.dataset.tlForecast;}
  if(btn.dataset.tlFormation){
   selected=btn.dataset.tlFormation;
-  id('tlFormationFeedback').textContent=t('선택한 포메이션 보기: ','Viewing formation: ')+selected+
-   t(' · 게임 안에서는 직접 설정해야 합니다.',' · Set this separately in EA FC.');
+  id('tlFormationFeedback').textContent=t('선택: ','Selected: ')+selected;
  }
  if(btn.dataset.tlForecast){
-  id('tlFormationFeedback').textContent=t('새 전술 실험 선택: ','Selected experimental tactic: ')+selected+
-   t(' · 포메이션을 EA FC 게임 안에서 직접 설정하세요.',' · Set this formation manually in EA FC.');
+  id('tlFormationFeedback').textContent=t('선택: ','Selected: ')+selected;
  }
  id('tlShareStatus').textContent='';
  render();
@@ -501,37 +423,6 @@ id('tlCopy').addEventListener('click',async()=>{
  }finally{btn.disabled=false;}
 });
 
-/* A trial only counts matches the user explicitly tags as having used the
- * selected formation. Automatic match logs do not include formations.
- * This is stored locally in one browser and is not shared with teammates.
- */
-id('tlTrialStart').addEventListener('click',()=>{
- if(!model?.league?.length){id('tlTrialStatus').textContent=t('수집된 리그 경기 정보가 없어 실험을 시작할 수 없습니다.','Cannot start without archived league matches.');return;}
- const base=model.league.slice(0,10);
- trial={version:1,formation:selected||forecastCandidates(model,people)[0].id,
-  people,anchorTimestamp:model.league[0].timestamp,anchorIds:base.map(m=>String(m.matchId)),
-  baseline:summary(base),confirmed:[],startedAt:new Date().toISOString()};
- if(!storeTrial()){
-  trial=null;id('tlTrialStatus').textContent=t('브라우저 저장이 차단되어 시험 기록을 보관할 수 없습니다.','Browser storage is blocked; cannot save the trial.');
-  return;
- }
- render();
-});
-id('tlTrialStop').addEventListener('click',()=>{
- trial=null;storeTrial();render();
-});
-id('tlTrialMatches').addEventListener('change',event=>{
- const checkbox=event.target.closest('[data-tl-trial-match]');
- if(!checkbox||!trial||!model)return;
- const matchId=String(checkbox.dataset.tlTrialMatch);
- const available=eligibleTrialMatches(model).some(m=>String(m.matchId)===matchId);
- if(!available)return;
- const confirmed=new Set(trial.confirmed);
- if(checkbox.checked)confirmed.add(matchId);else confirmed.delete(matchId);
- trial.confirmed=[...confirmed];
- if(!storeTrial())id('tlTrialStatus').textContent=t('브라우저 저장이 차단되어 변경을 보관할 수 없습니다.','Browser storage prevented saving changes.');
- else renderTrial(model);
-});
 const receive=()=>{
  if(window.__dokdoData&&Array.isArray(window.__dokdoData.matches)){
   model=compute(window.__dokdoData);render();
