@@ -106,8 +106,47 @@
         var dest = new URL(href, location.href);
         if (dest.searchParams.get('lang') === 'en') continue;
         dest.searchParams.set('lang', 'en');
-        links[k].setAttribute('href', dest.pathname + dest.search + dest.hash);
+        // Keep the original relative ./legacy.html prefix. Turning it into an
+        // absolute /dokdo-fc/legacy.html URL bypassed the site's hide rules
+        // and exposed two unwanted legacy links in the English navigation.
+        var filename = dest.pathname.split('/').pop();
+        links[k].setAttribute('href', './' + filename + dest.search + dest.hash);
       }
+      // Display short navigation labels in English so all five tabs stay
+      // inside their actual allotted width, without adding another tab.
+      var compact = {
+        '#overview': ['Home', 'Club Home'],
+        '#players': ['Players', 'Player Rankings'],
+        '#matches': ['Matches', 'Match Records'],
+        '#rivalry': ['Rivals', 'Head-to-Head'],
+        '#more': ['Trends', 'Team Trends']
+      };
+      var primary = document.querySelectorAll('.header .nav a');
+      for (var m = 0; m < primary.length; m++) {
+        var info = compact[primary[m].getAttribute('href')];
+        if (!info) continue;
+        if (primary[m].textContent !== info[0]) primary[m].textContent = info[0];
+        if (primary[m].getAttribute('aria-label') !== info[1]) primary[m].setAttribute('aria-label', info[1]);
+      }
+      var mobile = {
+        home: ['Home', 'Club Home'],
+        players: ['Players', 'Player Rankings'],
+        matches: ['Matches', 'Match Records'],
+        rivals: ['Rivals', 'Head-to-Head'],
+        more: ['Trends', 'Team Trends']
+      };
+      var mobileTabs = document.querySelectorAll('.app-bottom-nav [data-screen]');
+      for (var n = 0; n < mobileTabs.length; n++) {
+        var labels = mobile[mobileTabs[n].dataset.screen];
+        if (!labels) continue;
+        var label = mobileTabs[n].querySelector('.app-nav-label');
+        if (label && label.textContent !== labels[0]) label.textContent = labels[0];
+        if (mobileTabs[n].getAttribute('aria-label') !== labels[1])
+          mobileTabs[n].setAttribute('aria-label', labels[1]);
+      }
+      var trendHeading = document.querySelector('.division-trend-head strong');
+      if (trendHeading && trendHeading.textContent !== '5-Match Avg. Points')
+        trendHeading.textContent = '5-Match Avg. Points';
     } finally { translating = false; }
   }
   function languageLink(lang) {
@@ -127,7 +166,31 @@
       '@media(max-width:800px){.header .shell>.dfc-lang-switch{margin-left:2px;gap:1px;padding:2px}.header .shell>.dfc-lang-switch a{min-width:33px;min-height:36px}.header .shell>.app-status{margin-left:auto}html[data-dfc-language="en"] .app-bottom-nav .app-nav-label{font-size:9px;letter-spacing:-.2px}}',
       '@media(max-width:385px){.header .shell>.app-status{display:none!important}.header .shell>.dfc-lang-switch{margin-left:auto}}',
       '.header>.dfc-lang-switch{margin-left:auto}',
-      '@media(max-width:800px){.header>.dfc-lang-switch{margin-left:2px}}'
+      '@media(max-width:800px){.header>.dfc-lang-switch{margin-left:2px}}',
+      'html[data-dfc-language="en"] .dfc-lang-switch{flex-shrink:0}',
+      '@media(min-width:801px){html[data-dfc-language="en"] .header .shell{gap:8px;flex-wrap:nowrap}html[data-dfc-language="en"] .header .brand{flex:0 0 auto}html[data-dfc-language="en"] .header .nav{flex:1 1 auto;min-width:0;justify-content:center;gap:3px}html[data-dfc-language="en"] .header .nav a{font-size:11px;padding:9px 8px;min-width:0}}',
+      '@media(max-width:800px){html[data-dfc-language="en"] .header .shell>.app-status{display:none!important}html[data-dfc-language="en"] .header .shell>.dfc-lang-switch{margin-left:auto}html[data-dfc-language="en"] .app-bottom-nav .app-nav-label{font-size:10px;white-space:nowrap;line-height:1.25}html[data-dfc-language="en"] .app-bottom-nav button{min-width:0;overflow:hidden}html[data-dfc-language="en"] .app-bottom-nav{grid-template-columns:repeat(5,minmax(0,1fr))}}',
+      'html[data-dfc-language="en"] .division-trend{max-width:100%;min-width:0;box-sizing:border-box;overflow:hidden}',
+      'html[data-dfc-language="en"] .division-trend-head{display:flex;flex-wrap:wrap;align-items:flex-start;gap:5px;min-width:0}',
+      'html[data-dfc-language="en"] .division-trend-head strong{flex:1 1 100%;min-width:0;white-space:normal;line-height:1.4;overflow-wrap:break-word}',
+      'html[data-dfc-language="en"] .division-trend-summary{min-width:0;max-width:100%;justify-content:flex-start;overflow-wrap:anywhere}',
+      'html[data-dfc-language="en"] .division-trend-caption{max-width:100%;min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.5}',
+      'html[data-dfc-language="en"] .division-trend-chart{max-width:100%;width:100%;overflow:hidden;display:block}',
+      'html[data-dfc-language="en"] .division-hero-main>*{min-width:0;max-width:100%}',
+      'html[data-dfc-language="en"] .division-form-top{display:flex;flex-wrap:wrap;gap:7px;min-width:0}',
+      'html[data-dfc-language="en"] .division-form-top strong{width:100%;white-space:normal;min-width:0}',
+      'html[data-dfc-language="en"] .division-form-top span{min-width:0;white-space:normal;overflow-wrap:break-word}',
+      'html[data-dfc-language="en"] .division-subline .season-wdl{flex-wrap:wrap;white-space:normal;min-width:0}',
+      'html[data-dfc-language="en"] .division-subline .season-wdl b{white-space:normal;flex-basis:100%;margin-right:0}',
+      'html[data-dfc-language="en"] .division-copy{min-width:0;overflow-wrap:break-word}',
+      'html[data-dfc-language="en"] .division-showcase{min-width:0;max-width:100%;gap:9px}',
+      'html[data-dfc-language="en"] .division-copy strong{white-space:normal}',
+      'html[data-dfc-language="en"] .screen-head{min-width:0;flex-wrap:wrap}',
+      'html[data-dfc-language="en"] .screen-head h2{overflow-wrap:break-word}',
+      'html[data-dfc-language="en"] .metric h3,html[data-dfc-language="en"] .metric small{overflow-wrap:break-word;white-space:normal}',
+      'html[data-dfc-language="en"] .compare-period-card{min-width:0;overflow-wrap:break-word}',
+      'html[data-dfc-language="en"] .player-history-title{flex-wrap:wrap;overflow-wrap:break-word}',
+      '@media(max-width:380px){html[data-dfc-language="en"] .division-trend-head{gap:4px}html[data-dfc-language="en"] .division-trend-summary b{font-size:15px}html[data-dfc-language="en"] .hero-chips{flex-wrap:wrap}}'
     ].join('\n');
     document.head.appendChild(st);
   }
