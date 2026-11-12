@@ -31,3 +31,13 @@ main{padding-top:15px}
 @media(max-width:900px){.hero{grid-template-columns:1fr}.hero-left{padding:16px}.hero-right{padding:14px}.division-hero-main{grid-template-columns:minmax(0,1fr) minmax(200px,1fr)}}
 @media(max-width:700px){.header .shell{height:59px}.brand h1{font-size:21px}main{padding-top:8px}.hero-left{padding:13px 15px}.hero-left h2{font-size:27px}.division-hero-main{grid-template-columns:1fr;gap:8px}.division-digit{font-size:66px}.division-trend-chart{max-height:65px}.division-form{padding:9px}.metric-strip{gap:6px}.metric{padding:10px 8px;min-height:73px;gap:7px}.metric b{font-size:24px}.metric h3{font-size:10px}.metric-icon{width:28px;height:28px}.metric-icon svg{width:16px;height:16px}.section-title{margin:19px 0 10px}.section-title h2{font-size:21px}.star{min-height:143px;padding:12px}.star .hero-number{font-size:39px}.panel-head{padding:12px 14px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+/* Option 2: match-duel hero. Keep the sporty editorial type and compact data-first layout. */
+.hero-left{isolation:isolate;position:relative;background:linear-gradient(90deg,#06111ff7 0%,#081525e8 38%,#0c1c2bd1 68%,#14263a 100%);border-color:#34485d}
+.hero-left:before{content:"";position:absolute;inset:0;z-index:-2;width:auto;height:auto;border:0;border-radius:0;box-shadow:none;opacity:1;pointer-events:none;background:linear-gradient(115deg,#101f31,#1b3044 58%,#101b2c)}
+.hero-left:after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,#06111ff2 0%,#06111fdb 32%,#06111f65 75%,transparent 100%)}
+.hero-left .eyebrow,.hero-left .division-hero-main,.hero-left .hero-chips{position:relative;z-index:1}
+.hero-left .eyebrow{font-style:italic;text-transform:uppercase;letter-spacing:2.4px}
+.division-digit{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-weight:900;font-style:italic;font-stretch:condensed}
+.metric b,.star .hero-number{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-style:italic;font-weight:900}
+@media(max-width:700px){.hero-left:after{background:linear-gradient(90deg,#06111ff0,#06111f9e)}}
