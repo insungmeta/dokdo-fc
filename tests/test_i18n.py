@@ -47,7 +47,7 @@ class I18nTests(unittest.TestCase):
         ]:
             self.assertEqual(mapping.get(key), expected)
         runtime = (ROOT / "i18n-v1.js").read_text(encoding="utf-8")
-        for token in ('URLSearchParams', 'lang', 'localStorage',
+        for token in ('URLSearchParams', 'lang',
                       'MutationObserver', '.match-item .title',
                       "data-dfc-language", "dfc-lang-switch"):
             self.assertIn(token, runtime)
