@@ -511,3 +511,13 @@ main.shell{padding-bottom:calc(124px + env(safe-area-inset-bottom,0px))}footer.f
  .app-bottom-nav button .app-nav-icon{width:29px;height:28px}
  .app-bottom-nav button .app-nav-label{max-width:100%;white-space:nowrap}
 }
+
+
+/* Mobile ranking categories: no hidden post-Tackles tabs. */
+#players .leader-more-controls[hidden]{display:none!important}
+#players .leader-more-controls{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:7px 12px 8px;background:linear-gradient(90deg,#112938,#183743);border-top:1px solid #345560;border-bottom:1px solid #345560}
+#players .leader-more-controls button{flex:none;display:grid;place-items:center;width:38px;min-height:38px;border:1px solid #729b94;border-radius:8px;background:#24504c;color:#e7f7de;font-size:26px;font-weight:900;line-height:1;cursor:pointer}
+#players .leader-more-controls button:disabled{opacity:.25;cursor:default}
+#players .leader-more-controls button:focus-visible{outline:2px solid #c8f35d;outline-offset:2px}
+#players .leader-more-controls #leaderScrollHint{flex:1;min-width:0;color:#c7e0de;text-align:center;font-size:11px;line-height:1.4;font-weight:750;overflow-wrap:anywhere}
+@media(min-width:1001px){#players .leader-more-controls{display:none!important}}
