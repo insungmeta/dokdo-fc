@@ -7,6 +7,20 @@ const home=document.createElement('section');home.id='app-home';home.className='
 home.innerHTML='<div class="screen-head"><div><span class="eyebrow">DOKDO FC · EA FC 27</span><h2>클럽 홈</h2></div><small>팀 현황과 최근 경기</small></div>';
 hero.before(home);home.append(hero,metrics);
 const lead=document.createElement('div');lead.className='home-leaders';lead.innerHTML='<div class="screen-head"><div><span class="eyebrow">SQUAD LEADERS</span><h2>우리 팀 주인공</h2></div><a href="#players">전체 랭킹 ↗</a></div><div class="home-leader-grid" id="homeLeaderGrid"><p class="loading">선수 기록을 불러오는 중</p></div>';home.append(lead);
+/* Editorial homepage: keep original live data nodes, change only their layout. */
+const banner=document.createElement('div');banner.className='dfc-photo-banner';
+banner.innerHTML='<div class="dfc-banner-title"><span>DOKDO FC</span><strong>PRO CLUBS</strong><small>TEAM / RECORD / ANALYSIS</small></div>';
+home.insertBefore(banner,hero);
+const board=document.createElement('div');board.className='dfc-match-board';
+const summary=document.createElement('div');summary.className='dfc-summary-grid';
+const lower=document.createElement('div');lower.className='dfc-lower-grid';
+board.append(summary,lower);home.insertBefore(board,hero);
+const primary=hero.querySelector('.division-primary'),rating=metrics.querySelector('.metric-rating'),form=hero.querySelector('.division-form'),trend=hero.querySelector('.division-trend'),recent=hero.querySelector('.hero-right');
+const wrap=(cls,title,node)=>{const card=document.createElement('section');card.className='dfc-board-card '+cls;if(title){const heading=document.createElement('div');heading.className='dfc-card-title';heading.textContent=title;card.append(heading)}if(node)card.append(node);return card};
+summary.append(wrap('dfc-summary-division','DIVISION',primary),wrap('dfc-summary-rating','클럽 레이팅',rating),wrap('dfc-summary-form','최근 10경기 폼',form));
+const stat=wrap('dfc-summary-stat','시즌 팀 기록',null);stat.append(metrics);summary.append(stat);
+lower.append(wrap('dfc-board-matches','',recent),wrap('dfc-board-trend','팀 흐름 · 최근 경기',trend),wrap('dfc-board-leaders','주요 랭킹',lead));
+hero.classList.add('dfc-legacy-hero');hero.style.display='none';
 players.classList.add('app-screen');matches.classList.add('app-screen');more.classList.add('app-screen');tactics.classList.add('app-screen');
 const rivals=document.createElement('section');rivals.className='app-screen';rivals.id='app-rivals';rivals.innerHTML='<div class="screen-head"><div><span class="eyebrow">HEAD TO HEAD</span><h2>상대전적</h2></div><small>상대팀별 맞대결</small></div>';
 matches.after(rivals);rivals.append(rivalry);rivalry.open=true;
