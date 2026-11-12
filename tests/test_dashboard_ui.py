@@ -93,6 +93,18 @@ class DashboardUIContract(unittest.TestCase):
         self.assertIn("roleRows(formation,people)", tactical)
         self.assertIn("navigator.clipboard.writeText(shareText())", tactical)
         self.assertIn("if(now.n===0)return", tactical)
+        self.assertIn("function forecastCandidates(r,count)", tactical)
+        self.assertIn("function renderTrial(r)", tactical)
+        self.assertIn("function eligibleTrialMatches(r)", tactical)
+        self.assertIn("const trialKey='dfc-tactical-trial-v1'", tactical)
+        self.assertIn("tacticalPolling=true", tactical)
+        self.assertIn("matches.length>22", tactical)
+        for token in ("tlForecastOptions","tlForecastConfidence","tlTrialStart",
+                      "tlTrialStop","tlTrialStatus","tlTrialMatches"):
+            self.assertIn('id="' + token + '"', self.html)
+        self.assertIn('data-tl-formation="4-4-2"', self.html)
+        self.assertIn("'4-4-2':", tactical)
+        self.assertIn('getElementById(\'tactics\')?.classList.contains(\'is-active\')', tactical)
         self.assertEqual(self.html.count('id="tacticalLab"'), 1)
 
     def test_mobile_six_sections_remain(self):
