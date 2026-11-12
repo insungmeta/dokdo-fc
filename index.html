@@ -373,7 +373,7 @@ details[open]>.fold-summary em{transform:rotate(180deg)}
 @media(prefers-reduced-motion:reduce){.match-item .match-chevron,.fold-summary em{transition:none}}
 
 </style>
-<link rel="stylesheet" href="./mobile-app-v8.css?v=20261112-points-trend" media="all">
+<link rel="stylesheet" href="./mobile-app-v8.css?v=20261112-site-audit" media="all">
 <link rel="manifest" href="./site.webmanifest">
 <meta name="theme-color" content="#0b1723">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -390,16 +390,19 @@ details[open]>.fold-summary em{transform:rotate(180deg)}
 <div class="division-hero-main"><div class="division-primary"><div class="division-showcase" aria-label="현재 4부 리그"><span class="division-digit">4<span>부</span></span><div class="division-copy"><span class="division-live">● CURRENT DIVISION</span><strong>현재 소속 리그</strong><small>EA FC 27 PRO CLUBS</small></div></div>
 <div class="division-subline"><span><b>시즌 최고</b> 2부 리그</span><span><b>리그 전적</b> 52승 · 28무 · 60패</span></div></div>
 <div class="division-trend" aria-label="최근 리그 경기 승점 추세">
-  <div class="division-trend-head"><strong>경기력 추세</strong><b id="divisionTrendValue">—</b></div>
+  <div class="division-trend-head"><strong>최근 5경기 평균 승점</strong><div class="division-trend-summary"><b id="divisionTrendValue">—</b><span id="divisionTrendDelta" aria-label="이전 구간 대비 평균 승점 변화"></span></div></div>
   <svg id="divisionTrendChart" class="division-trend-chart" viewBox="0 0 280 112" role="group" aria-label="최근 5경기 평균 승점의 변화" xmlns="http://www.w3.org/2000/svg"><text x="140" y="60" text-anchor="middle" fill="#a8bfc3" font-size="11">경기 기록 불러오는 중</text></svg>
   <p class="division-trend-caption" id="divisionTrendCaption" aria-live="polite">최근 5경기 평균 승점 · 보관된 리그 경기</p>
 </div>
 <div class="division-form" aria-label="최근 10경기 팀 폼">
   <div class="division-form-top"><strong>최근 10경기 폼</strong><span id="heroFormRecord">5승 · 3무 · 2패</span><b id="heroFormPoints">승점 18</b></div>
   <div class="division-form-results" id="heroFormLine" aria-label="최근 경기 승무패"></div>
-  <small>최신 경기 → 과거 경기 · 보관된 리그 경기 기준</small>
+  <small>과거 경기 → 최신 경기 · 보관된 리그 경기 기준</small>
 </div></div>
-<div class="hero-chips"><span class="chip"><b>CLUB ID</b> 331042</span><span class="chip"><b>DIVISION</b> 수집된 EA 기준*</span><span class="chip"><b>FC 27</b> PRO CLUBS</span></div></div>
+<div class="hero-chips"><span class="chip"><b>CLUB ID</b> 331042</span><span class="chip"><b>DIVISION</b> EA 수집 기준</span><span class="chip"><b>FC 27</b> PRO CLUBS</span></div>
+<div class="sync-health" id="syncHealth" aria-live="polite"><span class="sync-health-dot" id="syncHealthDot"></span><span id="syncHealthText">데이터 갱신 상태 확인 중</span><button id="syncRefreshNow" type="button">지금 확인</button></div>
+<div class="sync-banner" id="syncBanner" hidden><span id="syncBannerText">새로운 경기 기록이 확인됐습니다.</span><button id="syncApplyUpdate" type="button">새 기록 적용</button></div>
+</div>
 <div class="hero-right hero-recent-card" aria-label="최근 경기 목록">
  <div class="hero-right-top"><span>RECENT MATCHES / 최근 경기</span><span id="heroRecentCount" class="win">기록 조회 중</span></div>
  <div class="hero-recent-list" id="heroRecentMatches"><p class="hero-loading">최근 경기 불러오는 중</p></div>
@@ -429,7 +432,7 @@ details[open]>.fold-summary em{transform:rotate(180deg)}
 <div class="category-strip" id="leaderTabs" role="group" aria-label="선수 기록 선택"><button type="button" data-leader="goals" class="active">⚽ 득점</button><button type="button" data-leader="assists">🎯 도움</button><button type="button" data-leader="rating">⭐ 평점</button><button type="button" data-leader="mvp">🏅 MVP</button><button type="button" data-leader="appearances">📅 출전</button><button type="button" data-leader="tackles">🦶 태클</button><button type="button" data-leader="interceptions">🧱 인터셉트</button><button type="button" data-leader="aerial">🪂 공중볼</button><button type="button" data-leader="cards">🟨🟥 카드</button><button type="button" data-leader="goalkeepers">🧤 GK</button></div>
 <div class="standings" id="leaderRows" aria-live="polite"></div><div class="note" id="leaderNote">시즌 누적 골 기록입니다.</div></section>
 <details class="panel player-detail-panel" id="playerDetails"><summary class="fold-summary"><span>👤 선수 개인 기록</span><small>선수 선택 시 펼쳐짐</small><em>⌄</em></summary><div class="panel-head"><div><small>PLAYER PROFILE</small><h3>선수 포커스</h3></div><span class="minor">선택된 선수 기록</span></div>
-<div class="profile-content"><div class="profile-kicker" id="profileCategory">⚽ GOLDEN BOOT</div><div class="profile-top"><div class="profile-avatar" id="profileAvatar">D</div><div><strong id="profileName">dududada3472</strong><small id="profileRole">FW · 시즌 득점</small></div></div><div class="profile-big"><div><small id="profileMainLabel">시즌 득점</small><div style="font-size:11px;color:#86a79e;margin-top:7px" id="profilePeriod">EA 시즌 누적</div></div><b id="profileMainValue">97</b></div><div class="profile-stats" id="profileSecondary"></div><p class="profile-hint" id="profileHint"></p><span class="scopetag" id="profileBadge">EA 선수 누적 기록</span></div></details>
+<div class="profile-content"><div class="profile-kicker" id="profileCategory">⚽ GOLDEN BOOT</div><div class="profile-top"><div class="profile-avatar" id="profileAvatar">D</div><div><strong id="profileName">dududada3472</strong><small id="profileRole">FW · 시즌 득점</small></div></div><div class="profile-big"><div><small id="profileMainLabel">시즌 득점</small><div style="font-size:11px;color:#86a79e;margin-top:7px" id="profilePeriod">EA 시즌 누적</div></div><b id="profileMainValue">97</b></div><div class="profile-stats" id="profileSecondary"></div><div class="player-match-history" id="profileHistory" aria-live="polite"></div><p class="profile-hint" id="profileHint"></p><span class="scopetag" id="profileBadge">EA 선수 누적 기록</span></div></details>
 </div>
 <div class="separate-row">
 <div class="panel highlight-panel"><div class="symbol">🛡️</div><div><h3>수비 기록은 DF 출장만 집계</h3><p>FW/MF로 뛴 태클은 수비 랭킹에 넣지 않습니다.<br>태클·인터셉트·공중볼 세 분야를 유지합니다.</p></div></div>
@@ -460,10 +463,13 @@ details[open]>.fold-summary em{transform:rotate(180deg)}
 <section id="more"><details class="fold-section" id="moreDetails"><summary class="fold-summary"><span>📈 팀 흐름 · 카드 기록</span><small>최근 10경기와 선수 경고·퇴장</small><em>⌄</em></summary>
 <div class="final-tiles"><div class="panel"><div class="panel-head"><div><small>TEAM TREND</small><h3>최근 10경기 흐름</h3></div><span class="minor">리그 경기 결과</span></div><div class="panel-content"><div class="formline" id="formLine"></div><div class="form-summary"><span id="formSummary">5승 · 3무 · 2패</span><strong>최근 10경기</strong></div><div class="team-record"><i class="w" id="formW"></i><i class="d" id="formD"></i><i class="l" id="formL"></i></div><p class="muted-tip">최근 기록은 보관 경기 중 최신 순서입니다. 시즌 전체 승률과 구분합니다.</p></div></div>
 <div class="panel"><div class="panel-head"><div><small>DISCIPLINE</small><h3>경고 · 퇴장 통합 기록</h3></div><span class="minor">모든 포지션 공통</span></div><div class="panel-content cards-board"><div class="card-row"><div><div class="name">Dokdo4866</div><div class="sub">보관 경기 카드 기록</div></div><div class="card-count">🟨 5　🟥 1</div></div><div class="card-row"><div><div class="name">dududada3472</div><div class="sub">보관 경기 카드 기록</div></div><div class="card-count">🟨 4　🟥 0</div></div><div class="notice-ribbon"><b>집계 기준</b> · 보관된 경기의 카드 이벤트만 반영하며, EA 전체 시즌 카드 누적과 혼합하지 않습니다.</div></div></div></div></details>
+<div class="panel team-period-compare" id="teamPeriodCompare" aria-label="최근 리그 10경기와 이전 10경기 비교">
+<div class="panel-head"><div><small>TEAM MOMENTUM / 10 VS 10</small><h3>최근 10경기 vs 이전 10경기</h3></div><span class="minor">보관된 리그 경기만 사용</span></div>
+<div class="team-period-body" id="teamPeriodBody">리그 경기 데이터 확인 중</div></div>
 </section>
 <div class="data-disclaimer"><strong>디자인 시안 V6 · 현재 운영 홈페이지는 변경하지 않았습니다.</strong> 2026년 11월 11일에 확인한 DOKDO FC EA 수집 데이터의 일부를 화면 설계용으로 사용했습니다. 선수 시즌 누적, 보관된 DF 경기 통계, 골키퍼 시즌 기록은 서로 집계 범위가 달라 각각 명시했습니다. <b>현재 4부</b>는 당시 EA division 코드 5를 기존 홈페이지 규칙으로 해석한 값이며, 시즌 최고 2부는 코드 3 기준입니다. 상대전적은 수집된 경기 21건만 반영합니다. 상대팀 엠블럼은 EA 경기 데이터의 이미지 주소를 사용하고, 접속 불가·미제공 시 기본 배지를 보여줍니다. 더 자세한 수집 범위는 <button class="method-btn" type="button" id="methodBtn">데이터 표시 기준</button>에서 확인할 수 있습니다.</div>
 </main><button type="button" class="back-to-top" id="backToTop" hidden aria-label="맨 위로 이동">↑ 맨 위로</button><footer class="foot">DOKDO FC · PLAYER FIRST DESIGN CONCEPT V5 · FAN PROJECT / NOT AFFILIATED WITH EA</footer>
 <dialog id="methodModal" class="modal"><h3>통계 표시 기준 및 한계</h3><p>선수 누적 득점·도움 및 골키퍼 클린시트는 EA 선수 누적 통계로 표시합니다. 수비수 태클·인터셉트·공중볼과 옐로·레드카드는 홈페이지에 보관된 경기별 이벤트만 활용합니다.</p><ul><li>수비 랭킹은 해당 경기에 DF로 등록된 사람 선수 이벤트만 합산합니다. FW/MF/GK 기록은 제외합니다.</li><li>경기 분석은 EA가 반환한 사람 선수 기록의 합계이며, AI 선수 기록이 빠질 수 있습니다. 상대팀 사람 선수 기록은 불완전한 경우가 있습니다.</li><li>패스 성공률은 수집된 선수의 패스 성공 합계 ÷ 시도 합계입니다. 볼 점유율, xG, 정확한 슈팅 좌표는 원본에 없어 생성하지 않습니다.</li><li>DNF에서 선수 기록이 미집계된 경기는 0으로 표시해 잘못된 비교를 만들지 않습니다.</li><li>상대전적은 보관된 경기에서 상대팀 ID가 같은 대상을 묶고, 같은 경기 ID의 중복을 제외하여 승·무·패를 계산합니다. 저장 이전 경기는 포함되지 않습니다.</li><li>EA division 코드 5는 사이트 기준 4부, 최고 코드 3은 2부로 표시합니다. 기준이 바뀌거나 데이터 수집에 실패하면 마지막 확인 시각을 함께 보여야 합니다.</li><li>실제 서비스 적용 전 최근 갱신 시각, 경기 중복 여부, 집계 구간을 추가 검증해야 합니다.</li></ul><button type="button" id="methodClose">닫기</button></dialog>
-<script src="./live-dashboard-v7.js?v=20261112-points-trend" defer></script>
-<script src="./mobile-app-v8.js?v=20261111-full-roster" defer></script>
+<script src="./live-dashboard-v7.js?v=20261112-site-audit" defer></script>
+<script src="./mobile-app-v8.js?v=20261112-site-audit" defer></script>
 </body></html>
