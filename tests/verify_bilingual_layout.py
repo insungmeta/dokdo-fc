@@ -156,6 +156,20 @@ def validate(driver, lang, width):
                 }
                 return {active:active.id,issues,headings:headings.slice(0,20),untranslated:untranslated.slice(0,30)};
             """)
+            if screen=="players" and width==390:
+                ranknav=script(driver, """
+                  const tabs=document.querySelector('#leaderTabs'),controls=document.querySelector('#leaderMoreControls');
+                  const hidden=controls?.hidden,more=tabs.scrollWidth-tabs.clientWidth;
+                  const buttons=Array.from(tabs.querySelectorAll('[data-leader]'));
+                  const last=buttons[buttons.length-1]?.textContent.trim();
+                  controls?.querySelector('[data-rank-direction="1"]')?.click();
+                  return {visible:Boolean(controls&&!hidden),overflow:more,lastCategory:last,
+                   nextEnabled:!controls?.querySelector('[data-rank-direction="1"]')?.disabled,
+                   hint:controls?.querySelector('#leaderScrollHint')?.textContent.trim()};
+                """)
+                print(json.dumps({"lang":lang,"width":width,"screen":"ranking-scroll-hint",**ranknav},ensure_ascii=False),flush=True)
+                if ranknav["overflow"]>12 and (not ranknav["visible"] or not ranknav["hint"]):
+                    info["issues"].append("mobile ranking categories hidden without scroll affordance")
             if screen=="tactics":
                 view=script(driver, """
                     const el=document.querySelector('#tactics'),lab=document.querySelector('#tacticalLab');
