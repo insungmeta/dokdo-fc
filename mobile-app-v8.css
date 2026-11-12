@@ -350,3 +350,44 @@ main.shell{padding-bottom:calc(124px + env(safe-area-inset-bottom,0px))}footer.f
  .match-contributor-chip{font-size:11px}
  .match-contributor-note{margin-left:58px}
 }
+
+
+/* V8.6 club rating: concise EA explanation + real recorded score changes */
+.metric-strip .metric-rating{position:relative;overflow:visible;align-items:flex-start}
+.metric-rating .rating-content{flex:1;min-width:0}
+.metric-rating .rating-heading{display:flex;align-items:center;gap:6px;min-width:0}
+.metric-rating .rating-heading h3{min-width:0;margin:0;white-space:nowrap}
+.metric-rating .rating-info{position:static;display:inline-flex;flex:none}
+.metric-rating .rating-info summary{display:inline-grid;place-items:center;width:20px;height:20px;list-style:none;border:1px solid #627b8a;border-radius:50%;color:#d1e1e4;font-size:13px;font-weight:800;cursor:pointer;line-height:1;transition:border-color .15s,background .15s}
+.metric-rating .rating-info summary::-webkit-details-marker{display:none}
+.metric-rating .rating-info summary:hover,.metric-rating .rating-info summary:focus-visible{border-color:#c3e79d;background:#29483e;outline-offset:2px}
+.metric-rating .rating-info[open] summary{border-color:#9abd79;background:#29483e}
+.metric-rating .rating-info-popover{position:absolute;right:9px;top:52px;z-index:30;width:min(286px,calc(100vw - 32px));padding:14px 15px;border-radius:12px;border:1px solid #63847a;background:#142a34;box-shadow:0 10px 28px #040b1299;color:#eaf2ed;text-align:left;font-size:12px;line-height:1.6}
+.metric-rating .rating-info-popover strong{font-size:13px;color:#d0f5ab;font-weight:900}
+.metric-rating .rating-info-popover p{margin:8px 0 0;color:#c7d9da}
+.metric-rating #clubRatingValue{font-variant-numeric:tabular-nums}
+.metric-rating .rating-caption{display:block;color:#9cb2be;font-size:9px;line-height:1.4;overflow-wrap:anywhere}
+.metric-rating .rating-trend{display:flex;flex-wrap:wrap;gap:4px 7px;align-items:center;margin-top:7px;line-height:1.3}
+.metric-rating .rating-trend strong{white-space:nowrap;font-size:13px;font-weight:950;font-variant-numeric:tabular-nums;letter-spacing:-.1px;color:#dce9e6}
+.metric-rating .rating-trend span{font-size:10px;font-weight:750;color:#b9cbd0}
+.metric-rating .rating-trend.is-up strong{color:#b8f680}
+.metric-rating .rating-trend.is-down strong{color:#ffaaa8}
+.metric-rating .rating-trend.is-flat strong{color:#d5e6e4}
+.metric-rating .rating-reference{display:block;font-size:9px;line-height:1.45;margin-top:5px;color:#8fa6b2}
+@media(max-width:1080px){
+ .metric-rating .rating-heading{gap:4px}
+ .metric-rating .rating-info summary{width:18px;height:18px;font-size:12px}
+}
+@media(max-width:800px){
+ .metric-strip .metric-rating{gap:8px}
+ .metric-rating .rating-heading h3{font-size:10px}
+ .metric-rating .rating-trend strong{font-size:12px}
+ .metric-rating .rating-trend span{font-size:9px}
+ .metric-rating .rating-caption{font-size:8px}
+ .metric-rating .rating-reference{font-size:8px}
+ .metric-rating .rating-info-popover{top:46px;padding:13px;font-size:12px}
+}
+@media(max-width:380px){
+ .metric-rating .rating-heading{flex-wrap:wrap}
+ .metric-rating .rating-heading h3{white-space:normal}
+}
