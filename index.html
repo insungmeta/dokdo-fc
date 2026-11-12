@@ -487,9 +487,17 @@ details[open]>.fold-summary em{transform:rotate(180deg)}
 <div class="tl-input-row"><strong>포메이션</strong><div class="tl-switch" role="group" aria-label="포메이션 선택"><button type="button" data-tl-formation="4-2-3-1" aria-pressed="true">4-2-3-1</button><button type="button" data-tl-formation="4-3-3" aria-pressed="false">4-3-3</button></div></div>
 <div class="tl-input-row"><strong>사람 선수 출전 인원</strong><div class="tl-switch" role="group" aria-label="사람 선수 출전 인원 선택"><button type="button" data-tl-people="5" aria-pressed="true">5명</button><button type="button" data-tl-people="7" aria-pressed="false">7명</button><button type="button" data-tl-people="9" aria-pressed="false">9명</button></div></div>
 </div>
+<div class="tl-recommend-actions" role="group" aria-label="전술 추천 기능">
+<button type="button" id="tlBestXI" aria-pressed="false">기록 기반 베스트11 추천</button>
+<button type="button" id="tlRecommendFormation">추천 포메이션 적용</button>
+</div>
 <h4 id="tlTitle">추천 포메이션 분석 중</h4>
 <div class="tl-pitch-wrap" id="tlPitch" aria-live="polite"></div>
-<div class="tl-legend" id="tlLegend"></div>
+<div class="tl-legend" id="tlLegend"></div><section class="tl-xi-choices" id="tlBestXIPanel" hidden aria-label="베스트11 포지션별 추천 명단">
+<div class="tl-xi-heading"><strong>포지션별 베스트11 후보</strong><span id="tlBestXICount"></span></div>
+<div class="tl-xi-list" id="tlXIList"></div>
+<p class="tl-xi-note" id="tlXIExplanation"></p>
+</section>
 <p class="tl-reason" id="tlReason"></p>
 </div>
 <div class="tl-list-grid">
