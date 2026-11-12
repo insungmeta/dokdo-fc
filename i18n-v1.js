@@ -124,7 +124,8 @@
         '#players': ['Players', 'Player Rankings'],
         '#matches': ['Matches', 'Match Records'],
         '#rivalry': ['Rivals', 'Head-to-Head'],
-        '#more': ['Trends', 'Team Trends']
+        '#more': ['Trends', 'Team Trends'],
+        '#tactics': ['Tactics', 'Tactical Board']
       };
       var primary = document.querySelectorAll('.header .nav a');
       for (var m = 0; m < primary.length; m++) {
@@ -138,7 +139,8 @@
         players: ['Players', 'Player Rankings'],
         matches: ['Matches', 'Match Records'],
         rivals: ['Rivals', 'Head-to-Head'],
-        more: ['Trends', 'Team Trends']
+        more: ['Trends', 'Team Trends'],
+        tactics: ['Tactics', 'Tactical Board']
       };
       var mobileTabs = document.querySelectorAll('.app-bottom-nav [data-screen]');
       for (var n = 0; n < mobileTabs.length; n++) {
@@ -174,7 +176,7 @@
       '@media(max-width:800px){.header>.dfc-lang-switch{margin-left:2px}}',
       'html[data-dfc-language="en"] .dfc-lang-switch{flex-shrink:0}',
       '@media(min-width:801px){html[data-dfc-language="en"] .header .shell{gap:8px;flex-wrap:nowrap}html[data-dfc-language="en"] .header .brand{flex:0 0 auto}html[data-dfc-language="en"] .header .nav{flex:1 1 auto;min-width:0;justify-content:center;gap:3px}html[data-dfc-language="en"] .header .nav a{font-size:11px;padding:9px 8px;min-width:0}}',
-      '@media(max-width:800px){html[data-dfc-language="en"] .header .shell>.app-status{display:none!important}html[data-dfc-language="en"] .header .shell>.dfc-lang-switch{margin-left:auto}html[data-dfc-language="en"] .app-bottom-nav .app-nav-label{font-size:10px;white-space:nowrap;line-height:1.25}html[data-dfc-language="en"] .app-bottom-nav button{min-width:0;overflow:hidden}html[data-dfc-language="en"] .app-bottom-nav{grid-template-columns:repeat(5,minmax(0,1fr))}}',
+      '@media(max-width:800px){html[data-dfc-language="en"] .header .shell>.app-status{display:none!important}html[data-dfc-language="en"] .header .shell>.dfc-lang-switch{margin-left:auto}html[data-dfc-language="en"] .app-bottom-nav .app-nav-label{font-size:10px;white-space:nowrap;line-height:1.25}html[data-dfc-language="en"] .app-bottom-nav button{min-width:0;overflow:hidden}html[data-dfc-language="en"] .app-bottom-nav{grid-template-columns:repeat(6,minmax(0,1fr))}}',
       'html[data-dfc-language="en"] #app-home .division-trend{max-width:100%;min-width:0;box-sizing:border-box;overflow:hidden}',
       'html[data-dfc-language="en"] #app-home .division-trend-head{display:flex;flex-wrap:wrap;align-items:flex-start;gap:5px;min-width:0}',
       'html[data-dfc-language="en"] #app-home .division-trend-head strong{flex:1 1 100%;min-width:0;white-space:normal;line-height:1.4;overflow-wrap:break-word}',
