@@ -10,6 +10,8 @@ on:
       - 'mobile-app-v8.css'
       - 'mobile-app-v8.js'
       - 'i18n-*.js'
+      - 'tactical-lab-v1.js'
+      - 'tactical-lab-v1.css'
       - 'assets/**'
       - 'push/**'
       - 'site.webmanifest'
