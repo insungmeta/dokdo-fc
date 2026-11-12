@@ -306,6 +306,41 @@ def validate(driver, lang, width):
                         info["issues"].append("Primary archived FW and season top scorer incorrectly omitted from ST")
                 if striker["selected"]!=striker["suggested"] or not striker["buttonFeedback"]:
                     info["issues"].append("Suggested formation button did not visibly reset and acknowledge selection")
+                # Synthetic future fixtures are used ONLY inside this temporary
+                # headless browser session to test trial reporting, never
+                # uploaded to the real EA match archive or shown to users.
+                trial_simulation=script(driver, """
+                    const original=window.__dokdoData,lab=document.querySelector('#tacticalLab');
+                    const futureDate=Math.max(...original.matches.filter(m=>m.matchType==='leagueMatch')
+                        .map(m=>Date.parse(m.timestamp)).filter(Number.isFinite));
+                    lab.querySelector('[data-tl-forecast="4-4-2"]').click();
+                    lab.querySelector('#tlTrialStart').click();
+                    const mock=Array.from({length:5},(_,i)=>({
+                      matchId:'__synthetic_validation_'+i,matchType:'leagueMatch',
+                      timestamp:new Date(futureDate+(i+1)*3600000).toISOString(),
+                      goals:i%2===0?2:0,goalsAgainst:1,players:[],opponentName:'Synthetic QA Only'
+                    }));
+                    window.__dokdoData={...original,matches:[...mock,...original.matches]};
+                    document.dispatchEvent(new Event('dokdo:ready'));
+                    const before=lab.querySelectorAll('[data-tl-trial-match]').length;
+                    for(let i=0;i<5;i++){
+                      const input=lab.querySelector('[data-tl-trial-match="__synthetic_validation_'+i+'"]');
+                      if(!input)continue;
+                      input.checked=true;input.dispatchEvent(new Event('change',{bubbles:true}));
+                    }
+                    const result=lab.querySelector('#tlTrialStatus').textContent;
+                    const verified=result.includes('5/5')&&result.includes('→');
+                    lab.querySelector('#tlTrialStop').click();
+                    window.__dokdoData=original;document.dispatchEvent(new Event('dokdo:ready'));
+                    return {shown:before,verified,summary:result.slice(0,480),
+                     stopped:!lab.querySelector('#tlTrialStart').hidden,
+                     pageWidth:document.documentElement.scrollWidth};
+                """)
+                print(json.dumps({"lang":lang,"width":width,"screen":"trial-comparison-simulation",**trial_simulation},ensure_ascii=False),flush=True)
+                if trial_simulation["shown"]!=5 or not trial_simulation["verified"] or not trial_simulation["stopped"]:
+                    info["issues"].append("5-match confirmed trial comparison did not compute")
+                if trial_simulation["pageWidth"]>width+4:
+                    info["issues"].append("trial comparison overflowed mobile viewport")
             if screen=="matches":
                 driver.execute_script("document.querySelector('#matchList .match-item').click()")
                 detail=script(driver, """
