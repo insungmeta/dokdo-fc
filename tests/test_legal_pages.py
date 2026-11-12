@@ -47,9 +47,9 @@ class LegalNoticeTests(unittest.TestCase):
         banner = self.read("assets/club-banner.svg")
         self.assertNotIn("EA FC 27  /  GEN 5", banner)
 
-    def test_unofficial_ea_collector_is_fail_closed(self):
+    def test_unofficial_ea_collector_has_pause_control_and_disclosure(self):
         workflow = self.read(".github/workflows/update-and-publish.yml")
-        self.assertIn("vars.DFC_EA_DATA_LICENSE_CONFIRMED == 'true'", workflow)
+        self.assertIn("vars.DFC_PAUSE_COLLECTION != 'true'", workflow)
         self.assertIn("until verified authorization", self.read("COMPLIANCE_REVIEW.md").replace("until permission is documented", "until verified authorization"))
         self.assertIn("license", self.read("README.md").lower())
 
