@@ -481,6 +481,23 @@ details[open]>.fold-summary em{transform:rotate(180deg)}
 <div class="tl-contents">
 <p class="tl-evidence" id="tlEvidence" role="status">경기 결과를 분석하고 있습니다.</p>
 <div class="tl-stats" id="tlStats" aria-label="최근 경기 핵심 지표"><span class="tl-note">통계 확인 중</span></div>
+<section class="tl-predictions" aria-label="다음 경기 가설 및 전술 실험">
+  <div class="tl-predictions-head">
+    <div><span class="tl-eyebrow">TACTICAL FORECAST</span><h4>다음 경기 예상 전술 · 새로운 포메이션 포함</h4></div>
+    <span class="tl-forecast-tag" id="tlForecastConfidence">분석 중</span>
+  </div>
+  <p class="tl-predictions-intro" id="tlForecastIntro">실제 경기 결과와 선수 기록을 바탕으로 아직 쓰지 않은 포메이션도 시험 후보로 제안합니다.</p>
+  <div class="tl-forecast-options" id="tlForecastOptions" aria-label="추천 전술 비교"></div>
+  <p class="tl-forecast-foot" id="tlForecastFoot">승률 예측이 아니라 전술 실험의 우선순위입니다.</p>
+  <div class="tl-trial">
+    <div><strong>전술 실험 기록</strong><p>실제로 이 전술을 사용할 때 시험을 시작하세요. 이후 저장되는 5경기와 직전 기록을 비교합니다.</p></div>
+    <div class="tl-trial-controls">
+      <button type="button" id="tlTrialStart">선택 전술 5경기 시험 시작</button>
+      <button type="button" id="tlTrialStop" hidden>시험 기록 종료</button>
+    </div>
+    <p id="tlTrialStatus" role="status" aria-live="polite"></p>
+  </div>
+</section>
 <div class="tl-columns">
 <div class="tl-display">
 <div class="tl-inputs">
