@@ -134,7 +134,7 @@ function renderArchive(){
   return archiveResult==='all'||archiveResult===state;
  });
  const selected=indices.slice(0,archiveVisibleCount);
- $('archiveTotal').textContent=EN()?'('+games.length+' matches)':'('+games.length+'경기)';
+ $('archiveTotal').textContent=EN()?'('+games.length+')':'('+games.length+'경기)';
  $('matchList').innerHTML=selected.length?selected.map(x=>matchItem(x.m,x.i)).join(''):'<p style="padding:16px;color:#98b5bf">이 종류로 보관된 경기는 아직 없습니다.</p>';
  $('archiveVisible').textContent=EN()?'Showing '+selected.length+' of '+indices.length+' matches':'전체 '+indices.length+'경기 중 '+selected.length+'경기 표시';
  const more=$('archiveShowAll');more.hidden=selected.length>=indices.length;
