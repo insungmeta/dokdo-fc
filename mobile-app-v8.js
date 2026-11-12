@@ -1,13 +1,13 @@
 /* DOKDO FC · Mobile app interface V8 */
 (()=>{'use strict';
 const init=()=>{
-const $=s=>document.querySelector(s),main=$('main.shell'),hero=$('section.hero'),metrics=$('.metric-strip'),players=$('#players'),matches=$('#matches'),rivalry=$('#rivalry'),more=$('#more');
-if(!main||!hero||!metrics||!players||!matches||!rivalry||!more)return;
+const $=s=>document.querySelector(s),main=$('main.shell'),hero=$('section.hero'),metrics=$('.metric-strip'),players=$('#players'),matches=$('#matches'),rivalry=$('#rivalry'),more=$('#more'),tactics=$('#tactics');
+if(!main||!hero||!metrics||!players||!matches||!rivalry||!more||!tactics)return;
 const home=document.createElement('section');home.id='app-home';home.className='app-screen';
 home.innerHTML='<div class="screen-head"><div><span class="eyebrow">DOKDO FC · EA FC 27</span><h2>클럽 홈</h2></div><small>팀 현황과 최근 경기</small></div>';
 hero.before(home);home.append(hero,metrics);
 const lead=document.createElement('div');lead.className='home-leaders';lead.innerHTML='<div class="screen-head"><div><span class="eyebrow">SQUAD LEADERS</span><h2>우리 팀 주인공</h2></div><a href="#players">전체 랭킹 ↗</a></div><div class="home-leader-grid" id="homeLeaderGrid"><p class="loading">선수 기록을 불러오는 중</p></div>';home.append(lead);
-players.classList.add('app-screen');matches.classList.add('app-screen');more.classList.add('app-screen');
+players.classList.add('app-screen');matches.classList.add('app-screen');more.classList.add('app-screen');tactics.classList.add('app-screen');
 const rivals=document.createElement('section');rivals.className='app-screen';rivals.id='app-rivals';rivals.innerHTML='<div class="screen-head"><div><span class="eyebrow">HEAD TO HEAD</span><h2>상대전적</h2></div><small>상대팀별 맞대결</small></div>';
 matches.after(rivals);rivals.append(rivalry);rivalry.open=true;
 const disclaimer=$('.data-disclaimer');if(disclaimer)more.append(disclaimer);
@@ -24,8 +24,9 @@ home:'<path d="m3 10 9-7 9 7v10H3z"/><path d="M9 21v-8h6v8"/>',
 players:'<circle cx="9" cy="8" r="3"/><path d="M2.5 20v-2a6.5 6.5 0 0 1 13 0v2M17 7a3 3 0 0 1 0 6m1 3a4 4 0 0 1 4 4"/>',
 matches:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v16M3 12h18"/><circle cx="12" cy="12" r="2"/>',
 rivals:'<path d="M7 3h10v6a5 5 0 0 1-10 0V3ZM7 5H4v3a5 5 0 0 0 5 5m8-8h3v3a5 5 0 0 1-5 5M12 14v4m-4 3h8"/>',
-more:'<path d="M4 6h16M4 12h16M4 18h16"/>'};
-const labels={home:'클럽 홈',players:'선수 랭킹',matches:'경기 기록',rivals:'상대전적',more:'팀 흐름'};
+more:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+tactics:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18"/><circle cx="8" cy="8" r="1.5"/><path d="m13 15 4-3"/>'};
+const labels={home:'클럽 홈',players:'선수 랭킹',matches:'경기 기록',rivals:'상대전적',more:'팀 흐름',tactics:'전술판'};
 const bottom=document.createElement('nav');bottom.className='app-bottom-nav';bottom.setAttribute('aria-label','주요 화면');
 bottom.innerHTML=Object.entries(labels).map(([id,label])=>'<button type="button" data-screen="'+id+'" aria-label="'+label+' 메뉴"><span class="app-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true">'+icons[id]+'</svg></span><span class="app-nav-label">'+label+'</span></button>').join('');document.body.append(bottom);
 
@@ -100,13 +101,13 @@ if(squadHeading&&squadStars&&squadStats&&squadNotes){
  rosterList.addEventListener('toggle',e=>{if(e.target.tagName!=='DETAILS'||!e.target.open)return;rosterList.querySelectorAll('details[open]').forEach(d=>{if(d!==e.target)d.open=false})},true);
 }
 
-const paths={home,players,matches,rivals,more},alias={overview:'home',players:'players',matches:'matches',rivalry:'rivals',more:'more','app-home':'home','app-rivals':'rivals'};
+const paths={home,players,matches,rivals,more,tactics},alias={overview:'home',players:'players',matches:'matches',rivalry:'rivals',more:'more',tactics:'tactics',tacticalLab:'tactics','app-home':'home','app-rivals':'rivals'};
 let current='';
 function show(id,opt={}){
 id=paths[id]?id:'home';
 Object.entries(paths).forEach(([key,el])=>{const on=key===id;el.classList.toggle('is-active',on);el.setAttribute('aria-hidden',String(!on))});
 bottom.querySelectorAll('[data-screen]').forEach(b=>{const on=b.dataset.screen===id;b.classList.toggle('active',on);b.setAttribute('aria-current',on?'page':'false')});
-const fragment={home:'overview',players:'players',matches:'matches',rivals:'rivalry',more:'more'}[id];
+const fragment={home:'overview',players:'players',matches:'matches',rivals:'rivalry',more:'more',tactics:'tactics'}[id];
 document.querySelectorAll('.header .nav a[href^="#"]').forEach(a=>{const on=a.getAttribute('href')==='#'+fragment;a.classList.toggle('selected',on);a.setAttribute('aria-current',on?'page':'false')});
 if(id==='rivals')rivalry.open=true;
 if(id==='more'&&moreDetails)moreDetails.open=true;
