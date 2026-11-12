@@ -365,7 +365,7 @@ function render(){
  id('tlEvidence').textContent=(stale?t('데이터 지연 · ','Data delayed · '):'')+t('최근 보관 리그 ','Last ')+now.n+t('경기 · 마지막 수집 ',' archived league games · last collected ')+status;
  id('tlEvidence').classList.toggle('is-stale',stale);
 
- const band=now.n>=20?t('시험 가설 · 비교 자료 충분','Trial hypotheses · fair sample'):
+ const band=(model.league?.length||0)>=20?t('시험 가설 · 지난 20경기 이상','Trial hypotheses · 20+ archived matches'):
   now.n>=10?t('시험 가설 · 표본 제한','Trial hypotheses · limited sample'):
   t('초기 가설 · 표본 부족','Exploratory · small sample');
  id('tlForecastConfidence').textContent=band;
