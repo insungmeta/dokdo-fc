@@ -77,7 +77,7 @@ class DashboardUIContract(unittest.TestCase):
         self.assertIn("people=Number(btn.dataset.tlPeople)", tactical)
         self.assertIn("data-tl-people=\"5\"", self.html)
         self.assertIn("data-tl-people=\"9\"", self.html)
-        self.assertIn("#more .tl-columns", styling)
+        self.assertIn("#tactics .tl-columns", styling)
         self.assertIn("Fewer than 5 matches", tactical)
         self.assertIn('id="tlRoles"', self.html)
         self.assertIn('id="tlCopy"', self.html)
@@ -87,8 +87,8 @@ class DashboardUIContract(unittest.TestCase):
         self.assertIn("if(now.n===0)return", tactical)
         self.assertEqual(self.html.count('id="tacticalLab"'), 1)
 
-    def test_mobile_five_sections_remain(self):
-        for menu in ('home', 'players', 'matches', 'rivals', 'more'):
+    def test_mobile_six_sections_remain(self):
+        for menu in ('home', 'players', 'matches', 'rivals', 'more', 'tactics'):
             self.assertIn(menu + ":'", self.mobile)
 
 
