@@ -138,11 +138,43 @@ document.querySelector('.hero-recent-all').addEventListener('click',()=>{archive
 const recent=leagues.slice(0,10),forms=recent.map(m=>num(m.goals)>num(m.goalsAgainst)?'w':num(m.goals)<num(m.goalsAgainst)?'l':'d');const w=forms.filter(x=>x==='w').length,d=forms.filter(x=>x==='d').length,l=forms.length-w-d,points=w*3+d;
 for(const id of ['formLine','heroFormLine'])$(id).innerHTML=forms.map((x,i)=>'<span class="'+x+'" title="'+num(recent[i].goals)+':'+num(recent[i].goalsAgainst)+'">'+x.toUpperCase()+'</span>').join('');
 $('formSummary').textContent=w+'승 · '+d+'무 · '+l+'패 · 승점 '+points+'점';$('heroFormRecord').textContent=w+'승 · '+d+'무 · '+l+'패';$('heroFormPoints').textContent='승점 '+points;$('formW').style.width=(forms.length?w/forms.length*100:0)+'%';$('formD').style.width=(forms.length?d/forms.length*100:0)+'%';$('formL').style.width=(forms.length?l/forms.length*100:0)+'%';
+/* Rating changes are shown only when the collector supplied a verified archived baseline. */
+const ratingSummary=(raw,trend)=>{
+ const current=raw!==null&&raw!==undefined&&raw!==''&&Number.isFinite(Number(raw))?Number(raw):null;
+ if(current===null)return {current:null,delta:null,mode:'missing',period:'',baseline:null,baselineAt:null};
+ const base=trend?.baseline,change=trend?.delta,when=trend?.baselineAt;
+ const valid=trend&&['previous','7d'].includes(trend.period)&&
+  base!==null&&base!==undefined&&base!==''&&Number.isFinite(Number(base))&&
+  change!==null&&change!==undefined&&Number.isFinite(Number(change))&&
+  Number(trend.current)===current&&Number(change)===current-Number(base)&&
+  when&&!Number.isNaN(new Date(when).getTime());
+ if(!valid)return {current,delta:null,mode:'missing',period:'',baseline:null,baselineAt:null};
+ const delta=Number(change);
+ return {current,delta,mode:delta>0?'up':delta<0?'down':'flat',
+  period:trend.period==='7d'?'7일 전 대비':'직전 변동 대비',
+  baseline:Number(base),baselineAt:when};
+};
 const division=n=>Number.isInteger(Number(n))&&Number(n)>=1&&Number(n)<=6?(Number(n)===1?'엘리트':(Number(n)-1)+'부'):'확인 중',league=data.league||{},overall=data.overall||{};
 const dv=division(league.currentDivision);document.querySelector('.division-digit').innerHTML=E(dv.replace('부',''))+(dv.endsWith('부')?'<span>부</span>':'');document.querySelector('.division-showcase').setAttribute('aria-label','현재 '+dv+' 리그');
 document.querySelector('.division-subline').innerHTML='<span class="best-division"><b>시즌 최고</b> '+E(division(league.bestDivision))+' 리그</span><span class="season-wdl"><b>리그 전적</b><span>승 <strong>'+num(league.wins)+'</strong></span><i>·</i><span>무 <strong>'+num(league.ties)+'</strong></span><i>·</i><span>패 <strong>'+num(league.losses)+'</strong></span></span>';
 document.querySelector('.hero-chips').innerHTML='<span class="chip"><b>CLUB ID</b> '+E(overall.clubId||league.clubId||'331042')+'</span><span class="chip"><b>DIVISION</b> EA 수집 기준</span><span class="chip"><b>갱신</b> '+E(fullDate(data.sync?.lastSuccess))+'</span>';
-const metrics=document.querySelectorAll('.metric-strip .metric');if(metrics.length===4){metrics[0].querySelector('b').textContent=num(overall.gamesPlayed)+'G';const wdlCells=metrics[1].querySelectorAll('.wdl-values strong');if(wdlCells.length===3){[overall.wins,overall.ties,overall.losses].forEach((n,i)=>wdlCells[i].textContent=num(n));}else{const wdlOld=metrics[1].querySelector('b');if(wdlOld)wdlOld.textContent=[overall.wins,overall.ties,overall.losses].map(num).join(' / ');}metrics[1].querySelector('small').textContent='승률 '+(num(overall.gamesPlayed)?(num(overall.wins)/num(overall.gamesPlayed)*100).toFixed(1):'0')+'%';metrics[2].querySelector('b').textContent=num(overall.goals);metrics[2].querySelector('small').textContent='실점 '+num(overall.goalsAgainst)+' · EA 누적';metrics[3].querySelector('b').textContent=num(overall.skillRating)}
+const metrics=document.querySelectorAll('.metric-strip .metric');if(metrics.length===4){metrics[0].querySelector('b').textContent=num(overall.gamesPlayed)+'G';const wdlCells=metrics[1].querySelectorAll('.wdl-values strong');if(wdlCells.length===3){[overall.wins,overall.ties,overall.losses].forEach((n,i)=>wdlCells[i].textContent=num(n));}else{const wdlOld=metrics[1].querySelector('b');if(wdlOld)wdlOld.textContent=[overall.wins,overall.ties,overall.losses].map(num).join(' / ');}metrics[1].querySelector('small').textContent='승률 '+(num(overall.gamesPlayed)?(num(overall.wins)/num(overall.gamesPlayed)*100).toFixed(1):'0')+'%';metrics[2].querySelector('b').textContent=num(overall.goals);metrics[2].querySelector('small').textContent='실점 '+num(overall.goalsAgainst)+' · EA 누적';metrics[3].querySelector('b').textContent=overall.skillRating==null?'—':Number(overall.skillRating).toLocaleString('ko-KR')}
+const clubRating=ratingSummary(overall.skillRating,data.ratingTrend);
+$('clubRatingValue').textContent=clubRating.current===null?'—':clubRating.current.toLocaleString('ko-KR');
+const ratingTrendNode=$('clubRatingTrend');
+ratingTrendNode.classList.remove('is-up','is-down','is-flat','is-missing');
+ratingTrendNode.classList.add('is-'+clubRating.mode);
+if(clubRating.delta===null){
+ $('clubRatingDelta').textContent='—';
+ $('clubRatingPeriod').textContent='점수 변화 기록 수집 중';
+ $('clubRatingReference').textContent='저장된 비교 수치가 확보되면 자동 표시됩니다.';
+}else{
+ const delta=clubRating.delta;
+ $('clubRatingDelta').textContent=(delta>0?'▲ +':delta<0?'▼ −':'→ ')+Math.abs(delta).toLocaleString('ko-KR')+'점';
+ $('clubRatingPeriod').textContent=clubRating.period;
+ $('clubRatingReference').textContent='기준 '+date(clubRating.baselineAt)+' · '+clubRating.baseline.toLocaleString('ko-KR')+'점';
+}
+
 const stars=document.querySelectorAll('.star-grid .star');['goals','assists','mvp','interceptions','goalkeepers'].forEach((k,i)=>{if(!stars[i])return;const x=boards[k].rows[0];stars[i].querySelector('.hero-number').textContent=x?x[1]:'—';stars[i].querySelector('.person').textContent=x?x[0]:'기록 없음';if(i===3)stars[i].querySelector('.detail').textContent='보관 DF 출전 경기 · 인터셉트'});
 /* Match reviews are collapsed by default. */
 if(rivals.length)h2h(rivals[0].key);
