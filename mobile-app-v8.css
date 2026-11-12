@@ -481,3 +481,16 @@ main.shell{padding-bottom:calc(124px + env(safe-area-inset-bottom,0px))}footer.f
 #matches .archive-searchbar input,#matches .archive-searchbar select{min-width:0;width:100%;min-height:39px;border:1px solid #43636b;border-radius:9px;background:#132a37;padding:8px 11px;color:#edf7f4;font:inherit;font-size:12px}
 #matches .archive-searchbar input::placeholder{color:#96acb7}
 @media(max-width:380px){#matches .archive-searchbar{grid-template-columns:minmax(0,1.4fr) minmax(100px,.7fr);gap:6px;padding-left:10px;padding-right:10px}}
+
+
+/* Manual archive status check: reliable touch target and visible result. */
+#app-home .sync-health{gap:9px;align-items:center}
+#app-home .sync-health #syncRefreshNow{min-height:44px;min-width:88px;max-width:104px;padding:10px 11px;font-size:11px;line-height:1.25;white-space:normal;border-color:#86ae8b;background:#235247;color:#f4ffe8;cursor:pointer;touch-action:manipulation;position:relative;z-index:3}
+#app-home .sync-health #syncRefreshNow:active{background:#356454;transform:scale(.98)}
+#app-home .sync-health #syncRefreshNow:focus-visible{outline:2px solid #c8f35d;outline-offset:2px}
+#app-home .sync-health #syncRefreshNow:disabled{cursor:progress;opacity:.7;transform:none}
+#app-home .sync-check-feedback[hidden]{display:none!important}
+#app-home .sync-check-feedback{position:relative;z-index:2;margin-top:7px;padding:9px 11px;border-radius:8px;border:1px solid #547a74;background:#153530;color:#ddf3e0;font-size:11px;line-height:1.55;overflow-wrap:anywhere}
+#app-home .sync-check-feedback[data-state="warn"]{border-color:#94784f;background:#3c3022;color:#ffe6b3}
+#app-home .sync-check-feedback[data-state="error"]{border-color:#965759;background:#43282b;color:#ffced0}
+@media(max-width:380px){#app-home .sync-health #syncRefreshNow{min-width:82px;padding:9px 7px;font-size:11px}}
