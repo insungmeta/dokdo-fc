@@ -375,7 +375,8 @@ details[open]>.fold-summary em{transform:rotate(180deg)}
 @media(prefers-reduced-motion:reduce){.match-item .match-chevron,.fold-summary em{transition:none}}
 
 </style>
-<link rel="stylesheet" href="./mobile-app-v8.css?v=20261112-en-layout-final2" media="all">
+<link rel="stylesheet" href="./mobile-app-v8.css?v=20261112-en-layout-final2"
+<link rel="stylesheet" href="./tactical-lab-v1.css?v=20261112-tactical1" media="all">
 <link rel="manifest" href="./site.webmanifest">
 <meta name="theme-color" content="#0b1723">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -472,6 +473,30 @@ details[open]>.fold-summary em{transform:rotate(180deg)}
 <div class="panel team-period-compare" id="teamPeriodCompare" aria-label="최근 리그 10경기와 이전 10경기 비교">
 <div class="panel-head"><div><small>TEAM MOMENTUM / 10 VS 10</small><h3>최근 10경기 vs 이전 10경기</h3></div><span class="minor">보관된 리그 경기만 사용</span></div>
 <div class="team-period-body" id="teamPeriodBody">리그 경기 데이터 확인 중</div></div>
+<section class="panel tactical-lab" id="tacticalLab" aria-label="DOKDO FC 팀 전술 분석">
+<div class="panel-head tl-head"><div><small class="tl-eyebrow">DFC TACTICAL LAB</small><h3>팀 분석 · 추천 전술판</h3></div><span class="minor">EA 보관 리그 경기 기준 · 전술 실험안</span></div>
+<div class="tl-contents">
+<p class="tl-evidence" id="tlEvidence" role="status">경기 결과를 분석하고 있습니다.</p>
+<div class="tl-stats" id="tlStats" aria-label="최근 경기 핵심 지표"><span class="tl-note">통계 확인 중</span></div>
+<div class="tl-columns">
+<div class="tl-display">
+<div class="tl-inputs">
+<div class="tl-input-row"><strong>포메이션</strong><div class="tl-switch" role="group" aria-label="포메이션 선택"><button type="button" data-tl-formation="4-2-3-1" aria-pressed="true">4-2-3-1</button><button type="button" data-tl-formation="4-3-3" aria-pressed="false">4-3-3</button></div></div>
+<div class="tl-input-row"><strong>사람 선수 출전 인원</strong><div class="tl-switch" role="group" aria-label="사람 선수 출전 인원 선택"><button type="button" data-tl-people="5" aria-pressed="true">5명</button><button type="button" data-tl-people="7" aria-pressed="false">7명</button><button type="button" data-tl-people="9" aria-pressed="false">9명</button></div></div>
+</div>
+<h4 id="tlTitle">추천 포메이션 분석 중</h4>
+<div class="tl-pitch-wrap" id="tlPitch" aria-live="polite"></div>
+<div class="tl-legend" id="tlLegend"></div>
+<p class="tl-reason" id="tlReason"></p>
+</div>
+<div class="tl-list-grid">
+<section class="tl-box"><h4>강점 · 최근 기록</h4><ul id="tlStrengths"></ul></section>
+<section class="tl-box tl-watch"><h4>보완할 부분</h4><ul id="tlRisks"></ul></section>
+<section class="tl-box tl-plan"><h4>다음 경기 전술 솔루션</h4><ul id="tlActions"></ul></section>
+</div>
+</div>
+<p class="tl-method" id="tlMethod">EA 기록으로 확인된 수치와 전술 제안을 구분합니다.</p>
+</div></section>
 </section>
 <div class="data-disclaimer"><strong>EA 데이터 표시 기준</strong> 2026년 11월 11일에 확인한 DOKDO FC EA 수집 데이터의 일부를 화면 설계용으로 사용했습니다. 선수 시즌 누적, 보관된 DF 경기 통계, 골키퍼 시즌 기록은 서로 집계 범위가 달라 각각 명시했습니다. <b>현재 4부</b>는 당시 EA division 코드 5를 기존 홈페이지 규칙으로 해석한 값이며, 시즌 최고 2부는 코드 3 기준입니다. 상대전적은 수집된 경기 21건만 반영합니다. 상대팀 엠블럼은 EA 경기 데이터의 이미지 주소를 사용하고, 접속 불가·미제공 시 기본 배지를 보여줍니다. 더 자세한 수집 범위는 <button class="method-btn" type="button" id="methodBtn">데이터 표시 기준</button>에서 확인할 수 있습니다.</div>
 </main><button type="button" class="back-to-top" id="backToTop" hidden aria-label="맨 위로 이동">↑ 맨 위로</button><footer class="foot">DOKDO FC · EA FC27 · FAN PROJECT / NOT AFFILIATED WITH EA</footer>
@@ -481,4 +506,5 @@ details[open]>.fold-summary em{transform:rotate(180deg)}
 <!-- DOKDO FC language switch: retains the same live EA data for both languages. -->
 <script src="./i18n-terms.js?v=20261112-en-layout-final2" defer></script>
 <script src="./i18n-v1.js?v=20261112-ko-default" defer></script>
+<script src="./tactical-lab-v1.js?v=20261112-tactical1" defer></script>
 </body></html>
