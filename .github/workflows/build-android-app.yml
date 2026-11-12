@@ -53,4 +53,18 @@ jobs:
           assert 'android:allowBackup="false"' in manifest
           print('Manifest permissions and backup checks passed')
           PY
-      # No public release artifact or upload signing key is generated.
+      # Keep a temporary CI build for private archiving. Not signed for Play,
+      # not a GitHub Release, and not submitted to any app store.
+      - name: Archive non-release APK and unsigned AAB temporarily
+        uses: actions/upload-artifact@v4
+        with:
+          name: dokdo-fc-private-build-${{ github.run_number }}
+          path: |
+            android-app/app/build/outputs/apk/debug/app-debug.apk
+            android-app/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+          retention-days: 1
+      # The public repo source remains the long-term backup; artifacts expire
+      # after 1 day and should be copied to a private archive if desired.
+      # No Google Play submission, public GitHub Release, or release signing key.
+
