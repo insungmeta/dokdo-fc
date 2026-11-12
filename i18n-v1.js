@@ -61,6 +61,7 @@
     out = out.replace(/(\d+)\s*전(?=[\s·,.!)]|$)/g, '$1 fixtures');
     out = out.replace(/\s*기준\s*[·,]/g, ' ·');
     out = out.replace(/^현재\s+(?=Division)/, 'Current ');
+    out = out.replace(/(Division\s+\d+)\s+League(?=$|[\s·,:.!?])/g, '$1');
     if (cache.size > 3500) cache.clear();
     cache.set(str, out);
     return out;
