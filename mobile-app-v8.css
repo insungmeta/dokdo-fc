@@ -393,50 +393,50 @@ main.shell{padding-bottom:calc(124px + env(safe-area-inset-bottom,0px))}footer.f
 }
 
 /* V8.7: five-match rolling points form in the former empty area beside current division */
-#overview .division-primary{min-width:0}
-#overview .division-trend{min-width:0;position:relative;z-index:1;padding:10px 12px 9px;border:1px solid #456b62;border-radius:12px;background:#102c32cc;color:#ecf7f0}
-#overview .division-trend-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;min-width:0}
-#overview .division-trend-head strong{font-size:11px;letter-spacing:-.2px;font-weight:950;color:#d7ebdf;white-space:nowrap}
-#overview .division-trend-head b{color:#c7f459;font-size:16px;font-weight:950;white-space:nowrap;font-variant-numeric:tabular-nums}
-#overview .division-trend-chart{display:block;width:100%;height:101px;max-width:480px;overflow:visible;margin:3px auto 0}
-#overview .division-trend-caption{margin:4px 0 0;color:#b7cdd0;font-size:9px;line-height:1.35;min-height:13px}
-#overview .division-trend-point{cursor:pointer;outline:none}
-#overview .division-trend-point .trend-hit{fill:transparent}
-#overview .division-trend-point .trend-dot{fill:#c7f459;stroke:#163633;stroke-width:2;transition:r .12s,stroke .12s}
-#overview .division-trend-point:hover .trend-dot,#overview .division-trend-point:focus-visible .trend-dot,#overview .division-trend-point.is-selected .trend-dot{fill:#e3ffb2;stroke:#fff;stroke-width:2.5}
+#app-home .division-primary{min-width:0}
+#app-home .division-trend{min-width:0;position:relative;z-index:1;padding:10px 12px 9px;border:1px solid #456b62;border-radius:12px;background:#102c32cc;color:#ecf7f0}
+#app-home .division-trend-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;min-width:0}
+#app-home .division-trend-head strong{font-size:11px;letter-spacing:-.2px;font-weight:950;color:#d7ebdf;white-space:nowrap}
+#app-home .division-trend-head b{color:#c7f459;font-size:16px;font-weight:950;white-space:nowrap;font-variant-numeric:tabular-nums}
+#app-home .division-trend-chart{display:block;width:100%;height:101px;max-width:480px;overflow:visible;margin:3px auto 0}
+#app-home .division-trend-caption{margin:4px 0 0;color:#b7cdd0;font-size:9px;line-height:1.35;min-height:13px}
+#app-home .division-trend-point{cursor:pointer;outline:none}
+#app-home .division-trend-point .trend-hit{fill:transparent}
+#app-home .division-trend-point .trend-dot{fill:#c7f459;stroke:#163633;stroke-width:2;transition:r .12s,stroke .12s}
+#app-home .division-trend-point:hover .trend-dot,#app-home .division-trend-point:focus-visible .trend-dot,#app-home .division-trend-point.is-selected .trend-dot{fill:#e3ffb2;stroke:#fff;stroke-width:2.5}
 @media(min-width:801px){
-  #overview .division-hero-main{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);align-items:center;column-gap:12px;row-gap:7px}
-  #overview .division-hero-main .division-form{grid-column:1/-1;margin-top:4px}
+  #app-home .division-hero-main{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);align-items:center;column-gap:12px;row-gap:7px}
+  #app-home .division-hero-main .division-form{grid-column:1/-1;margin-top:4px}
 }
 @media(max-width:800px){
-  #overview .division-hero-main{display:block}
-  #overview .division-trend{margin-top:12px}
-  #overview .division-trend-head strong{font-size:12px}
-  #overview .division-trend-caption{font-size:10px}
+  #app-home .division-hero-main{display:block}
+  #app-home .division-trend{margin-top:12px}
+  #app-home .division-trend-head strong{font-size:12px}
+  #app-home .division-trend-caption{font-size:10px}
 }
 @media(max-width:380px){
-  #overview .division-trend{padding:9px 10px}
-  #overview .division-trend-chart{height:94px}
+  #app-home .division-trend{padding:9px 10px}
+  #app-home .division-trend-chart{height:94px}
 }
 
 /* V8.8: dashboard reliability, readability, player history, and team momentum */
-#overview .division-trend-summary{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;align-items:baseline}
-#overview .division-trend-summary b{font-size:17px}
-#overview #divisionTrendDelta{font-size:11px;font-weight:950;color:#c4d7d6;white-space:nowrap}
-#overview #divisionTrendDelta.is-up{color:#c9f68d}
-#overview #divisionTrendDelta.is-down{color:#ffafaf}
-#overview #divisionTrendDelta.is-flat{color:#d2e3e5}
-#overview .division-trend-chart{touch-action:pan-y}
-#overview .sync-health{margin-top:10px;display:flex;gap:8px;align-items:center;min-width:0;border:1px solid #39565b;border-radius:9px;background:#101e2acc;padding:8px 10px;color:#d3e3e5;font-size:11px;line-height:1.4;position:relative;z-index:2}
-#overview .sync-health-dot{height:8px;width:8px;flex:none;border-radius:50%;background:#8da7b2}
-#overview .sync-health-dot.is-ok{background:#b9e67f}
-#overview .sync-health-dot.is-warn{background:#e5b96e}
-#overview .sync-health-dot.is-error{background:#eb8888}
-#overview #syncHealthText{flex:1;min-width:0;overflow-wrap:anywhere}
-#overview .sync-health button,#overview .sync-banner button{flex:none;min-height:31px;border-radius:7px;border:1px solid #597d75;background:#1f403c;color:#e2f4df;font-weight:900;padding:5px 9px;font-size:10px}
-#overview .sync-banner[hidden]{display:none!important}
-#overview .sync-banner{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-top:7px;padding:9px;border-radius:9px;border:1px solid #7a9a63;background:#264b36;color:#edffcf;font-size:11px;position:relative;z-index:2}
-#overview .sync-banner span{flex:1}
+#app-home .division-trend-summary{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;align-items:baseline}
+#app-home .division-trend-summary b{font-size:17px}
+#app-home #divisionTrendDelta{font-size:11px;font-weight:950;color:#c4d7d6;white-space:nowrap}
+#app-home #divisionTrendDelta.is-up{color:#c9f68d}
+#app-home #divisionTrendDelta.is-down{color:#ffafaf}
+#app-home #divisionTrendDelta.is-flat{color:#d2e3e5}
+#app-home .division-trend-chart{touch-action:pan-y}
+#app-home .sync-health{margin-top:10px;display:flex;gap:8px;align-items:center;min-width:0;border:1px solid #39565b;border-radius:9px;background:#101e2acc;padding:8px 10px;color:#d3e3e5;font-size:11px;line-height:1.4;position:relative;z-index:2}
+#app-home .sync-health-dot{height:8px;width:8px;flex:none;border-radius:50%;background:#8da7b2}
+#app-home .sync-health-dot.is-ok{background:#b9e67f}
+#app-home .sync-health-dot.is-warn{background:#e5b96e}
+#app-home .sync-health-dot.is-error{background:#eb8888}
+#app-home #syncHealthText{flex:1;min-width:0;overflow-wrap:anywhere}
+#app-home .sync-health button,#app-home .sync-banner button{flex:none;min-height:31px;border-radius:7px;border:1px solid #597d75;background:#1f403c;color:#e2f4df;font-weight:900;padding:5px 9px;font-size:10px}
+#app-home .sync-banner[hidden]{display:none!important}
+#app-home .sync-banner{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-top:7px;padding:9px;border-radius:9px;border:1px solid #7a9a63;background:#264b36;color:#edffcf;font-size:11px;position:relative;z-index:2}
+#app-home .sync-banner span{flex:1}
 #players .player-match-history{margin-top:16px;border-top:1px solid #355362;padding-top:13px}
 #players .player-history-title{display:flex;align-items:baseline;justify-content:space-between;gap:9px;margin-bottom:8px;color:#f1f9f1;font-size:13px;font-weight:950}
 #players .player-history-title small{font-size:10px;font-weight:750;color:#bdd0d3}
@@ -460,15 +460,15 @@ main.shell{padding-bottom:calc(124px + env(safe-area-inset-bottom,0px))}footer.f
 #more .compare-difference b{font-size:14px;color:#c8f35d}
 #more .compare-period-note{font-size:11px;color:#a7c1cb;line-height:1.5}
 @media(min-width:801px) and (max-width:1100px){
-  #overview .hero{grid-template-columns:1fr}
-  #overview .division-digit{font-size:99px}
+  #app-home .hero{grid-template-columns:1fr}
+  #app-home .division-digit{font-size:99px}
 }
 @media(max-width:800px){
-  #overview .division-form>small{font-size:11px}
-  #overview .division-trend-head strong{font-size:12px}
-  #overview .division-trend-caption{font-size:11px}
-  #overview .sync-health{font-size:11px}
-  #overview .sync-health button{font-size:11px}
+  #app-home .division-form>small{font-size:11px}
+  #app-home .division-trend-head strong{font-size:12px}
+  #app-home .division-trend-caption{font-size:11px}
+  #app-home .sync-health{font-size:11px}
+  #app-home .sync-health button{font-size:11px}
   #players .player-history-title{font-size:13px}
   #more .compare-period-card{padding:10px}
   #more .compare-period-card small{font-size:11px}
