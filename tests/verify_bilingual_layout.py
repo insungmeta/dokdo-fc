@@ -3,6 +3,7 @@ Runs against a local HTTP server with the repository's actual JS, CSS and archiv
 """
 import json
 import os
+from time import sleep
 from pathlib import Path
 
 from selenium import webdriver
@@ -37,6 +38,8 @@ def validate(driver, lang, width):
             return el && el.textContent === (document.documentElement.lang==='en'?'Home':'클럽 홈');
         """)
     )
+    # Let asynchronous score cards and font layout settle before geometry checks.
+    sleep(1.3)
     info = script(driver, """
         const rect=e=>{let r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}};
         const within=(inner,outer,allow=2)=>inner.left>=outer.left-allow&&inner.right<=outer.right+allow;
