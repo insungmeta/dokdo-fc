@@ -246,6 +246,34 @@ function shareText(){
  * label in the EA data, so they are NOT trained win probabilities or evidence
  * that the proposed formation caused prior wins.
  */
+/* Observed teammate co-appearances are descriptive only. They are not
+ * independent win-probability estimates or proof of chemistry/causation.
+ * Ignore AI, duplicate match/player entries, and tiny samples. */
+function observedPairs(r){
+ const pairs=new Map();
+ for(const match of r.league||[]){
+  const names=[...new Set((Array.isArray(match.players)?match.players:[])
+   .filter(p=>Number(p?.playerId)>0&&String(p?.name||p?.playerName||'').trim())
+   .map(p=>String(p.name||p.playerName).trim()))].sort();
+  if(names.length<2)continue;
+  const pts=Number(match.goals)>Number(match.goalsAgainst)?3:
+   Number(match.goals)===Number(match.goalsAgainst)?1:0;
+  for(let i=0;i<names.length;i++)for(let j=i+1;j<names.length;j++){
+   const key=names[i]+'|'+names[j],prev=pairs.get(key)||{names:[names[i],names[j]],games:0,points:0};
+   prev.games++;prev.points+=pts;pairs.set(key,prev);
+  }
+ }
+ return [...pairs.values()].filter(p=>p.games>=5)
+  .sort((a,b)=>b.games-a.games||b.points/b.games-a.points/a.games).slice(0,3);
+}
+function topIssue(r){
+ if(r.now.n<5)return t('표본 부족: 추가 경기 기록이 필요합니다.','Limited sample: more matches needed.');
+ if(r.now.gaAvg>=1.6)return t('최근 실점이 많아 수비 전환 보호가 우선입니다.','High concessions: prioritize defensive transition cover.');
+ if(r.now.gfAvg<1.2)return t('최근 득점이 적어 공격 연결 개선이 우선입니다.','Low scoring: prioritize attacking connections.');
+ if(r.pass.games>=4&&r.pass.ratio!==null&&r.pass.ratio<.7)
+  return t('사람 선수 패스 성공률이 낮아 연결 방식을 조정할 필요가 있습니다.','Human passing is low; simplify connections.');
+ return t('뚜렷한 경고는 없으며 포메이션별 실전 검증이 필요합니다.','No strong warning; validate tactical options in matches.');
+}
 function forecastCandidates(r,count){
  const sample=r.now.n,conceded=r.now.gaAvg,scored=r.now.gfAvg;
  const roleCounts={forward:0,midfielder:0,defender:0,goalkeeper:0};
@@ -290,7 +318,10 @@ function forecastCandidates(r,count){
 function render(){
  if(!model)return;
  const {now,before,pass,delta,updated}=model,forecast=forecastCandidates(model,people),suggested=forecast[0].id,formation=selected||suggested;
- const qualified=now.n>=5,dx=diagnoses(model);
+ const qualified=now.n>=5,dx=diagnoses(model),pairs=observedPairs(model);
+ const pairing=pairs.length?t('동반 출전 상위 조합 ','Most frequent co-appearances ')+pairs.map(p=>p.names.join(' + ')+' ('+p.games+t('경기',' games')+')').join(' · '):
+  t('5경기 이상 함께 출전한 조합을 확인하지 못했습니다.','No pair with 5+ verified shared appearances.');
+
  for(const button of root.querySelectorAll('[data-tl-formation]')){
   const current=button.dataset.tlFormation===formation;button.classList.toggle('is-selected',current);
   button.setAttribute('aria-pressed',String(current));
@@ -369,9 +400,9 @@ function render(){
   );
  }
 
- id('tlReason').textContent=!qualified
-  ?t('자료가 적어 초기 실험안으로만 제시합니다. 실제 경기에서 결과를 확인하세요.','Limited records: this is an exploratory trial idea. Test it in matches.')
-  :forecast.find(x=>x.id===formation)?.expected||t('새로운 전술 실험안입니다.','Experimental tactical setup.');
+ id('tlReason').textContent=topIssue(model)+' '+(!qualified
+  ?t('초기 실험안입니다.','Exploratory only.')
+  :forecast.find(x=>x.id===formation)?.expected||t('새로운 전술 실험안입니다.','Experimental tactical setup.'));
 
  id('tlStrengths').innerHTML=dx.strengths.map(s=>'<li>'+escape(s)+'</li>').join('');
  id('tlRisks').innerHTML=dx.risks.map(s=>'<li>'+escape(s)+'</li>').join('');
@@ -392,7 +423,7 @@ function render(){
  id('tlCopy').textContent=t('전술 요약 복사','Copy Tactical Brief');
  const extra=delta===null?t('이전 10경기와 비교할 20경기 표본은 부족합니다.','Fewer than 20 archived matches to compare two periods.')
   :t('이전 10경기 대비 경기당 승점 변화 ','Points/game vs previous 10: ')+(delta>0?'+':'')+avg(delta)+t('점','.'); 
- id('tlMethod').textContent=t('분석 범위: 보관된 리그 결과 최근 '+now.n+'경기의 득점·실점·승점·무실점. ','Analysis: goals for/against, points and clean sheets from the last '+now.n+' archived league matches. ')+extra+' '+t('포메이션 추천은 전술 실험안이며, EA 공식 알고리즘이나 실제 실점 원인 분석이 아닙니다. 사람 선수 패스 통계는 누락될 수 있습니다.','Formation advice is editorial, not an official EA model or a diagnosis of causes. Human pass stats may be incomplete.');
+ id('tlMethod').textContent=t('분석 범위: 보관된 리그 결과 최근 '+now.n+'경기의 득점·실점·승점·무실점. ','Analysis: goals for/against, points and clean sheets from the last '+now.n+' archived league matches. ')+extra+' '+pairing+' · '+t('동반 출전은 선수 궁합의 인과관계나 승률을 증명하지 않습니다.','Co-appearances do not establish chemistry, causality or predicted win rate.')+' '+t('포메이션 추천은 전술 실험안이며, EA 공식 알고리즘이나 실제 실점 원인 분석이 아닙니다. 사람 선수 패스 통계는 누락될 수 있습니다.','Formation advice is editorial, not an official EA model or a diagnosis of causes. Human pass stats may be incomplete.');
 }
 id('tlBestXI').addEventListener('click',()=>{
  lineupMode=!lineupMode;
