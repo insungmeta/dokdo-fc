@@ -11,8 +11,8 @@ on:
       - 'requirements.txt'
       - 'tests/**'
   schedule:
-    # Every 5 minutes (UTC minute 03, 08, 13, ..., 58); avoid top-of-hour load.
-    - cron: '3-58/5 * * * *'
+    # Best-effort 30-minute intervals; 03 and 33 minutes UTC, GitHub schedule may delay.
+    - cron: '3,33 * * * *'
 permissions:
   contents: write
   pages: write
@@ -22,12 +22,13 @@ concurrency:
   cancel-in-progress: false
 jobs:
   refresh-and-publish:
-    # Legal-rights safeguard: the unofficial EA endpoint is NOT an approved
-    # community API. Do not make new EA requests unless verified permission
-    # has been obtained and the repository variable is deliberately enabled.
-    # Existing local archive files remain available to the published website.
-    if: ${{ vars.DFC_EA_DATA_LICENSE_CONFIRMED == 'true' }}
+    # This is an UNOFFICIAL collector: EA data-access permission is NOT confirmed.
+    # Owner requested cautious, non-commercial operation while EA replies.
+    # This does not imply permission. Set DFC_PAUSE_COLLECTION=true to halt collection.
+    # Previously archived files remain accessible if paused.
+    if: ${{ vars.DFC_PAUSE_COLLECTION != 'true' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
