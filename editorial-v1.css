@@ -267,3 +267,53 @@ main{padding-top:15px}
 /* Photographic football hero, CC0 Wikimedia Commons. */
 .dfc-photo-banner{background-image:linear-gradient(90deg,#061021 0%,#061021f0 24%,#061021a3 46%,#06102122 100%),url('https://commons.wikimedia.org/wiki/Special:FilePath/Soccer-263716_1920.jpg')!important;background-position:center,center 44%!important;background-size:cover,cover!important}
 @media(max-width:600px){.dfc-photo-banner{background-position:center,center 40%!important}}
+
+/* Reference v10: the ACTUAL supplied football duel photograph, self-hosted. */
+.dfc-photo-banner{background-image:linear-gradient(90deg,#071322f8 0%,#071322ed 23%,#0713229c 42%,#07132206 100%),url('./assets/reference-match-photo.svg')!important;background-position:center,center center!important;background-size:cover,cover!important;background-repeat:no-repeat!important;min-height:155px!important}
+.dfc-photo-banner:before{background:linear-gradient(115deg,transparent 0 4%,#99c92966 4.2%,transparent 5.2% 94%,#c7f02d 94.2% 95.2%,transparent 95.4%)!important}
+.dfc-banner-title strong{font-family:Impact,'Arial Narrow',Arial,sans-serif!important;font-style:italic!important;font-weight:900!important}
+.dfc-summary-grid>.dfc-board-card,.dfc-lower-grid>.dfc-board-card{background:linear-gradient(160deg,#15253e,#0b1729)!important;border:1px solid #2c415b!important;box-shadow:inset 0 1px #ffffff0c!important}
+.dfc-summary-grid .division-primary,.dfc-summary-grid .division-showcase,.dfc-summary-grid .division-copy{min-width:0!important}
+.dfc-summary-grid .division-primary{border:0!important;box-shadow:none!important}
+.dfc-summary-grid .division-copy small{font-size:9px!important}
+.dfc-summary-grid .division-subline{font-size:9px!important}
+.dfc-summary-rating .rating-heading{display:none!important}
+.dfc-summary-rating .metric h3{display:none!important}
+.dfc-summary-rating .metric b{color:#fff!important}
+.dfc-board-leaders .home-leader-grid{display:grid!important;grid-template-columns:1fr!important;gap:3px!important}
+.dfc-board-leaders .home-leader{background:#0b182a!important;border:1px solid #263a52!important;border-radius:2px!important;grid-template-columns:1fr auto!important;min-height:0!important;padding:6px 8px!important}
+.dfc-board-leaders .home-leader strong{color:#d4fa3c!important}
+@media(min-width:701px){
+ .dfc-photo-banner{min-height:150px!important;max-height:180px!important}
+ .dfc-summary-grid{grid-template-columns:1fr .83fr 1.28fr .98fr!important}
+ .dfc-lower-grid{grid-template-columns:1fr 1.17fr .92fr!important}
+ .dfc-summary-grid>.dfc-board-card{height:78px!important;min-height:0!important;padding:9px!important}
+ .dfc-summary-grid .division-digit{font-size:39px!important}
+ .dfc-summary-grid .division-copy small,.dfc-summary-grid .division-subline{display:none!important}
+ .dfc-summary-stat .metric-strip{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .dfc-summary-stat .metric{min-height:0!important;padding:0!important}
+ .dfc-summary-stat .metric b{font-size:17px!important}
+ .dfc-lower-grid>.dfc-board-card{min-height:218px!important}
+}
+@media(max-width:700px){
+ .dfc-photo-banner{height:128px!important;min-height:128px!important;max-height:128px!important;padding:12px 16px!important;background-position:center,56% center!important}
+ .dfc-banner-title strong{font-size:34px!important}
+ .dfc-summary-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:5px!important}
+ .dfc-summary-grid>.dfc-board-card{height:100px!important;max-height:100px!important;min-height:0!important;padding:7px 8px!important;overflow:hidden!important}
+ .dfc-summary-grid .division-digit{font-size:36px!important}
+ .dfc-summary-grid .division-copy small{display:none!important}
+ .dfc-summary-grid .division-subline{display:none!important}
+ .dfc-summary-rating .metric b{font-size:31px!important}
+ .dfc-summary-rating .rating-reference{display:none!important}
+ .dfc-summary-stat .metric-strip{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:0!important}
+ .dfc-summary-stat .metric{min-height:0!important;padding:0!important}
+ .dfc-summary-stat .metric b{font-size:17px!important}
+ .dfc-summary-form .division-form-results{display:flex!important;gap:2px!important}
+ .dfc-summary-form .division-form-results span{height:20px!important;flex:1!important;min-width:0!important;font-size:9px!important}
+ .dfc-lower-grid{grid-template-columns:1fr!important;gap:6px!important}
+ .dfc-lower-grid>.dfc-board-card{min-height:0!important;padding:9px!important}
+ .dfc-board-leaders{grid-column:auto!important}
+ .dfc-board-leaders .home-leader-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:4px!important}
+ .dfc-board-leaders .home-leader{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:3px!important;padding:6px!important}
+ .dfc-board-leaders .home-leader strong{font-size:21px!important}
+}
