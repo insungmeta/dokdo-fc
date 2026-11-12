@@ -265,7 +265,7 @@ document.querySelector('.h2h-foot').textContent='상대전적은 상대팀 ID와
 document.querySelector('footer.foot').textContent='DOKDO FC · EA FC27 · FAN PROJECT / NOT AFFILIATED WITH EA';
 document.querySelector('.microtop .shell span:last-child').textContent='FC27 · LIVE TEAM DASHBOARD';
 document.querySelector('.live').innerHTML='<span class="demo">AUTO UPDATE</span> EA 자동 연동';
-document.querySelector('.nav').insertAdjacentHTML('beforeend','<a href="./legacy.html#matches">전체 기록</a><a href="./legacy.html#board">게시판</a>');
+/* Archived match and board links live in Team Trends tools; primary navigation stays at five items. */
 
 const nav=document.querySelector('.nav');
 nav.addEventListener('click',e=>{
