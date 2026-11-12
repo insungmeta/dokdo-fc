@@ -216,7 +216,7 @@ function roleRows(formation,count){
          ai:all.filter(p=>!assigned.includes(p))};
 }
 function shareText(){
- const r=model,formation=selected||r.suggested,rows=roleRows(formation,people),dx=diagnoses(r);
+ const r=model,formation=selected||forecastCandidates(r,people)[0].id,rows=roleRows(formation,people),dx=diagnoses(r);
  const lines=[
   'DOKDO FC · '+t('경기 전 전술 요약','Pre-match Tactical Brief'),
   t('포메이션','Formation')+': '+formation,
@@ -461,23 +461,29 @@ id('tlRecommendFormation').addEventListener('click',()=>{
   id('tlFormationFeedback').textContent=t('경기 데이터가 로드된 뒤 추천 전술을 볼 수 있습니다.','Suggested formation is available after match data loads.');
   return;
  }
- const prior=selected||model.suggested;
+ const proposed=forecastCandidates(model,people)[0].id;
+ const prior=selected||proposed;
  selected=null;
  id('tlShareStatus').textContent='';
  render();
  id('tlFormationFeedback').textContent=(prior===model.suggested?
   t('현재 추천 전술은 ','Current suggested formation: '):
   t('선택한 전술에서 추천 전술로 전환했습니다. ','Switched to the suggested formation. '))+
-  model.suggested+t(' · 게임 안에서는 직접 포메이션을 설정해야 합니다.',' · This does not change settings inside EA FC.');
+  proposed+t(' · 게임 안에서는 직접 포메이션을 설정해야 합니다.',' · This does not change settings inside EA FC.');
 });
 root.addEventListener('click',event=>{
- const btn=event.target.closest('[data-tl-people],[data-tl-formation]');
+ const btn=event.target.closest('[data-tl-people],[data-tl-formation],[data-tl-forecast]');
  if(!btn)return;
  if(btn.dataset.tlPeople){people=Number(btn.dataset.tlPeople)||5;}
+ if(btn.dataset.tlForecast){selected=btn.dataset.tlForecast;}
  if(btn.dataset.tlFormation){
   selected=btn.dataset.tlFormation;
   id('tlFormationFeedback').textContent=t('선택한 포메이션 보기: ','Viewing formation: ')+selected+
    t(' · 게임 안에서는 직접 설정해야 합니다.',' · Set this separately in EA FC.');
+ }
+ if(btn.dataset.tlForecast){
+  id('tlFormationFeedback').textContent=t('새 전술 실험 선택: ','Selected experimental tactic: ')+selected+
+   t(' · 포메이션을 EA FC 게임 안에서 직접 설정하세요.',' · Set this formation manually in EA FC.');
  }
  id('tlShareStatus').textContent='';
  render();
@@ -494,7 +500,65 @@ id('tlCopy').addEventListener('click',async()=>{
   id('tlShareStatus').textContent=t('복사 권한이 차단됐습니다. HTTPS에서 다시 시도해 주세요.','Clipboard permission was denied. Retry on HTTPS.');
  }finally{btn.disabled=false;}
 });
-const receive=()=>{if(window.__dokdoData){model=compute(window.__dokdoData);render();}};
+
+/* A trial only counts matches the user explicitly tags as having used the
+ * selected formation. Automatic match logs do not include formations.
+ * This is stored locally in one browser and is not shared with teammates.
+ */
+id('tlTrialStart').addEventListener('click',()=>{
+ if(!model?.league?.length){id('tlTrialStatus').textContent=t('수집된 리그 경기 정보가 없어 실험을 시작할 수 없습니다.','Cannot start without archived league matches.');return;}
+ const base=model.league.slice(0,10);
+ trial={version:1,formation:selected||forecastCandidates(model,people)[0].id,
+  people,anchorTimestamp:model.league[0].timestamp,anchorIds:base.map(m=>String(m.matchId)),
+  baseline:summary(base),confirmed:[],startedAt:new Date().toISOString()};
+ if(!storeTrial()){
+  trial=null;id('tlTrialStatus').textContent=t('브라우저 저장이 차단되어 시험 기록을 보관할 수 없습니다.','Browser storage is blocked; cannot save the trial.');
+  return;
+ }
+ render();
+});
+id('tlTrialStop').addEventListener('click',()=>{
+ trial=null;storeTrial();render();
+});
+id('tlTrialMatches').addEventListener('change',event=>{
+ const checkbox=event.target.closest('[data-tl-trial-match]');
+ if(!checkbox||!trial||!model)return;
+ const matchId=String(checkbox.dataset.tlTrialMatch);
+ const available=eligibleTrialMatches(model).some(m=>String(m.matchId)===matchId);
+ if(!available)return;
+ const confirmed=new Set(trial.confirmed);
+ if(checkbox.checked)confirmed.add(matchId);else confirmed.delete(matchId);
+ trial.confirmed=[...confirmed];
+ if(!storeTrial())id('tlTrialStatus').textContent=t('브라우저 저장이 차단되어 변경을 보관할 수 없습니다.','Browser storage prevented saving changes.');
+ else renderTrial(model);
+});
+const receive=()=>{
+ if(window.__dokdoData&&Array.isArray(window.__dokdoData.matches)){
+  model=compute(window.__dokdoData);render();
+ }
+};
+/* GitHub Actions can be delayed; checking every 5 minutes does not mean
+ * the EA source refreshes every five minutes. This refreshes only Tactical Lab. */
+let tacticalPolling=false;
+async function pollTacticalData(){
+ if(tacticalPolling||document.hidden||!document.getElementById('tactics')?.classList.contains('is-active'))return;
+ tacticalPolling=true;
+ try{
+  const response=await fetch('./data/dashboard.json?tl='+Date.now(),{cache:'no-store'});
+  if(!response.ok)throw Error('Data HTTP '+response.status);
+  const fresh=await response.json();
+  if(!fresh||!Array.isArray(fresh.matches)||!Array.isArray(fresh.members))return;
+  const changed=!model||fresh.sync?.lastSuccess!==model.updated||
+   fresh.matches.length!==model.league.length;
+  if(changed){model=compute(fresh);render();}
+ }catch(error){
+  const status=id('tlEvidence');
+  if(status)status.title=t('저장된 데이터 자동 확인 실패. 마지막 결과를 유지합니다.','Automated saved-data check failed; retaining last results.');
+ }finally{tacticalPolling=false}
+}
+window.setInterval(pollTacticalData,5*60*1000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)pollTacticalData()});
+
 document.addEventListener('dokdo:ready',receive);
 receive();
 })();
