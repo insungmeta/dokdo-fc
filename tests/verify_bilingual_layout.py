@@ -165,6 +165,24 @@ def main():
     driver=webdriver.Chrome(options=opts)
     all_issues=[]
     try:
+        # Root and archived URLs default to Korean even with an English browser.
+        # An earlier explicit EN visit must not persist to an ordinary visit.
+        for page in ("", "legacy.html"):
+            driver.get(BASE + page + "?lang=en")
+            WebDriverWait(driver, 12).until(
+                lambda d: d.execute_script("return document.documentElement.lang==='en' && Boolean(document.querySelector('.dfc-lang-switch'))")
+            )
+            driver.get(BASE + page)
+            WebDriverWait(driver, 12).until(
+                lambda d: d.execute_script("return document.documentElement.lang==='ko' && Boolean(document.querySelector('.dfc-lang-switch'))")
+            )
+            expected=script(driver, """
+                return {lang:document.documentElement.lang,
+                        active:document.querySelector('.dfc-lang-switch .is-active')?.textContent.trim()};
+            """)
+            if expected["lang"]!="ko" or expected["active"]!="KO":
+                all_issues.append("Default Korean failed on "+(page or "index")+": "+str(expected))
+            print(json.dumps({"page":page or "index","defaultLanguage":expected},ensure_ascii=False),flush=True)
         for lang in ("ko","en"):
             for width in WIDTHS:
                 try:
