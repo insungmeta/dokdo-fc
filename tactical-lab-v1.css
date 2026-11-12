@@ -1,0 +1,49 @@
+
+/* DOKDO FC Tactical Lab: readable in KO and EN, no new navigation tab. */
+#more .tactical-lab{margin-top:14px;min-width:0}
+#more .tactical-lab .tl-head{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px}
+#more .tactical-lab .tl-head h3{font-size:19px;font-weight:950;line-height:1.35}
+#more .tl-eyebrow{color:#c7f35d;letter-spacing:.08em;font-size:11px;font-weight:900}
+#more .tl-evidence{color:#b6ced0;font-size:11px;line-height:1.5;overflow-wrap:anywhere}
+#more .tl-evidence.is-stale{color:#efc183}
+#more .tl-contents{padding:16px;display:grid;gap:15px}
+#more .tl-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+#more .tl-stat{padding:11px 9px;border:1px solid #385762;border-radius:10px;background:#112c39;min-width:0}
+#more .tl-stat span{display:block;color:#b8cdd5;font-size:10px;font-weight:700;line-height:1.45;overflow-wrap:break-word}
+#more .tl-stat strong{display:block;color:#d0f47b;font-weight:950;font-size:21px;margin-top:5px;font-variant-numeric:tabular-nums}
+#more .tl-columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+#more .tl-display{border:1px solid #3b5c61;border-radius:13px;background:#0d222e;padding:13px;min-width:0}
+#more .tl-display h4{font-size:16px;font-weight:950;color:#edfbf0;margin:0 0 5px}
+#more .tl-pitch-wrap{max-width:310px;width:100%;margin:10px auto}
+#more .tl-pitch-svg{display:block;max-width:100%;width:100%;height:auto;aspect-ratio:340/445}
+#more .tl-legend{font-size:10px;color:#c5d7d9;text-align:center;line-height:1.5;overflow-wrap:anywhere}
+#more .tl-reason{font-size:11px;color:#b6ced6;line-height:1.6;margin:8px 0 0}
+#more .tl-inputs{display:grid;gap:8px}
+#more .tl-input-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+#more .tl-input-row>strong{font-size:11px;color:#e0f1ec}
+#more .tl-switch{display:flex;flex-wrap:wrap;gap:5px}
+#more .tl-switch button{min-height:37px;min-width:44px;padding:6px 10px;border:1px solid #56777b;border-radius:9px;background:#1c3b46;color:#d7e9eb;font-size:11px;font-weight:900;cursor:pointer}
+#more .tl-switch button.is-selected{border-color:#d2fa65;background:#c9f35f;color:#153225}
+#more .tl-switch button:focus-visible{outline:2px solid #c9f35f;outline-offset:2px}
+#more .tl-list-grid{display:grid;gap:11px;min-width:0}
+#more .tl-box{border:1px solid #395560;background:#142c39;padding:13px;border-radius:11px;min-width:0}
+#more .tl-box h4{font-size:13px;color:#d6f5d0;margin:0 0 8px}
+#more .tl-box.tl-watch h4{color:#f6c6a3}
+#more .tl-box.tl-plan h4{color:#d4ecfd}
+#more .tl-box ul{padding-left:17px;margin:0;display:grid;gap:7px;color:#d8e8e8;font-size:12px;line-height:1.65}
+#more .tl-method{color:#b7ced4;background:#11252e;border-left:3px solid #5e8886;font-size:11px;padding:10px 12px;line-height:1.6;margin:0;overflow-wrap:anywhere}
+#more .tl-note{font-size:11px;line-height:1.5;color:#adc4c8}
+@media(max-width:850px){
+  #more .tl-columns{grid-template-columns:minmax(0,1fr)}
+  #more .tl-display{width:100%;box-sizing:border-box}
+  #more .tl-pitch-wrap{max-width:340px}
+}
+@media(max-width:540px){
+  #more .tl-contents{padding:12px;gap:12px}
+  #more .tl-head h3{font-size:16px}
+  #more .tl-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #more .tl-stat strong{font-size:19px}
+  #more .tl-switch button{min-height:42px}
+  #more .tl-box ul{font-size:11px}
+  #more .tl-method{font-size:10px}
+}
