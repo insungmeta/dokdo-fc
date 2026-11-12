@@ -12,7 +12,6 @@ on:
       - 'assets/**'
       - 'push/**'
       - 'site.webmanifest'
-      - 'data/**'
       - '.github/workflows/publish-site.yml'
   workflow_dispatch:
 
