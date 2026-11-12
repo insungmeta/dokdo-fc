@@ -1,5 +1,5 @@
 {
-  "name": "DOKDO FC — FC27 Pro Clubs",
+  "name": "DOKDO FC — Club Stats",
   "short_name": "DOKDO FC",
   "start_url": "/dokdo-fc/",
   "scope": "/dokdo-fc/",
@@ -13,5 +13,6 @@
       "type": "image/svg+xml",
       "purpose": "any"
     }
-  ]
+  ],
+  "description": "Independent, unofficial DOKDO FC team stats and tactical ideas. Not affiliated with EA."
 }
