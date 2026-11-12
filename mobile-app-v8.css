@@ -473,3 +473,11 @@ main.shell{padding-bottom:calc(124px + env(safe-area-inset-bottom,0px))}footer.f
   #more .compare-period-card{padding:10px}
   #more .compare-period-card small{font-size:11px}
 }
+
+
+/* Archive find/filter: two controls, easily operated with thumbs. */
+#matches .archive-searchbar{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(112px,.8fr);gap:9px;padding:8px 13px 11px}
+#matches .archive-searchbar label{display:grid;gap:5px;color:#c5d6d9;font-size:11px;font-weight:850}
+#matches .archive-searchbar input,#matches .archive-searchbar select{min-width:0;width:100%;min-height:39px;border:1px solid #43636b;border-radius:9px;background:#132a37;padding:8px 11px;color:#edf7f4;font:inherit;font-size:12px}
+#matches .archive-searchbar input::placeholder{color:#96acb7}
+@media(max-width:380px){#matches .archive-searchbar{grid-template-columns:minmax(0,1.4fr) minmax(100px,.7fr);gap:6px;padding-left:10px;padding-right:10px}}
