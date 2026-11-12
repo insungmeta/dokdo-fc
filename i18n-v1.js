@@ -59,6 +59,14 @@
     out = out.replace(/\s*기준\s*[·,]/g, ' ·');
     out = out.replace(/^현재\s+(?=Division)/, 'Current ');
     out = out.replace(/(Division\s+\d+)\s+League(?=$|[\s·,:.!?])/g, '$1');
+    out = out.replace(/평균\s*(\d+(?:\.\d+)?)\s*pts/g, 'avg. $1 pts');
+    out = out.replace(/(^|[\s·,:])경기(?=$|[\s·,:.!?])/g, '$1Matches');
+    out = out.replace(/(^|[\s·,:])선수(?=$|[\s·,:.!?])/g, '$1Players');
+    out = out.replace(/(^|[\s·,:])기준(?=$|[\s·,:.!?\d])/g, '$1as of');
+    out = out.replace(/오전(?=\s*\d)/g, 'AM');
+    out = out.replace(/오후(?=\s*\d)/g, 'PM');
+    out = out.replace(/(\d+)\s*minutes ago/gi, '$1 minutes ago');
+    out = out.replace(/(\d+)\s*min ago/gi, '$1 min ago');
     if (cache.size > 3500) cache.clear();
     cache.set(str, out);
     return out;
