@@ -58,10 +58,11 @@ function leader(k){active=k;const b=boards[k];document.querySelectorAll('[data-l
 $('leaderTabs').addEventListener('click',e=>{const el=e.target.closest('[data-leader]');if(el)leader(el.dataset.leader)});
 $('leaderRows').addEventListener('click',e=>{const el=e.target.closest('[data-name]');if(el){detail(el.dataset.name,active);$('playerDetails').open=true;if(window.matchMedia('(max-width:820px)').matches)$('playerDetails').scrollIntoView({behavior:'smooth',block:'start'})}});
 $('leaderRows').addEventListener('keydown',e=>{const el=e.target.closest('[data-name]');if(el&&(e.key==='Enter'||e.key===' ')){e.preventDefault();detail(el.dataset.name,active);$('playerDetails').open=true;if(window.matchMedia('(max-width:820px)').matches)$('playerDetails').scrollIntoView({behavior:'smooth',block:'start'})}});
-const crests=new Map(matches.filter(m=>m.opponentCrestUrl).map(m=>[String(m.opponentId),m.opponentCrestUrl]));
-function crest(id,n,size='small'){const raw=crests.get(String(id))||'',url=/^https:\/\/eafc24\.content\.easports\.com\//.test(raw)?raw:'';const ab=String(n||'FC').trim().split(/\s+/).slice(0,2).map(s=>s.slice(0,1)).join('').toUpperCase();return '<span class="crest-frame '+size+'" role="img" aria-label="'+E(n)+' 엠블럼"><span class="crest-fallback">'+E(ab)+'</span>'+(url?'<img class="crest-img" src="'+E(url)+'" loading="lazy" alt="">':'')+'</span>'}
+/* Trademark/privacy minimization: do not embed EA-hosted or opponent-owned crests.
+ * Use generated, neutral initials instead of remote copyrighted images. */
+function crest(id,n,size='small'){const ab=String(n||'FC').trim().split(/\s+/).slice(0,2).map(part=>part.slice(0,1)).join('').toUpperCase();return '<span class="crest-frame '+size+'" role="img" aria-label="'+E(n)+' 팀 배지"><span class="crest-fallback">'+E(ab)+'</span></span>'}
 const dfc=cls=>'<svg class="mini-logo '+(cls||'')+'" role="img" aria-label="DOKDO FC 엠블럼"><use href="#dfc-crest"/></svg>';
-document.addEventListener('error',e=>{if(e.target.matches?.('.crest-img'))e.target.parentElement.classList.add('is-fallback')},true);
+
 const groups=new Map(),seen=new Set();
 for(const m of matches){const id=String(m.matchId);if(seen.has(id))continue;seen.add(id);const key=String(m.opponentId||('name:'+String(m.opponentName).toLowerCase()));let v=groups.get(key);if(!v){v={key,name:String(m.opponentName||'상대팀'),opponentId:m.opponentId,fixtures:[]};groups.set(key,v)}v.fixtures.push(m)}
 const rivals=[...groups.values()].sort((a,b)=>b.fixtures.length-a.fixtures.length||a.name.localeCompare(b.name));
