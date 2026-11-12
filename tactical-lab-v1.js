@@ -18,7 +18,7 @@ const allocations={
  '4-2-3-1':{5:['ST','LW','CAM','RW','LCDM'],7:['ST','LW','CAM','RW','LCDM','RCDM','LCB'],9:['ST','LW','CAM','RW','LCDM','RCDM','LCB','LB','RB']},
  '4-3-3':{5:['ST','LW','RW','LCM','CDM'],7:['ST','LW','RW','LCM','RCM','CDM','LCB'],9:['ST','LW','RW','LCM','RCM','CDM','LCB','LB','RB']}
 };
-let people=5,selected=null,model=null;
+let people=5,selected=null,model=null,lineupMode=false;
 const isValid=m=>m&&m.matchType==='leagueMatch'&&m.matchId&&
  m.goals!==null&&m.goals!==undefined&&m.goalsAgainst!==null&&m.goalsAgainst!==undefined&&
  Number.isFinite(Number(m.goals))&&Number.isFinite(Number(m.goalsAgainst))&&
@@ -54,7 +54,7 @@ function compute(data){
  const delta=now.n===10&&before.n===10?now.pts-before.pts:null;
  // These are editorial tactical heuristics, not validated EA formation recommendations.
  const suggested=now.n>=5&&now.gaAvg<1.3&&now.gfAvg<1.2?'4-3-3':'4-2-3-1';
- return {now,before,pass,delta,suggested,updated:data?.sync?.lastSuccess||null};
+ return {now,before,pass,delta,suggested,updated:data?.sync?.lastSuccess||null,roster:Array.isArray(data?.members)?data.members:[]};
 }
 function diagnoses(r){
  const {now,pass,delta}=r;
@@ -76,7 +76,53 @@ function diagnoses(r){
  if(!risks.length)risks.push(t('선택한 지표에서 큰 경고는 없지만, 세부 수비 위치나 실수는 이 데이터로 판단할 수 없습니다.','No major threshold warnings; positioning errors and individual mistakes cannot be assessed from scores.'));
  return {strengths:strengths.slice(0,3),risks:risks.slice(0,3)};
 }
-function pitch(formation,count){
+
+/* Transparent positional shortlist, not an official EA Best XI.
+ * EA roster positions are broad (FW/MF/DF/GK), not verified LB/CB/CAM roles.
+ * Do not invent specialists, field positions, player availability or online status.
+ */
+const roleCategory=pos=>pos==='GK'?'goalkeeper':
+ ['ST','LW','RW'].includes(pos)?'forward':
+ ['LB','LCB','RCB','RB'].includes(pos)?'defender':'midfielder';
+function candidateScore(player,category){
+ const games=Math.max(0,Number(player.gamesPlayed)||0);
+ const rating=Math.max(0,Math.min(10,Number(player.ratingAve)||0));
+ const gf=Math.max(0,Number(player.goals)||0)/Math.max(1,games);
+ const assists=Math.max(0,Number(player.assists)||0)/Math.max(1,games);
+ const mvp=Math.max(0,Number(player.manOfTheMatch)||0)/Math.max(1,games);
+ // Prioritize EA season average rating and minimum experience.
+ // Role-specific rates are secondary; there is NO detailed positional tracking.
+ if(category==='goalkeeper')return Math.max(0,Number(player.cleanSheetsGK)||0)*8+Math.min(games,50)/10;
+ return rating*10+Math.min(games,80)/8+(category==='forward'?gf*24+assists*10:
+ category==='midfielder'?gf*9+assists*20:gf*2+assists*3)+mvp*7;
+}
+function bestXI(roster,formation){
+ const members=Array.isArray(roster)?roster:[],used=new Set(),chosen={};
+ const valid=members.filter(p=>p&&p.name&&Number(p.gamesPlayed)>=5&&
+   Number.isFinite(Number(p.ratingAve))&&Number(p.ratingAve)>0);
+ const priority=formation==='4-3-3'
+ ? ['GK','LCB','RCB','LB','RB','CDM','LCM','RCM','ST','LW','RW']
+ : ['GK','LCB','RCB','LB','RB','LCDM','RCDM','CAM','ST','LW','RW'];
+ for(const role of priority){
+  const category=roleCategory(role);
+  const options=valid.filter(p=>{
+   const position=String(p.position||p.favoritePosition||'').toLowerCase();
+   // GK clean sheets demonstrate some historical GK participation; not current GK status.
+   return category==='goalkeeper'?
+       position==='goalkeeper'||Number(p.cleanSheetsGK)>0:
+       position===category;
+  }).filter(p=>!used.has(String(p.name).toLowerCase()));
+  options.sort((a,b)=>candidateScore(b,category)-candidateScore(a,category)||
+      Number(b.gamesPlayed)-Number(a.gamesPlayed)||String(a.name).localeCompare(String(b.name)));
+  if(options.length){
+   const p=options[0];chosen[role]=p;used.add(String(p.name).toLowerCase());
+  }else chosen[role]=null;
+ }
+ return chosen;
+}
+const trimLabel=x=>String(x||'').length>12?String(x).slice(0,11)+'…':String(x||'');
+
+function pitch(formation,count,lineup){
  const current=allocations[formation],active=new Set(current[count]),pts=formations[formation];
  const parts=[
  '<svg viewBox="0 0 340 445" class="tl-pitch-svg" role="img" aria-label="'+escape(t('포메이션 '+formation+'; 연두색은 사람 조작, 회색은 AI','Formation '+formation+'; lime means human, gray means AI'))+'">',
@@ -90,10 +136,12 @@ function pitch(formation,count){
  '<rect x="140" y="404" width="60" height="21" stroke="#8cad9c" fill="none" stroke-opacity=".65"/>'
  ];
  for(const [position,x,y] of pts){
-  const cx=5+x*3.3,cy=5+y*4.35,human=active.has(position);
-  parts.push('<g><rect x="'+(cx-27).toFixed(1)+'" y="'+(cy-16).toFixed(1)+'" width="54" height="32" rx="9" fill="'+(human?'#c8f35d':'#2f5360')+'" stroke="'+(human?'#f0ffb6':'#92b0b7')+'"/>',
-   '<text x="'+cx.toFixed(1)+'" y="'+(cy-2).toFixed(1)+'" font-size="10.5" text-anchor="middle" dominant-baseline="middle" font-weight="800" fill="'+(human?'#163022':'#f2f7f8')+'">'+position+'</text>',
-   '<text x="'+cx.toFixed(1)+'" y="'+(cy+11).toFixed(1)+'" font-size="8.3" text-anchor="middle" fill="'+(human?'#244c32':'#c5d4d7')+'">'+(human?'USER':'AI')+'</text></g>');
+  const cx=5+x*3.3,cy=5+y*4.35,p=lineup?lineup[position]:null;
+  const human=active.has(position)&&(!lineup||Boolean(p)),name=human&&p?trimLabel(p.name):human?'USER':'AI';
+  const label=human&&p?position+' · '+p.name+' · '+(Number(p.ratingAve)||0).toFixed(1):position+' · '+(human?'USER':'AI');
+  parts.push('<g><title>'+escape(label)+'</title><rect x="'+(cx-27).toFixed(1)+'" y="'+(cy-16).toFixed(1)+'" width="54" height="32" rx="9" fill="'+(human?'#c8f35d':'#2f5360')+'" stroke="'+(human?'#f0ffb6':'#92b0b7')+'"/>',
+   '<text x="'+cx.toFixed(1)+'" y="'+(cy-4).toFixed(1)+'" font-size="10.5" text-anchor="middle" dominant-baseline="middle" font-weight="800" fill="'+(human?'#163022':'#f2f7f8')+'">'+position+'</text>',
+   '<text x="'+cx.toFixed(1)+'" y="'+(cy+11).toFixed(1)+'" font-size="'+(p?'7.2':'8.3')+'" text-anchor="middle" fill="'+(human?'#244c32':'#c5d4d7')+'">'+escape(name)+'</text></g>');
  }
  return parts.join('')+'</svg>';
 }
@@ -132,6 +180,11 @@ function shareText(){
  ];
  for(const role of rows.humans)lines.push('- '+role.position+': '+role.description[en()?1:0]);
  lines.push('',t('전술 근거','Analysis')+': '+dx.risks.join(' '));
+ if(lineupMode){
+  const xi=bestXI(r.roster,formation);
+  lines.push('',t('기록 기반 베스트11 후보','Stats-based Best XI candidates')+':');
+  formations[formation].forEach(([role])=>lines.push(role+': '+(xi[role]?.name||'AI / Unverified')));
+ }
  lines.push(t('주의: 경기 결과 기반 전술 실험안이며 EA 공식 추천이 아닙니다.','Note: These are experimental suggestions based on results, not official EA recommendations.'));
  lines.push('https://insungmeta.github.io/dokdo-fc/'+(en()?'?lang=en#more':'#more'));
  return lines.join('\n');
@@ -159,8 +212,32 @@ function render(){
   [t('무실점 경기','Clean Sheets'),now.clean+'/'+now.n]
  ].map(([name,value])=>'<div class="tl-stat"><span>'+escape(name)+'</span><strong>'+escape(value)+'</strong></div>').join('');
  id('tlTitle').textContent=formation+' · '+(qualified?t('추천 배치','Suggested Setup'):t('기본 전술 예시','Example Setup'));
- id('tlPitch').innerHTML=pitch(formation,people);
- id('tlLegend').textContent=t('연두색: 직접 조작 '+people+'명 · 회색: AI '+(11-people)+'명 (골키퍼 AI 포함)','Lime: '+people+' human-controlled · Grey: '+(11-people)+' AI (including GK)');
+ const lineup=lineupMode?bestXI(model.roster,formation):null;
+ id('tlPitch').innerHTML=pitch(formation,people,lineup);
+ const assigned=lineup?allocations[formation][people].filter(pos=>lineup[pos]).length:people;
+ id('tlLegend').textContent=lineupMode?
+   t('연두색: 실제 기록 있는 선발 후보 '+assigned+'명 · 나머지 AI (현재 접속 여부 미확인)','Lime: '+assigned+' candidates with saved stats · others AI (online status unverified)'):
+   t('연두색: 직접 조작 '+people+'명 · 회색: AI '+(11-people)+'명 (골키퍼 AI 포함)','Lime: '+people+' human-controlled · Grey: '+(11-people)+' AI (including GK)');
+ id('tlBestXI').classList.toggle('is-selected',lineupMode);
+ id('tlBestXI').setAttribute('aria-pressed',String(lineupMode));
+ id('tlBestXIPanel').hidden=!lineupMode;
+ if(lineupMode){
+  const positions=formations[formation].map(row=>row[0]);
+  const active=new Set(allocations[formation][people]);
+  const filled=positions.filter(pos=>Boolean(lineup[pos])).length;
+  id('tlBestXICount').textContent=t('선수 후보 '+filled+'명 / 11자리','Candidates '+filled+' / 11 slots');
+  id('tlXIList').innerHTML=positions.map(pos=>{
+   const p=lineup[pos],human=active.has(pos)&&Boolean(p),rating=p?Number(p.ratingAve).toFixed(1):'—';
+   return '<div class="tl-xi-row"><strong>'+escape(pos)+'</strong><span class="tl-xi-name">'+escape(p?.name||t('AI / 미확인','AI / Unverified'))+'</span>'+
+     '<span class="tl-xi-info">'+(p?escape(t('평점 ','Rating ')+rating+' · '+Number(p.gamesPlayed)+t('경기',' games')):'—')+'</span>'+
+     '<span class="tl-xi-tag '+(human?'is-human':'')+'">'+(human?'USER':'AI')+'</span></div>';
+  }).join('');
+  id('tlXIExplanation').textContent=t(
+   'EA 시즌 평균 평점·출전 수·포지션별 득점/도움 기여를 활용한 비공식 추천입니다. 포지션은 FW/MF/DF 등 대분류만 확인되어 LB·CB 등 세부 적합도, 현재 접속·출전 가능 여부는 검증되지 않았습니다. GK는 클린시트 보유 기록으로 후보를 판단합니다. 실제 조작 선수는 위 인원 설정에 따른 일부이며 나머지는 AI로 표시됩니다.',
+   'Unofficial shortlist based on EA season rating, appearances and position-weighted goals/assists. EA provides broad FW/MF/DF roles only; specialist roles and online availability cannot be verified. GK candidates use recorded clean sheets. Human selections follow the player-count setting; remaining slots show AI.'
+  );
+ }
+ id('tlRecommendFormation').textContent=t('추천 포메이션 적용','Apply Suggested Formation');
  id('tlReason').textContent=!qualified
   ?t('5경기 미만이므로 실제 결과 기반 추천을 보류합니다. 4-2-3-1은 기본 예시일 뿐입니다.','Fewer than 5 matches: there is not enough evidence for a result-based recommendation.')
   :formation!==suggested
@@ -190,6 +267,17 @@ function render(){
   :t('이전 10경기 대비 경기당 승점 변화 ','Points/game vs previous 10: ')+(delta>0?'+':'')+avg(delta)+t('점','.'); 
  id('tlMethod').textContent=t('분석 범위: 보관된 리그 결과 최근 '+now.n+'경기의 득점·실점·승점·무실점. ','Analysis: goals for/against, points and clean sheets from the last '+now.n+' archived league matches. ')+extra+' '+t('포메이션 추천은 전술 실험안이며, EA 공식 알고리즘이나 실제 실점 원인 분석이 아닙니다. 사람 선수 패스 통계는 누락될 수 있습니다.','Formation advice is editorial, not an official EA model or a diagnosis of causes. Human pass stats may be incomplete.');
 }
+id('tlBestXI').addEventListener('click',()=>{
+ lineupMode=!lineupMode;
+ if(lineupMode)selected=null;
+ id('tlShareStatus').textContent='';
+ render();
+});
+id('tlRecommendFormation').addEventListener('click',()=>{
+ selected=null;
+ id('tlShareStatus').textContent='';
+ render();
+});
 root.addEventListener('click',event=>{
  const btn=event.target.closest('[data-tl-people],[data-tl-formation]');
  if(!btn)return;
