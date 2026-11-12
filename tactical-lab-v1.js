@@ -216,25 +216,28 @@ function roleRows(formation,count){
          ai:all.filter(p=>!assigned.includes(p))};
 }
 function shareText(){
- const r=model,formation=selected||forecastCandidates(r,people)[0].id,rows=roleRows(formation,people),dx=diagnoses(r);
+ const r=model,formation=selected||forecastCandidates(r,people)[0].id;
+ const attack=formation==='4-4-2'
+  ?t('투톱 1명 연계 · 1명 침투','Two strikers: one links, one runs')
+  :formation==='4-3-3'
+  ?t('윙어 폭 유지 · ST 박스 침투','Wingers wide · ST into box')
+  :t('ST 등지기 → CAM 연결 → 침투','ST hold-up → CAM → run');
+ const defense=r.now.gaAvg>=1.6
+  ?t('중앙 수비 보호 · 풀백 동시 전진 금지','Central cover · No simultaneous fullback overlap')
+  :t('CDM 중앙 유지 · 빠른 수비 복귀','CDM central · Quick defensive recovery');
  const lines=[
-  'DOKDO FC · '+t('경기 전 전술 요약','Pre-match Tactical Brief'),
-  t('포메이션','Formation')+': '+formation,
-  t('사람 선수','Human players')+': '+people+' / AI: '+(11-people),
-  t('기준','Basis')+': '+t('최근 보관 리그','Last archived league')+' '+r.now.n+t('경기',' matches'),
-  t('경기당 득점/실점/승점','Goals for/against/points per match')+': '+avg(r.now.gfAvg)+' / '+avg(r.now.gaAvg)+' / '+avg(r.now.pts),
-  t('사람 선수 포지션','Human-controlled positions')+': '+rows.humans.map(x=>x.position).join(', '),
-  t('AI 포지션','AI positions')+': '+rows.ai.join(', '),
-  t('출전 포지션별 역할','Role assignments')+':'
+  'DOKDO FC | '+t('경기 전 추천','Next-Match Plan'),
+  t('추천 배치','Suggested Formation')+': '+formation+' ('+people+t('명',' players')+')',
+  t('공격','Attack')+': '+attack,
+  t('수비','Defense')+': '+defense,
+  t('최근','Last')+' '+r.now.n+t('경기 기준',' matches')+' · '+t('경기당 득점','Goals/match')+' '+avg(r.now.gfAvg)+' / '+t('실점','Conceded')+' '+avg(r.now.gaAvg)
  ];
- for(const role of rows.humans)lines.push('- '+role.position+': '+role.description[en()?1:0]);
- lines.push('',t('전술 근거','Analysis')+': '+dx.risks.join(' '));
  if(lineupMode){
   const xi=bestXI(r.roster,formation,r.history);
-  lines.push('',t('기록 기반 베스트11 후보','Stats-based Best XI candidates')+':');
-  formations[formation].forEach(([role])=>lines.push(role+': '+(xi[role]?.name||'AI / Unverified')));
+  lines.push(t('베스트11 후보','Best XI Candidates')+': '+
+   formations[formation].map(([role])=>role+' '+(xi[role]?.name||'AI')).join(' · '));
  }
- lines.push(t('주의: 경기 결과 기반 전술 실험안이며 EA 공식 추천이 아닙니다.','Note: These are experimental suggestions based on results, not official EA recommendations.'));
+ lines.push(t('전술 제안은 예상안이며 효과가 검증된 것은 아닙니다.','Tactical suggestion is unverified and not a proven performance gain.'));
  lines.push('https://insungmeta.github.io/dokdo-fc/'+(en()?'?lang=en#tactics':'#tactics'));
  return lines.join('\n');
 }
@@ -332,7 +335,8 @@ function render(){
   [t('경기당 승점','Points per Game'),avg(now.pts)],
   [t('무실점 경기','Clean Sheets'),now.clean+'/'+now.n]
  ].map(([name,value])=>'<div class="tl-stat"><span>'+escape(name)+'</span><strong>'+escape(value)+'</strong></div>').join('');
- id('tlTitle').textContent=formation+' · '+(qualified?t('추천 배치','Suggested Setup'):t('기본 전술 예시','Example Setup'));
+ id('tlTitle').textContent=formation+' · '+(!qualified?t('전술 예시','Tactical Option'):
+  formation===suggested?t('1순위 추천','Top Pick'):t('대안 전술','Alternative'));
  const lineup=lineupMode?bestXI(model.roster,formation,model.history):null;
  id('tlPitch').innerHTML=pitch(formation,people,lineup);
  const assigned=lineup?allocations[formation][people].filter(pos=>lineup[pos]).length:people;
