@@ -41,3 +41,23 @@ main{padding-top:15px}
 .division-digit{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-weight:900;font-style:italic;font-stretch:condensed}
 .metric b,.star .hero-number{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-style:italic;font-weight:900}
 @media(max-width:700px){.hero-left:after{background:linear-gradient(90deg,#06111ff0,#06111f9e)}}
+
+/* Visual-first data hierarchy: compact match banner, scoreboards, charts, rank podium. */
+.hero-left{background-image:linear-gradient(90deg,#071322f7 0%,#071322e8 43%,#0713228c 100%),url('./assets/club-banner.svg');background-position:center,right center;background-size:cover,auto 100%;background-repeat:no-repeat}
+.hero-left:before{background:none}
+.hero-left:after{background:linear-gradient(90deg,#071322e8 0%,#071322b2 45%,#07132233 100%)}
+.division-showcase{padding:0;border-left:3px solid var(--lime);padding-left:12px}
+.division-digit{color:#fff;text-shadow:0 4px 18px #0006}
+.division-form-results span{box-shadow:0 1px 5px #0005;font-weight:900}
+.metric{position:relative;overflow:hidden}.metric:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#c5f12675}
+.metric b{color:#f5f8fc}.metric .accent{color:var(--lime)}
+.metric-wdl:before{background:var(--lime)}
+.star{border-top:2px solid #d2ed603d!important}
+.star:first-child{border-top-color:var(--lime)!important}
+.star .emblem{border-radius:3px;background:#1b3144}
+.star .hero-number{text-shadow:0 4px 18px #0006}
+.match-item .score,.match-item .wl{font-weight:900}
+.panel-head{border-bottom:1px solid #2a3c50}
+.section-title .no{color:var(--lime)}
+.division-trend-chart{filter:drop-shadow(0 2px 4px #0004)}
+@media(max-width:700px){.hero-left{background-size:cover,auto 100%;background-position:center,right center}.hero-left:after{background:linear-gradient(90deg,#071322f2,#071322a5)}.division-showcase{padding-left:8px}.metric:before{width:2px}}
