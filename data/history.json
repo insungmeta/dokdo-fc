@@ -65562,6 +65562,45 @@
           "ratingAve": 8.4
         }
       ]
+    },
+    {
+      "at": "2026-11-12T13:49:25.214075+00:00",
+      "kind": "data-change",
+      "members": [
+        {
+          "name": "WhatSevenYouSay",
+          "playerName": "",
+          "position": "",
+          "overall": 0,
+          "gamesPlayed": 0,
+          "winRate": 0,
+          "goals": 0,
+          "assists": 0,
+          "averageRating": 0.0,
+          "manOfTheMatch": 0,
+          "shotSuccessRate": 0,
+          "passesMade": 0,
+          "passSuccessRate": 0,
+          "tacklesMade": 0,
+          "tackleSuccessRate": 0,
+          "cleanSheetsDef": 0,
+          "cleanSheetsGK": 0,
+          "redCards": 0,
+          "ratingAve": 0.0
+        }
+      ],
+      "career": [
+        {
+          "name": "WhatSevenYouSay",
+          "position": "",
+          "gamesPlayed": 0,
+          "goals": 0,
+          "assists": 0,
+          "averageRating": 0.0,
+          "manOfTheMatch": 0,
+          "ratingAve": 0.0
+        }
+      ]
     }
   ]
 }
