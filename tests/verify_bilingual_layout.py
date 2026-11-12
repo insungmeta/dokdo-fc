@@ -173,6 +173,28 @@ def main():
                         all_issues.append(f"{lang} {width}px: {issue}")
                 except (TimeoutException,Exception) as ex:
                     all_issues.append(f"{lang} {width}px: automation exception: {str(ex)[:250]}")
+        # Archived full-match/board page also exposes the same language toggle.
+        for lang in ("ko","en"):
+            for width in (390,1280):
+                driver.set_window_size(width,930)
+                driver.get(BASE+"legacy.html?lang="+lang)
+                WebDriverWait(driver,15).until(
+                    lambda d: d.execute_script("return Boolean(document.querySelector('.dfc-lang-switch'))")
+                )
+                view=script(driver, """
+                    const lang=document.documentElement.lang,rect=x=>x.getBoundingClientRect();
+                    const toggle=document.querySelector('.dfc-lang-switch');
+                    const header=document.querySelector('.header');
+                    return {language:lang,viewport:innerWidth,pageWidth:document.documentElement.scrollWidth,
+                      headerRight:rect(header).right,toggleRight:rect(toggle).right,
+                      visible:rect(toggle).width>0&&rect(toggle).height>0};
+                """)
+                driver.save_screenshot(str(OUT / f"dfc-legacy-{lang}-{width}.png"))
+                print(json.dumps({"lang":lang,"width":width,"screen":"legacy",**view},ensure_ascii=False),flush=True)
+                if not view["visible"] or view["toggleRight"]>width+2:
+                    all_issues.append(f"legacy {lang} {width}px language switch out of viewport")
+                if view["pageWidth"]>width+4:
+                    all_issues.append(f"legacy {lang} {width}px page horizontal overflow {view['pageWidth']}")
         if all_issues:
             print("\nFAILURES:\n"+"\n".join(all_issues),flush=True)
             raise SystemExit(1)
