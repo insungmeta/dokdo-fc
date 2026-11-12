@@ -96,6 +96,24 @@ def validate(driver, lang, width):
                 manOfTheMatch:m.manOfTheMatch,cleanSheetsGK:m.cleanSheetsGK}))};
         """)
         print(json.dumps({"screen":"roster-inspection",**roster_inspection},ensure_ascii=False),flush=True)
+        striker_inspection=script(driver, """
+          const data=window.__dokdoData||{},names=(data.members||[]).filter(p=>/dududada/i.test(p.name||''));
+          const byId=new Set(names.map(p=>String(p.playerId)));
+          const matches=[];
+          for(const m of data.matches||[]){
+            for(const p of m.players||[]){
+              const same=/dududada/i.test(p.name||p.playerName||'')||(p.playerId&&byId.has(String(p.playerId)));
+              if(same)matches.push({type:m.matchType,date:m.timestamp,position:p.position,proPos:p.proPos,
+                  favoritePosition:p.favoritePosition,id:p.playerId,goals:p.goals,assists:p.assists,name:p.name,
+                  keys:Object.keys(p).slice(0,36)});
+            }
+          }
+          const roles={};for(const m of matches){let p=m.position||m.proPos||m.favoritePosition||'unknown';roles[p]=(roles[p]||0)+1;}
+          return {members:names,matched:matches.length,positionCounts:roles,
+            recentMatches:matches.slice(0,35),matchKeys:(data.matches||[])[0]&&Object.keys((data.matches||[])[0])};
+        """)
+        print(json.dumps({"screen":"dududada-position-audit",**striker_inspection},ensure_ascii=False),flush=True)
+
     # Go beyond the home card: verify each of the five screens and the full
     # squad view at representative mobile and desktop sizes.
     if width in (390, 1280):
