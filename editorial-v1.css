@@ -72,3 +72,15 @@ main{padding-top:15px}
 .star .star-top{letter-spacing:.5px}.star .person{margin-top:8px}
 @media(min-width:901px){.hero-left{max-height:265px}.division-trend-chart{max-height:75px}.division-form{padding:8px}.division-form-results{margin:4px 0}}
 @media(max-width:700px){.hero-left,.hero-right{max-height:none;min-height:0}.metric-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.metric{min-height:68px}.star-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.star{min-height:135px}}
+
+/* Match-duel artwork: original, self-hosted, no EA/Premier League marks. */
+.hero-left{background-image:linear-gradient(90deg,#071322f7 0%,#071322e5 37%,#0713228c 65%,#07132224 100%),url('./assets/match-duel.svg');background-position:center,right center;background-size:cover,cover;background-repeat:no-repeat}
+.hero-left:before{display:none}.hero-left:after{background:linear-gradient(90deg,#06101e90 0%,transparent 65%)}
+.hero-left .division-hero-main,.hero-left .eyebrow,.hero-left .hero-chips,.hero-left .sync-health{position:relative;z-index:1}
+.hero-left .division-primary{background:linear-gradient(90deg,#061322bc,#06132255);border-radius:4px}
+.hero-left .division-trend,.hero-left .division-form{background:#091727cb;backdrop-filter:blur(3px);border:1px solid #6c819044;border-radius:4px}
+.hero-left .division-form-results span{border-radius:3px}
+.hero-right .hero-recent-list{font-variant-numeric:tabular-nums}
+.nav a{letter-spacing:-.3px}.nav a.selected{color:var(--lime)}
+@media(max-width:900px){.hero-left{background-position:center,70% center}}
+@media(max-width:700px){.hero-left{background-image:linear-gradient(90deg,#071322f7 0%,#071322df 52%,#07132277 100%),url('./assets/match-duel.svg');background-position:center,75% center}.hero-left .division-primary{background:#061322aa}}
