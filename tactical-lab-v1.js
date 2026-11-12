@@ -54,7 +54,7 @@ function compute(data){
  const delta=now.n===10&&before.n===10?now.pts-before.pts:null;
  // These are editorial tactical heuristics, not validated EA formation recommendations.
  const suggested=now.n>=5&&now.gaAvg<1.3&&now.gfAvg<1.2?'4-3-3':'4-2-3-1';
- return {now,before,pass,delta,suggested,updated:data?.sync?.lastSuccess||null,roster:Array.isArray(data?.members)?data.members:[]};
+ return {now,before,pass,delta,suggested,updated:data?.sync?.lastSuccess||null,roster:Array.isArray(data?.members)?data.members:[],history:archivedRoleHistory(data?.matches)};
 }
 function diagnoses(r){
  const {now,pass,delta}=r;
@@ -77,45 +77,87 @@ function diagnoses(r){
  return {strengths:strengths.slice(0,3),risks:risks.slice(0,3)};
 }
 
-/* Transparent positional shortlist, not an official EA Best XI.
- * EA roster positions are broad (FW/MF/DF/GK), not verified LB/CB/CAM roles.
- * Do not invent specialists, field positions, player availability or online status.
+/* Match-by-match player positions are better evidence of a person's primary role
+ * than the EA member row, which can describe only their most recently used role.
+ * Historic match positions are broad FW/MF/DF/GK. We do not fabricate ST/CAM/CB
+ * specialists, online availability, or player intent.
  */
 const roleCategory=pos=>pos==='GK'?'goalkeeper':
  ['ST','LW','RW'].includes(pos)?'forward':
  ['LB','LCB','RCB','RB'].includes(pos)?'defender':'midfielder';
-function candidateScore(player,category){
- const games=Math.max(0,Number(player.gamesPlayed)||0);
- const rating=Math.max(0,Math.min(10,Number(player.ratingAve)||0));
- const gf=Math.max(0,Number(player.goals)||0)/Math.max(1,games);
- const assists=Math.max(0,Number(player.assists)||0)/Math.max(1,games);
- const mvp=Math.max(0,Number(player.manOfTheMatch)||0)/Math.max(1,games);
- // Prioritize EA season average rating and minimum experience.
- // Role-specific rates are secondary; there is NO detailed positional tracking.
- if(category==='goalkeeper')return Math.max(0,Number(player.cleanSheetsGK)||0)*8+Math.min(games,50)/10;
- return rating*10+Math.min(games,80)/8+(category==='forward'?gf*24+assists*10:
- category==='midfielder'?gf*9+assists*20:gf*2+assists*3)+mvp*7;
+const roleNames={
+ forward:['공격수','Forward'],midfielder:['미드필더','Midfielder'],
+ defender:['수비수','Defender'],goalkeeper:['골키퍼','Goalkeeper']
+};
+const normalizeRole=value=>{
+ const v=String(value||'').trim().toLowerCase();
+ if(/^(forward|fw|striker|attacker|st|cf|lw|rw)$/.test(v))return 'forward';
+ if(/^(midfielder|midfield|mf|cam|cdm|cm|lm|rm)$/.test(v))return 'midfielder';
+ if(/^(defender|def|df|cb|lb|rb|lcb|rcb)$/.test(v))return 'defender';
+ if(/^(goalkeeper|gk|keeper)$/.test(v))return 'goalkeeper';
+ return null;
+};
+const personKey=name=>String(name||'').trim().toLocaleLowerCase();
+function archivedRoleHistory(matches){
+ const hist={},seen=new Set();
+ for(const match of Array.isArray(matches)?matches:[]){
+  if(!match?.matchId||!Array.isArray(match.players))continue;
+  for(const p of match.players){
+   const key=personKey(p?.name||p?.playerName),role=normalizeRole(p?.position||p?.favoritePosition||p?.proPos);
+   // Exclude AI and unavailable positions; duplicate match/player events count once.
+   if(!key||!role||!(Number(p.playerId)>0))continue;
+   const once=String(match.matchId)+'|'+key;
+   if(seen.has(once))continue;
+   seen.add(once);
+   if(!hist[key])hist[key]={forward:0,midfielder:0,defender:0,goalkeeper:0,total:0};
+   hist[key][role]++;hist[key].total++;
+  }
+ }
+ return hist;
 }
-function bestXI(roster,formation){
+function primaryPosition(p,history){
+ const obs=history?.[personKey(p.name)],reported=normalizeRole(p.position||p.favoritePosition||p.proPos);
+ if(obs?.total>=3){
+  const sorted=['forward','midfielder','defender','goalkeeper']
+   .sort((a,b)=>obs[b]-obs[a]);
+  const dominant=sorted[0];
+  // At least 3 corroborating appearances and >=60% across the archive.
+  if(obs[dominant]>=3&&obs[dominant]/obs.total>=.6)
+   return {category:dominant,source:'archive',observed:obs[dominant],total:obs.total,
+     reported:reported||null};
+ }
+ return {category:reported||(Number(p.cleanSheetsGK)>0?'goalkeeper':null),
+   source:reported?'roster':'unverified',observed:0,total:obs?.total||0,
+   reported:reported||null};
+}
+function candidateScore(p,role){
+ const games=Math.max(1,Number(p.gamesPlayed)||1),rating=Math.max(0,Math.min(10,Number(p.ratingAve)||0));
+ const goals=Math.max(0,Number(p.goals)||0),assists=Math.max(0,Number(p.assists)||0),mvp=Math.max(0,Number(p.manOfTheMatch)||0);
+ // Explicit heuristic, not an EA rating formula. For ST, verified season scoring
+ // has priority; for other attackers use a combined goals/assists contribution.
+ if(role==='ST')return goals*.8+(goals/games)*35+rating*4+assists*.13+Math.min(games,100)*.12;
+ if(role==='LW'||role==='RW')return goals*.3+assists*.55+goals/games*12+assists/games*15+rating*6+Math.min(games,90)*.1;
+ if(role==='GK')return Math.max(0,Number(p.cleanSheetsGK)||0)*8+Math.min(games,60)*.15+rating*5;
+ if(roleCategory(role)==='midfielder')return rating*7+assists*.38+goals*.12+Math.min(games,90)*.12+(mvp/games)*10;
+ return rating*9+Math.min(games,100)*.15+(mvp/games)*9; // DF, archival tackle events not used as season totals
+}
+function bestXI(roster,formation,history={}){
  const members=Array.isArray(roster)?roster:[],used=new Set(),chosen={};
  const valid=members.filter(p=>p&&p.name&&Number(p.gamesPlayed)>=5&&
    Number.isFinite(Number(p.ratingAve))&&Number(p.ratingAve)>0);
+ // Reserve ST first so a prolific, mainly-forward player cannot be consumed
+ // by midfield when EA's last listed position says MF.
  const priority=formation==='4-3-3'
- ? ['GK','LCB','RCB','LB','RB','CDM','LCM','RCM','ST','LW','RW']
- : ['GK','LCB','RCB','LB','RB','LCDM','RCDM','CAM','ST','LW','RW'];
+ ? ['ST','LW','RW','GK','LCB','RCB','LB','RB','CDM','LCM','RCM']
+ : ['ST','LW','RW','GK','LCB','RCB','LB','RB','LCDM','RCDM','CAM'];
  for(const role of priority){
   const category=roleCategory(role);
-  const options=valid.filter(p=>{
-   const position=String(p.position||p.favoritePosition||'').toLowerCase();
-   // GK clean sheets demonstrate some historical GK participation; not current GK status.
-   return category==='goalkeeper'?
-       position==='goalkeeper'||Number(p.cleanSheetsGK)>0:
-       position===category;
-  }).filter(p=>!used.has(String(p.name).toLowerCase()));
-  options.sort((a,b)=>candidateScore(b,category)-candidateScore(a,category)||
+  const options=valid.filter(p=>primaryPosition(p,history).category===category)
+   .filter(p=>!used.has(personKey(p.name)));
+  options.sort((a,b)=>candidateScore(b,role)-candidateScore(a,role)||
       Number(b.gamesPlayed)-Number(a.gamesPlayed)||String(a.name).localeCompare(String(b.name)));
   if(options.length){
-   const p=options[0];chosen[role]=p;used.add(String(p.name).toLowerCase());
+   const p=options[0];chosen[role]=p;used.add(personKey(p.name));
   }else chosen[role]=null;
  }
  return chosen;
@@ -181,7 +223,7 @@ function shareText(){
  for(const role of rows.humans)lines.push('- '+role.position+': '+role.description[en()?1:0]);
  lines.push('',t('전술 근거','Analysis')+': '+dx.risks.join(' '));
  if(lineupMode){
-  const xi=bestXI(r.roster,formation);
+  const xi=bestXI(r.roster,formation,r.history);
   lines.push('',t('기록 기반 베스트11 후보','Stats-based Best XI candidates')+':');
   formations[formation].forEach(([role])=>lines.push(role+': '+(xi[role]?.name||'AI / Unverified')));
  }
@@ -212,7 +254,7 @@ function render(){
   [t('무실점 경기','Clean Sheets'),now.clean+'/'+now.n]
  ].map(([name,value])=>'<div class="tl-stat"><span>'+escape(name)+'</span><strong>'+escape(value)+'</strong></div>').join('');
  id('tlTitle').textContent=formation+' · '+(qualified?t('추천 배치','Suggested Setup'):t('기본 전술 예시','Example Setup'));
- const lineup=lineupMode?bestXI(model.roster,formation):null;
+ const lineup=lineupMode?bestXI(model.roster,formation,model.history):null;
  id('tlPitch').innerHTML=pitch(formation,people,lineup);
  const assigned=lineup?allocations[formation][people].filter(pos=>lineup[pos]).length:people;
  id('tlLegend').textContent=lineupMode?
@@ -229,12 +271,17 @@ function render(){
   id('tlXIList').innerHTML=positions.map(pos=>{
    const p=lineup[pos],human=active.has(pos)&&Boolean(p),rating=p?Number(p.ratingAve).toFixed(1):'—';
    return '<div class="tl-xi-row"><strong>'+escape(pos)+'</strong><span class="tl-xi-name">'+escape(p?.name||t('AI / 미확인','AI / Unverified'))+'</span>'+
-     '<span class="tl-xi-info">'+(p?escape(t('평점 ','Rating ')+rating+' · '+Number(p.gamesPlayed)+t('경기',' games')):'—')+'</span>'+
+     '<span class="tl-xi-info">'+(p?(()=>{
+      const primary=primaryPosition(p,model.history),roleLabel=roleNames[primary.category]?.[en()?1:0]||t('미확인','Unverified');
+      const proof=primary.source==='archive'?t('보관 출전 ','Archived appearances ')+primary.observed+'/'+primary.total:
+        t('EA 명단 기준','EA roster only');
+      return escape(t('시즌 ','Season ')+Number(p.goals)+t('골',' goals')+' · '+t('평점 ','Rating ')+rating+' · '+roleLabel+' · '+proof);
+     })():'—')+'</span>'+
      '<span class="tl-xi-tag '+(human?'is-human':'')+'">'+(human?'USER':'AI')+'</span></div>';
   }).join('');
   id('tlXIExplanation').textContent=t(
-   'EA 시즌 평균 평점·출전 수·포지션별 득점/도움 기여를 활용한 비공식 추천입니다. 포지션은 FW/MF/DF 등 대분류만 확인되어 LB·CB 등 세부 적합도, 현재 접속·출전 가능 여부는 검증되지 않았습니다. GK는 클린시트 보유 기록으로 후보를 판단합니다. 실제 조작 선수는 위 인원 설정에 따른 일부이며 나머지는 AI로 표시됩니다.',
-   'Unofficial shortlist based on EA season rating, appearances and position-weighted goals/assists. EA provides broad FW/MF/DF roles only; specialist roles and online availability cannot be verified. GK candidates use recorded clean sheets. Human selections follow the player-count setting; remaining slots show AI.'
+   '선수 주 포지션은 보관된 경기에서 3회 이상, 전체 관측의 60% 이상으로 확인되면 그 기록을 우선합니다. 기록이 부족하면 EA 명단의 최근 포지션을 임시 사용합니다. 시즌 득점·도움·평점으로 후보를 비교하며, ST는 득점 실적을 더 중시합니다. LB·CB 등의 세부 적합도와 현재 접속 여부는 알 수 없습니다. 실제 조작 인원 설정과 나머지 AI는 별도입니다.',
+   'Primary position uses archived match roles when at least 3 appearances and 60% agree. Otherwise the latest EA roster position is provisional. Selection considers season goals, assists and rating, with ST weighted toward scoring. Specialist roles and online status are unknown. Human/AI slots remain separate.'
   );
  }
  id('tlRecommendFormation').textContent=t('추천 포메이션 적용','Apply Suggested Formation');
