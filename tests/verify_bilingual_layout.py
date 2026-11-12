@@ -144,7 +144,7 @@ def validate(driver, lang, width):
                     root.querySelector('[data-tl-people="9"]').click();
                     out.nineHuman=count();
                     root.querySelector('[data-tl-formation="4-3-3"]').click();
-                    out.alternative=svg.parentElement.querySelector('svg')?.getAttribute('aria-label');
+                    out.alternative=root.querySelector('#tlPitch svg')?.getAttribute('aria-label');
                     out.fourThreeThree=root.querySelector('[data-tl-formation="4-3-3"]').getAttribute('aria-pressed');
                     out.widthAfter=document.documentElement.scrollWidth;
                     return out;
