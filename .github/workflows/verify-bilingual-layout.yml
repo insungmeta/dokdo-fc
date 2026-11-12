@@ -1,0 +1,39 @@
+name: Verify DOKDO FC bilingual layout
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'i18n-*.js'
+      - 'mobile-app-v8.css'
+      - 'live-dashboard-v7.js'
+      - 'index.html'
+      - 'tests/verify_bilingual_layout.py'
+      - '.github/workflows/verify-bilingual-layout.yml'
+permissions:
+  contents: read
+concurrency:
+  group: dokdo-visual-audit
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Chrome test driver
+        run: |
+          python -m pip install --quiet "selenium>=4.26,<5"
+          google-chrome --version || chromium --version
+      - name: Inspect English and Korean page at six viewport widths
+        run: |
+          python -m http.server 8914 --bind 127.0.0.1 >/tmp/dfc-local-http.log 2>&1 &
+          sleep 2
+          python tests/verify_bilingual_layout.py
+      - name: Save actual browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dfc-layout-screenshots
+          path: layout-screenshots/*.png
+          if-no-files-found: ignore
