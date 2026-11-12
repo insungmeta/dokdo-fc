@@ -11,8 +11,8 @@ on:
       - 'requirements.txt'
       - 'tests/**'
   schedule:
-    # Best-effort 30-minute intervals; 03 and 33 minutes UTC, GitHub schedule may delay.
-    - cron: '3,33 * * * *'
+    # Best-effort 5-minute intervals (03, 08, ..., 58 UTC); scheduling may be delayed.
+    - cron: '3-58/5 * * * *'
 permissions:
   contents: write
   pages: write
@@ -23,7 +23,7 @@ concurrency:
 jobs:
   refresh-and-publish:
     # This is an UNOFFICIAL collector: EA data-access permission is NOT confirmed.
-    # Owner requested cautious, non-commercial operation while EA replies.
+    # Owner requested 5-minute tracking while EA replies; no approval is implied.
     # This does not imply permission. Set DFC_PAUSE_COLLECTION=true to halt collection.
     # Previously archived files remain accessible if paused.
     if: ${{ vars.DFC_PAUSE_COLLECTION != 'true' }}
