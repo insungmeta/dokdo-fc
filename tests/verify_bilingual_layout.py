@@ -85,6 +85,50 @@ def validate(driver, lang, width):
     screenshot = OUT / f"dfc-{lang}-{width}.png"
     driver.save_screenshot(str(screenshot))
     print(json.dumps({"lang":lang,"width":width,**info},ensure_ascii=False),flush=True)
+    # Go beyond the home card: verify each of the five screens and the full
+    # squad view at representative mobile and desktop sizes.
+    if width in (390, 1280):
+        for screen in ("players", "matches", "rivals", "more"):
+            driver.execute_script(
+                "document.querySelector('.app-bottom-nav [data-screen=\"' + arguments[0] + '\"]').click()", screen
+            )
+            section = {
+                "players": "#players", "matches": "#matches",
+                "rivals": "#app-rivals", "more": "#more"
+            }[screen]
+            WebDriverWait(driver, 6).until(
+                lambda d: d.execute_script(
+                    "return document.querySelector(arguments[0]).classList.contains('is-active')", section
+                )
+            )
+            details=script(driver, """
+                const active=document.querySelector('.app-screen.is-active');
+                const issues=[],headings=Array.from(active.querySelectorAll('h2,h3,.panel-head strong'))
+                  .filter(el=>getComputedStyle(el).display!=='none').map(el=>el.textContent.trim());
+                const relevant=Array.from(active.querySelectorAll('.screen-head,.panel-head,.metric,.compare-period-card,.roster-heading,.archive-searchbar'));
+                for(const el of relevant){
+                  const rc=el.getBoundingClientRect();
+                  if(rc.width&&el.scrollWidth>el.clientWidth+8 && getComputedStyle(el).overflowX!=='auto')
+                    issues.push('overflow '+el.className+' '+el.scrollWidth+'>'+el.clientWidth);
+                }
+                if(document.documentElement.scrollWidth>innerWidth+4)
+                  issues.push('page horizontal overflow '+document.documentElement.scrollWidth);
+                return {active:active.id,issues,headings:headings.slice(0,20)};
+            """)
+            print(json.dumps({"lang":lang,"width":width,"screen":screen,**details},ensure_ascii=False),flush=True)
+            driver.save_screenshot(str(OUT / f"dfc-{lang}-{width}-{screen}.png"))
+            info["issues"].extend(screen+": "+x for x in details["issues"])
+        # The optional complete squad tab is a common source of long player names.
+        driver.execute_script("document.querySelector('.app-bottom-nav [data-screen=\"players\"]').click()")
+        driver.execute_script("document.querySelector('[data-squad-view=\"roster\"]').click()")
+        r=script(driver, """
+            return {width:document.documentElement.scrollWidth,
+                    selected:document.querySelector('[data-squad-view="roster"]').classList.contains('is-selected'),
+                    playerCount:document.querySelectorAll('.roster-member').length};
+        """)
+        print(json.dumps({"lang":lang,"width":width,"screen":"roster",**r},ensure_ascii=False),flush=True)
+        if r["width"]>width+4:info["issues"].append('roster page overflow')
+        driver.save_screenshot(str(OUT / f"dfc-{lang}-{width}-roster.png"))
     return info["issues"]
 
 def main():
