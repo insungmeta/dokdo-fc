@@ -113,11 +113,34 @@ def validate(driver, lang, width):
                 }
                 if(document.documentElement.scrollWidth>innerWidth+4)
                   issues.push('page horizontal overflow '+document.documentElement.scrollWidth);
-                return {active:active.id,issues,headings:headings.slice(0,20)};
+                const untranslated=[];
+                if(document.documentElement.lang==='en'){
+                  const skip='.roster-identity strong,.roster-avatar,.match-item .title,.standing-row .who strong,.home-leader .hl-name,.star .person,.card-row .name,.team-name-pair,.crest-fallback,.match-contributor-chip strong,option,.board-post';
+                  const walker=document.createTreeWalker(active,NodeFilter.SHOW_TEXT);
+                  let n;
+                  while((n=walker.nextNode())){
+                    if(!/[가-힣]/.test(n.nodeValue))continue;
+                    const p=n.parentElement;if(!p||p.closest(skip)||getComputedStyle(p).display==='none')continue;
+                    const content=n.nodeValue.trim();
+                    if(content)untranslated.push(content.slice(0,115));
+                  }
+                }
+                return {active:active.id,issues,headings:headings.slice(0,20),untranslated:untranslated.slice(0,30)};
             """)
             print(json.dumps({"lang":lang,"width":width,"screen":screen,**details},ensure_ascii=False),flush=True)
             driver.save_screenshot(str(OUT / f"dfc-{lang}-{width}-{screen}.png"))
             info["issues"].extend(screen+": "+x for x in details["issues"])
+            if screen=="matches":
+                driver.execute_script("document.querySelector('#matchList .match-item').click()")
+                detail=script(driver, """
+                  const node=document.querySelector('#matchReviewPanel');
+                  const ko=Array.from(node.querySelectorAll('h3,strong,.coverage,.review-utility,.match-contribution-label'))
+                   .map(x=>x.textContent.trim()).filter(x=>/[가-힣]/.test(x));
+                  return {open:!node.hidden,visibleWidth:document.documentElement.scrollWidth,untranslated:ko.slice(0,25)};
+                """)
+                print(json.dumps({"lang":lang,"width":width,"screen":"match-detail",**detail},ensure_ascii=False),flush=True)
+                driver.save_screenshot(str(OUT / f"dfc-{lang}-{width}-match-detail.png"))
+                if detail["visibleWidth"]>width+4:info["issues"].append('match-detail page overflow')
         # The optional complete squad tab is a common source of long player names.
         driver.execute_script("document.querySelector('.app-bottom-nav [data-screen=\"players\"]').click()")
         driver.execute_script("document.querySelector('[data-squad-view=\"roster\"]').click()")
