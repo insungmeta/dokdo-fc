@@ -123,24 +123,31 @@ const topGames=games.map((m,i)=>({m,i})).slice(0,5);
 $('heroRecentCount').textContent='최근 '+topGames.length+'경기';
 $('heroRecentMatches').innerHTML=topGames.length?topGames.map(x=>matchItem(x.m,x.i)).join(''):'<p class="hero-loading">아직 보관된 경기가 없습니다.</p>';
 $('heroRecentMatches').addEventListener('click',e=>{const el=e.target.closest('[data-game]');if(!el)return;toggleMatchReview(num(el.dataset.game),el)});
-let archiveKind='all',archiveExpanded=false;
+let archiveKind='all',archiveVisibleCount=10,archiveQuery='',archiveResult='all';
 function renderArchive(){
  closeMatchReview();
- const indices=games.map((m,i)=>({m,i})).filter(x=>archiveKind==='all'||x.m.raw.matchType===archiveKind);
- const selected=archiveExpanded?indices:indices.slice(0,10);
+ const indices=games.map((m,i)=>({m,i})).filter(x=>{
+  if(archiveKind!=='all'&&x.m.raw.matchType!==archiveKind)return false;
+  if(archiveQuery&&!x.m.opp.toLocaleLowerCase().includes(archiveQuery))return false;
+  const state=x.m.score[0]>x.m.score[1]?'w':x.m.score[0]<x.m.score[1]?'l':'d';
+  return archiveResult==='all'||archiveResult===state;
+ });
+ const selected=indices.slice(0,archiveVisibleCount);
  $('archiveTotal').textContent='('+games.length+'경기)';
  $('matchList').innerHTML=selected.length?selected.map(x=>matchItem(x.m,x.i)).join(''):'<p style="padding:16px;color:#98b5bf">이 종류로 보관된 경기는 아직 없습니다.</p>';
  $('archiveVisible').textContent='전체 '+indices.length+'경기 중 '+selected.length+'경기 표시';
  const more=$('archiveShowAll');more.hidden=selected.length>=indices.length;
- if(!more.hidden)more.textContent='나머지 '+(indices.length-selected.length)+'경기 모두 보기';
+ if(!more.hidden)more.textContent='다음 '+Math.min(20,indices.length-selected.length)+'경기 더 보기';
  $('archiveFilters').querySelectorAll('[data-archive-kind]').forEach(btn=>{const on=btn.dataset.archiveKind===archiveKind;btn.classList.toggle('active',on);btn.setAttribute('aria-pressed',String(on))});
 }
 renderArchive();
 $('matchList').addEventListener('click',e=>{const el=e.target.closest('[data-game]');if(!el)return;toggleMatchReview(num(el.dataset.game),el)});
 $('profileHistory').addEventListener('click',e=>{const el=e.target.closest('[data-game]');if(!el)return;toggleMatchReview(num(el.dataset.game),el)});
-$('archiveFilters').addEventListener('click',e=>{const btn=e.target.closest('[data-archive-kind]');if(!btn)return;archiveKind=btn.dataset.archiveKind;archiveExpanded=false;renderArchive()});
-$('archiveShowAll').addEventListener('click',()=>{archiveExpanded=true;renderArchive()});
-document.querySelector('.hero-recent-all').addEventListener('click',()=>{archiveKind='all';archiveExpanded=true;renderArchive()});
+$('archiveFilters').addEventListener('click',e=>{const btn=e.target.closest('[data-archive-kind]');if(!btn)return;archiveKind=btn.dataset.archiveKind;archiveVisibleCount=10;renderArchive()});
+$('archiveShowAll').addEventListener('click',()=>{archiveVisibleCount+=20;renderArchive()});
+$('archiveSearch').addEventListener('input',e=>{archiveQuery=String(e.target.value||'').trim().toLocaleLowerCase();archiveVisibleCount=10;renderArchive()});
+$('archiveResult').addEventListener('change',e=>{archiveResult=e.target.value;archiveVisibleCount=10;renderArchive()});
+document.querySelector('.hero-recent-all').addEventListener('click',()=>{archiveKind='all';archiveQuery='';archiveResult='all';$('archiveSearch').value='';$('archiveResult').value='all';archiveVisibleCount=20;renderArchive()});
 const recent=leagues.slice(0,10),displayRecent=[...recent].reverse(),forms=recent.map(m=>num(m.goals)>num(m.goalsAgainst)?'w':num(m.goals)<num(m.goalsAgainst)?'l':'d');const w=forms.filter(x=>x==='w').length,d=forms.filter(x=>x==='d').length,l=forms.length-w-d,points=w*3+d;
 for(const id of ['formLine','heroFormLine'])$(id).innerHTML=displayRecent.map(m=>{const x=num(m.goals)>num(m.goalsAgainst)?'w':num(m.goals)<num(m.goalsAgainst)?'l':'d';return '<span class="'+x+'" title="'+E(date(m.timestamp))+' · '+num(m.goals)+':'+num(m.goalsAgainst)+'">'+x.toUpperCase()+'</span>'}).join('');
 $('formSummary').textContent=w+'승 · '+d+'무 · '+l+'패 · 승점 '+points+'점';$('heroFormRecord').textContent=w+'승 · '+d+'무 · '+l+'패';$('heroFormPoints').textContent='승점 '+points;$('formW').style.width=(forms.length?w/forms.length*100:0)+'%';$('formD').style.width=(forms.length?d/forms.length*100:0)+'%';$('formL').style.width=(forms.length?l/forms.length*100:0)+'%';
