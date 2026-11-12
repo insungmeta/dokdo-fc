@@ -392,3 +392,36 @@ main{padding-top:15px}
  .dfc-summary-stat .metric b{font-size:17px!important}
  .dfc-banner-title strong{font-size:clamp(30px,8.2vw,46px)!important}
 }
+
+/* DOKDO FC / graphic-first sports scoreboard. Overrides older experiments. */
+.dfc-photo-banner{border:0!important;border-bottom:3px solid #bfe82a!important;box-shadow:inset 0 -32px 48px #06111e55!important}
+.dfc-banner-title span{font:800 9px/1.4 Arial,sans-serif!important;letter-spacing:2px!important;color:#bfe82a!important}
+.dfc-banner-title strong{font-family:Impact,'Arial Narrow',Arial,sans-serif!important;font-style:italic!important;letter-spacing:-1px!important}
+.dfc-match-board{gap:7px!important}
+.dfc-board-card{border-radius:4px!important;background:#101d30!important;border:1px solid #2b4059!important;box-shadow:inset 0 1px #ffffff12!important}
+.dfc-card-title{display:flex!important;align-items:center!important;gap:7px!important;font-size:10px!important;font-weight:800!important;letter-spacing:.1px!important;line-height:1.3!important;color:#dce7f3!important}
+.dfc-card-title:before{content:'';width:14px;height:14px;flex:0 0 14px;background:#c7ef37;clip-path:polygon(50% 0%,92% 22%,92% 75%,50% 100%,8% 75%,8% 22%);opacity:.9}
+.dfc-summary-division .dfc-card-title:before{clip-path:polygon(50% 0%,64% 30%,100% 30%,72% 55%,84% 100%,50% 73%,16% 100%,28% 55%,0 30%,36% 30%)}
+.dfc-summary-rating .dfc-card-title:before{clip-path:polygon(0 20%,25% 42%,50% 0,75% 42%,100% 20%,87% 85%,13% 85%)}
+.dfc-summary-form .dfc-card-title:before{clip-path:polygon(0 100%,0 55%,20% 55%,20% 80%,40% 80%,40% 30%,60% 30%,60% 50%,80% 50%,80% 0,100% 0,100% 100%)}
+.dfc-summary-stat .dfc-card-title:before{clip-path:polygon(50% 0,100% 20%,100% 60%,50% 100%,0 60%,0 20%)}
+.dfc-board-trend .dfc-card-title:before{clip-path:polygon(0 90%,0 70%,25% 48%,44% 65%,67% 20%,85% 37%,100% 0,100% 40%,85% 67%,67% 50%,44% 95%,25% 78%)}
+.dfc-board-leaders .dfc-card-title:before{clip-path:polygon(0 10%,20% 10%,20% 45%,40% 25%,50% 0,60% 25%,80% 45%,80% 10%,100% 10%,85% 95%,15% 95%)}
+.dfc-summary-grid .division-digit{font-family:Impact,'Arial Narrow',Arial,sans-serif!important;font-style:italic!important;font-weight:900!important;color:#fff!important}
+.dfc-summary-rating .metric b,.dfc-summary-stat .metric b{font-family:Impact,'Arial Narrow',Arial,sans-serif!important;font-style:italic!important;color:#c7ef37!important}
+.dfc-summary-grid .division-form-results span{border-radius:1px!important;font-family:Arial,sans-serif!important;font-weight:900!important}
+.dfc-board-matches .hero-right-top{font-weight:900!important;letter-spacing:.3px!important}
+.dfc-board-matches .hero-recent-list{font-size:11px!important}
+.dfc-board-trend .division-trend-chart{overflow:visible!important}
+.dfc-board-leaders .home-leader strong{font-family:Impact,'Arial Narrow',Arial,sans-serif!important;font-style:italic!important;font-size:23px!important;color:#c7ef37!important}
+.dfc-summary-grid .metric-icon{display:none!important}
+.dfc-summary-grid .rating-info-popover{z-index:20!important}
+@media(min-width:701px){.dfc-summary-grid>.dfc-board-card{min-height:94px!important;padding:10px!important}.dfc-lower-grid>.dfc-board-card{min-height:220px!important}}
+@media(max-width:700px){
+ .dfc-summary-grid{gap:6px!important}
+ .dfc-summary-grid>.dfc-board-card{min-height:108px!important;padding:8px!important}
+ .dfc-card-title{font-size:9px!important;gap:5px!important}
+ .dfc-card-title:before{width:11px;height:11px;flex-basis:11px}
+ .dfc-summary-grid .division-digit{font-size:34px!important}
+ .dfc-board-leaders .home-leader strong{font-size:20px!important}
+}
