@@ -61,10 +61,10 @@ class I18nTests(unittest.TestCase):
 
     def test_stale_collection_is_not_reported_as_live(self):
         script = (ROOT / "live-dashboard-v7.js").read_text(encoding="utf-8")
-        self.assertIn("minutes>=75", script)
-        self.assertIn("age<75*60*1000", script)
+        self.assertIn("minutes>=12", script)
+        self.assertIn("age<20*60*1000", script)
         workflow = (ROOT / ".github/workflows/update-and-publish.yml").read_text(encoding="utf-8")
-        self.assertIn("3,33 * * * *", workflow)
+        self.assertIn("3-58/5 * * * *", workflow)
         self.assertIn("예약 실행 지연", script)
         self.assertIn("분 전", script)
 
