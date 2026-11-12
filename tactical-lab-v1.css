@@ -60,3 +60,23 @@
 #tactics .tl-share button:disabled{opacity:.7;cursor:progress}
 #tactics .tl-share #tlShareStatus{flex:1;min-width:0;color:#c3d9d7;font-size:11px;line-height:1.5;overflow-wrap:anywhere}
 @media(max-width:540px){#tactics .tl-share button{width:100%}#tactics .tl-share #tlShareStatus{text-align:center}}
+
+/* Stats-based Best XI shortlist and experimental formation controls. */
+#tactics .tl-recommend-actions{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+#tactics .tl-recommend-actions button{flex:1 1 120px;min-height:43px;padding:8px;border:1px solid #60867a;border-radius:9px;background:#25454c;color:#e4f2ec;font-weight:900;font-size:11px;line-height:1.35;cursor:pointer}
+#tactics .tl-recommend-actions button.is-selected{border-color:#c8ef69;color:#102f24;background:#c6ef65}
+#tactics .tl-recommend-actions button:focus-visible{outline:2px solid #c8ef69;outline-offset:2px}
+#tactics .tl-xi-choices[hidden]{display:none!important}
+#tactics .tl-xi-choices{margin:12px 0;border-top:1px solid #456064;padding-top:12px;min-width:0}
+#tactics .tl-xi-heading{display:flex;gap:8px;justify-content:space-between;align-items:baseline;flex-wrap:wrap;margin:0 0 9px}
+#tactics .tl-xi-heading strong{font-size:12px;color:#e9f6e5}
+#tactics .tl-xi-heading span{font-size:10px;color:#b4c9cf}
+#tactics .tl-xi-list{display:grid;gap:4px;max-width:100%}
+#tactics .tl-xi-row{display:grid;grid-template-columns:45px minmax(0,1fr) minmax(0,.78fr) 40px;gap:5px;align-items:center;border:1px solid #345460;background:#17313d;border-radius:8px;padding:7px;min-width:0}
+#tactics .tl-xi-row>strong{font-size:11px;color:#cafa83}
+#tactics .tl-xi-name{font-size:11px;color:#e7f1f0;font-weight:750;min-width:0;overflow-wrap:anywhere}
+#tactics .tl-xi-info{font-size:9px;color:#b5cbd0;min-width:0;overflow-wrap:anywhere}
+#tactics .tl-xi-tag{border-radius:6px;text-align:center;padding:3px;background:#39525f;font-size:8px;color:#edf3f7;font-weight:950}
+#tactics .tl-xi-tag.is-human{background:#c8f35d;color:#133021}
+#tactics .tl-xi-note{font-size:10px;line-height:1.55;color:#bdd0d4;margin:9px 0 0;overflow-wrap:anywhere}
+@media(max-width:540px){#tactics .tl-xi-row{grid-template-columns:38px minmax(0,1fr) 38px}.tl-xi-row .tl-xi-info{grid-column:2 / 3;grid-row:2}.tl-xi-row .tl-xi-tag{grid-column:3;grid-row:1 / 3}}
