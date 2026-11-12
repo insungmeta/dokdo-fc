@@ -84,3 +84,15 @@ main{padding-top:15px}
 .nav a{letter-spacing:-.3px}.nav a.selected{color:var(--lime)}
 @media(max-width:900px){.hero-left{background-position:center,70% center}}
 @media(max-width:700px){.hero-left{background-image:linear-gradient(90deg,#071322f7 0%,#071322df 52%,#07132277 100%),url('./assets/match-duel.svg');background-position:center,75% center}.hero-left .division-primary{background:#061322aa}}
+
+/* Correct actual dashboard's FIVE leader cards; previous four-column override was wrong. */
+@media(min-width:1001px){.star-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:701px) and (max-width:1000px){.star-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.star-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.star:last-child{grid-column:span 2}}
+/* Emphasize actual match data, not the small supporting labels. */
+.hero-right{border-top:3px solid var(--lime);box-shadow:0 8px 25px #0004}
+.hero-right-top{font-weight:900;letter-spacing:.4px}
+.hero-recent-card .hero-recent-list{font-variant-numeric:tabular-nums}
+.section-title p,.star .detail,.metric small{color:#a8b8ca}
+.star .hero-number,.metric b{font-variant-numeric:tabular-nums}
+@media(min-width:901px){.hero{grid-template-columns:minmax(0,1.32fr) minmax(320px,.9fr)}}
