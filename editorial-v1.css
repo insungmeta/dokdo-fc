@@ -496,3 +496,23 @@ main{padding-top:15px}
  #app-home .dfc-summary-grid .rating-trend span{font-size:9px!important}
  #app-home .dfc-photo-banner .dfc-banner-title strong{font-size:clamp(28px,8vw,43px)!important}
 }
+
+/* Prevent orphan Korean syllables in compact season stat headings. */
+#app-home .dfc-summary-stat .metric h3{
+ display:block!important;
+ width:100%!important;
+ max-width:100%!important;
+ font-family:Arial,'Malgun Gothic',sans-serif!important;
+ font-size:clamp(8px,2.15vw,10px)!important;
+ font-weight:800!important;
+ line-height:1.25!important;
+ letter-spacing:-.45px!important;
+ white-space:nowrap!important;
+ word-break:keep-all!important;
+ overflow-wrap:normal!important;
+ overflow:hidden!important;
+ text-overflow:clip!important;
+}
+#app-home .dfc-summary-stat .metric{min-width:0!important;width:100%!important}
+#app-home .dfc-summary-stat .metric>div:not(.metric-icon){min-width:0!important;width:100%!important}
+@media(max-width:380px){#app-home .dfc-summary-stat .metric h3{font-size:8px!important;letter-spacing:-.6px!important}}
