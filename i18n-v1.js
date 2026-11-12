@@ -24,7 +24,7 @@
     '#profileName', '#profileAvatar', '#h2hOpponentGroup',
     '#rivalSelect option', '.h2h-rival-brand', '.match-contributor-chip strong',
     '.roster-member summary strong', '.h2h-fixtures .name',
-    '.board-post-content', '.board-comment-content', '[translate="no"]',
+    '.board-post-content', '.board-comment-content', '.board-post h4', '.board-post p', '.board-post .board-post-top', '[translate="no"]',
     '[data-no-translate]'
   ].join(',');
   var cache = new Map();
@@ -44,9 +44,11 @@
       out = out.split(original).join(target);
     }
     // Counts and division tiers are numerical and not part of player names.
-    out = out.replace(/(\d+)\s*부(?=\s*리그|[\s·,:.!?)]|$)/g, 'Division $1');
+    out = out.replace(/(\d+)\s*부(?:\s*리그)?(?=[\s·,:.!?)]|$)/g, 'Division $1');
     out = out.replace(/(\d+)\s*승\s*[·,\/]\s*(\d+)\s*무\s*[·,\/]\s*(\d+)\s*패/g, '$1W · $2D · $3L');
     out = out.replace(/(\d+)\s*경기(?=[\s·,.!)]|$)/g, '$1 matches');
+    out = out.replace(/승점\s*(\d+(?:\.\d+)?)/g, '$1 pts');
+    out = out.replace(/(\d+(?:\.\d+)?)\s*점(?=[\s·,.!)]|$)/g, '$1 pts');
     out = out.replace(/(\d+)\s*명(?=[\s·,.!)]|$)/g, '$1 players');
     if (cache.size > 3500) cache.clear();
     cache.set(str, out);
