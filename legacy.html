@@ -186,12 +186,15 @@
 .player-row.card-row{grid-template-columns:28px 40px 1fr auto}
 .player-row .card-value{display:flex;align-items:center;gap:11px;font-family:'DM Sans','Noto Sans KR',sans-serif;font-size:12px;white-space:nowrap}
 .player-row .card-value span{display:inline-block;color:#ecf4fb;font-weight:800}
+
+.footer{flex-wrap:wrap;gap:10px 16px;line-height:1.55}.footer nav{display:flex;gap:9px;flex-wrap:wrap}.footer nav a{color:#c9e982;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:800px){.footer{display:flex;flex-direction:column;align-items:flex-start}.footer nav{flex-wrap:wrap}}
 </style>
 <link rel="manifest" href="./site.webmanifest">
 <script src="./push/client.js" defer></script>
 </head>
 <body>
-<div class="topline">THE ISLAND. THE PRIDE. THE CLUB. — DOKDO FC / EA SPORTS FC 27</div>
+<div class="topline">THE ISLAND. THE PRIDE. THE CLUB. — DOKDO FC · INDEPENDENT FAN PROJECT</div>
 <div class="wrap">
 <header class="header">
 <a class="logo" href="#home" data-go="home"><img class="crest-image" src="./assets/dfc-crest.svg" width="48" height="56" alt="DFC 엠블럼"><span class="brand">DOKDO FC<small>PRO CLUBS · FC 27</small></span></a>
@@ -201,7 +204,7 @@
 <section class="club-strip" aria-label="DOKDO FC 구단 소개">
   <div class="club-strip-cover"><img src="./assets/club-banner.svg" width="1200" height="630" alt="DFC 독도 엠블럼과 경기장 그래픽" fetchpriority="high"></div>
   <div class="club-strip-brand"><img src="./assets/dfc-crest.svg" width="80" height="92" alt="DFC 엠블럼">
-    <div class="club-strip-copy"><div class="eyebrow">DFC <span>•</span> EA SPORTS FC 27 PRO CLUBS</div>
+    <div class="club-strip-copy"><div class="eyebrow">DFC <span>•</span> FC 27 PRO CLUBS · FAN COMMUNITY</div>
       <h1>DOKDO <em>FC</em></h1>
       <p>ONE TEAM. ONE PRIDE. ONE LEGACY.</p>
       <div class="club-chips"><span id="division">디비전 확인 중</span><span>CLUB ID 331042</span></div>
@@ -267,7 +270,10 @@
 </main>
 
 <div class="disclaimer">실제 EA 기록을 수집한 경우에만 수치를 표시합니다. 데이터 수집이 실패하면 마지막 저장 기록을 유지하며, 업데이트가 늦어질 수 있습니다. <a href="https://www.ea.com/games/ea-sports-fc/clubs/overview?clubId=331042&amp;platform=common-gen5" target="_blank" rel="noopener">EA 원본 클럽 기록 ↗</a></div>
-<footer class="footer"><span>© DOKDO FC — WE PLAY AS ONE.</span><span>INDEPENDENT FAN SITE · NOT AFFILIATED WITH EA</span><span>FREE HOSTED / GEN 5</span></footer>
+<footer class="footer"><span>DOKDO FC — WE PLAY AS ONE.</span>
+<span>본 웹사이트는 EA 또는 EA의 라이선스 제공자가 보증하거나 제휴하는 웹사이트가 아닙니다.</span>
+<nav aria-label="법적 안내"><a href="./privacy.html">개인정보 처리 안내</a> · <a href="./legal.html">저작권·비제휴 안내</a></nav>
+</footer>
 </div>
 <dialog id="details"><header class="dialoghead"><div><div class="kicker" id="detailLabel">DOKDO FC</div><h2 id="detailTitle">경기 상세</h2></div><button class="close" id="closeDetail" aria-label="닫기">×</button></header><div class="dialogbody" id="detailBody"></div></dialog>
 <script>
