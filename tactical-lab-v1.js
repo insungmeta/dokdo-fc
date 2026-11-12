@@ -59,6 +59,11 @@ function compute(data){
 function diagnoses(r){
  const {now,pass,delta}=r;
  const strengths=[],risks=[];
+ if(now.n===0)return {
+  strengths:[t('아직 확인된 리그 경기 결과가 없습니다.','No verified league match results yet.')],
+  risks:[t('데이터가 확보되기 전에는 강점·약점을 판단할 수 없습니다.','Strengths and weaknesses cannot be assessed until results are collected.')]
+ };
+
  if(now.gaAvg<=1.1)strengths.push(t('경기당 실점 '+avg(now.gaAvg)+'골로 최근 수비 결과가 안정적인 편입니다.','Recent defensive results: '+avg(now.gaAvg)+' goals conceded per game.'));
  if(now.gfAvg>=1.8)strengths.push(t('경기당 득점 '+avg(now.gfAvg)+'골로 공격 결과가 비교적 좋습니다.','Recent scoring: '+avg(now.gfAvg)+' goals per game.'));
  if(delta!==null&&delta>=.35)strengths.push(t('이전 10경기 대비 경기당 승점이 '+avg(delta)+'점 상승했습니다.','Points per game improved by '+avg(delta)+' compared with the previous 10.'));
@@ -91,6 +96,45 @@ function pitch(formation,count){
    '<text x="'+cx.toFixed(1)+'" y="'+(cy+11).toFixed(1)+'" font-size="8.3" text-anchor="middle" fill="'+(human?'#244c32':'#c5d4d7')+'">'+(human?'USER':'AI')+'</text></g>');
  }
  return parts.join('')+'</svg>';
+}
+const descriptions={
+ ST:['등지고 연결한 후 박스 진입','Hold up play, combine, then attack the box'],
+ LW:['터치라인 폭 유지 → 침투 또는 컷백','Stay wide, run in behind or cut back'],
+ RW:['반대쪽 폭 유지 → 뒷공간 침투','Maintain opposite-side width and make runs in behind'],
+ CAM:['ST 주변 연계, 세컨드볼, 역압박','Link with ST, recover second balls and counter-press'],
+ LCDM:['중앙 수비 앞 보호, 안전한 패스 옵션','Protect central defense, offer safe passing outlet'],
+ RCDM:['볼 반대편 공간 관리, 수비 전환','Protect the far-side channel and recover on turnovers'],
+ CDM:['센터백 앞 잔류, 전진 패스 방향 전환','Hold in front of CBs and switch buildup'],
+ LCM:['좌측 하프스페이스 지원, 복귀','Support left half-space, recover defensively'],
+ RCM:['우측 하프스페이스 지원, 복귀','Support right half-space, recover defensively'],
+ LB:['한쪽 측면만 선택적으로 오버래핑','Overlap selectively, not with both fullbacks'],
+ RB:['반대편 풀백과 역할 교대, 수비 대비','Balance the other fullback and cover transitions'],
+ LCB:['수비라인 유지, 중앙 커버','Maintain the back line and cover the center'],
+ RCB:['수비라인 유지, 중앙 커버','Maintain the back line and cover the center'],
+ GK:['후방 패스 옵션 및 박스 보호','Support buildup and protect the box']
+};
+function roleRows(formation,count){
+ const assigned=allocations[formation][count]||[],all=formations[formation].map(x=>x[0]);
+ return {humans:assigned.map(p=>({position:p,description:descriptions[p]||[p,p]})),
+         ai:all.filter(p=>!assigned.includes(p))};
+}
+function shareText(){
+ const r=model,formation=selected||r.suggested,rows=roleRows(formation,people),dx=diagnoses(r);
+ const lines=[
+  'DOKDO FC · '+t('경기 전 전술 요약','Pre-match Tactical Brief'),
+  t('포메이션','Formation')+': '+formation,
+  t('사람 선수','Human players')+': '+people+' / AI: '+(11-people),
+  t('기준','Basis')+': '+t('최근 보관 리그','Last archived league')+' '+r.now.n+t('경기',' matches'),
+  t('경기당 득점/실점/승점','Goals for/against/points per match')+': '+avg(r.now.gfAvg)+' / '+avg(r.now.gaAvg)+' / '+avg(r.now.pts),
+  t('사람 선수 포지션','Human-controlled positions')+': '+rows.humans.map(x=>x.position).join(', '),
+  t('AI 포지션','AI positions')+': '+rows.ai.join(', '),
+  t('출전 포지션별 역할','Role assignments')+':'
+ ];
+ for(const role of rows.humans)lines.push('- '+role.position+': '+role.description[en()?1:0]);
+ lines.push('',t('전술 근거','Analysis')+': '+dx.risks.join(' '));
+ lines.push(t('주의: 경기 결과 기반 전술 실험안이며 EA 공식 추천이 아닙니다.','Note: These are experimental suggestions based on results, not official EA recommendations.'));
+ lines.push('https://insungmeta.github.io/dokdo-fc/'+(en()?'?lang=en#more':'#more'));
+ return lines.join('\n');
 }
 function render(){
  if(!model)return;
@@ -138,6 +182,10 @@ function render(){
  :t('빌드업: CDM을 안전한 후방 패스 옵션으로 남기고 윙어에게 폭을 유지하도록 역할을 지정하세요.','Build-up: keep a CDM as a safe outlet; ask wingers to maintain width.')
  ];
  id('tlActions').innerHTML=actions.map(a=>'<li>'+escape(a)+'</li>').join('');
+ const roles=roleRows(formation,people);
+ id('tlRoles').innerHTML=roles.humans.map(role=>'<li><strong>'+escape(role.position)+'</strong> · '+escape(role.description[en()?1:0])+'</li>').join('');
+ id('tlAIPositions').textContent=t('AI 조작 포지션: ','AI-controlled positions: ')+roles.ai.join(' · ');
+ id('tlCopy').textContent=t('전술 요약 복사','Copy Tactical Brief');
  const extra=delta===null?t('이전 10경기와 비교할 20경기 표본은 부족합니다.','Fewer than 20 archived matches to compare two periods.')
   :t('이전 10경기 대비 경기당 승점 변화 ','Points/game vs previous 10: ')+(delta>0?'+':'')+avg(delta)+t('점','.'); 
  id('tlMethod').textContent=t('분석 범위: 보관된 리그 결과 최근 '+now.n+'경기의 득점·실점·승점·무실점. ','Analysis: goals for/against, points and clean sheets from the last '+now.n+' archived league matches. ')+extra+' '+t('포메이션 추천은 전술 실험안이며, EA 공식 알고리즘이나 실제 실점 원인 분석이 아닙니다. 사람 선수 패스 통계는 누락될 수 있습니다.','Formation advice is editorial, not an official EA model or a diagnosis of causes. Human pass stats may be incomplete.');
@@ -147,7 +195,20 @@ root.addEventListener('click',event=>{
  if(!btn)return;
  if(btn.dataset.tlPeople){people=Number(btn.dataset.tlPeople)||5;}
  if(btn.dataset.tlFormation){selected=btn.dataset.tlFormation;}
+ id('tlShareStatus').textContent='';
  render();
+});
+id('tlCopy').addEventListener('click',async()=>{
+ if(!model){id('tlShareStatus').textContent=t('경기 데이터 준비 후 사용할 수 있습니다.','Available after match data has loaded.');return;}
+ const btn=id('tlCopy');
+ btn.disabled=true;
+ try{
+  if(!navigator.clipboard||!navigator.clipboard.writeText)throw Error('Clipboard API unavailable');
+  await navigator.clipboard.writeText(shareText());
+  id('tlShareStatus').textContent=t('복사되었습니다. 팀 채팅에 붙여넣으세요.','Copied. Paste it into the team chat.');
+ }catch(error){
+  id('tlShareStatus').textContent=t('복사 권한이 차단됐습니다. HTTPS에서 다시 시도해 주세요.','Clipboard permission was denied. Retry on HTTPS.');
+ }finally{btn.disabled=false;}
 });
 const receive=()=>{if(window.__dokdoData){model=compute(window.__dokdoData);render();}};
 document.addEventListener('dokdo:ready',receive);
