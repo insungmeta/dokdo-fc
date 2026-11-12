@@ -181,6 +181,30 @@ def validate(driver, lang, width):
                     info["issues"].append('tactics formation or evidence not rendered')
                 if tactical["widthAfter"]>width+4:
                     info["issues"].append('tactical pitch causes page overflow')
+                best=script(driver, """
+                    const root=document.querySelector('#tacticalLab');
+                    root.querySelector('#tlBestXI').click();
+                    const rows=Array.from(root.querySelectorAll('#tlXIList .tl-xi-row'));
+                    const names=rows.map(row=>row.querySelector('.tl-xi-name')?.textContent.trim())
+                        .filter(x=>x&&!x.includes('AI /')&&!x.includes('미확인'));
+                    const selected=Array.from(root.querySelectorAll('#tlPitch svg text')).filter(x=>x.textContent==='USER').length;
+                    const result={rowCount:rows.length,uniquePlayers:new Set(names).size,
+                     candidates:names.length,panelVisible:!root.querySelector('#tlBestXIPanel').hidden,
+                     bestButtonPressed:root.querySelector('#tlBestXI').getAttribute('aria-pressed'),
+                     formation:root.querySelector('#tlTitle').textContent,
+                     usedWidth:document.documentElement.scrollWidth,menuActive:document.querySelector('#tactics').classList.contains('is-active')};
+                    root.querySelector('#tlRecommendFormation').click();
+                    result.suggestedFormationPressed=Array.from(root.querySelectorAll('[data-tl-formation]')).filter(b=>b.getAttribute('aria-pressed')==='true').map(b=>b.textContent.trim());
+                    return result;
+                """)
+                print(json.dumps({"lang":lang,"width":width,"screen":"best-xi",**best},ensure_ascii=False),flush=True)
+                driver.save_screenshot(str(OUT / f"dfc-{lang}-{width}-best-xi.png"))
+                if best["rowCount"]!=11 or not best["panelVisible"] or best["bestButtonPressed"]!="true" or not best["menuActive"]:
+                    info["issues"].append('best xi selection did not render 11 positions')
+                if best["uniquePlayers"]!=best["candidates"]:
+                    info["issues"].append('best xi duplicated a player in multiple positions')
+                if best["usedWidth"]>width+4:
+                    info["issues"].append('best xi panel horizontally overflows')
             if screen=="matches":
                 driver.execute_script("document.querySelector('#matchList .match-item').click()")
                 detail=script(driver, """
