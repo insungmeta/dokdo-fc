@@ -85,6 +85,17 @@ def validate(driver, lang, width):
     screenshot = OUT / f"dfc-{lang}-{width}.png"
     driver.save_screenshot(str(screenshot))
     print(json.dumps({"lang":lang,"width":width,**info},ensure_ascii=False),flush=True)
+    if lang=="ko" and width==390:
+        roster_inspection=script(driver, """
+          const arr=window.__dokdoData?.members||[];
+          const hist={};
+          for(const m of arr){const p=m.position||m.favoritePosition||m.proPos||'unknown';hist[p]=(hist[p]||0)+1;}
+          return {members:arr.length,positions:hist,
+           sample:arr.slice(0,5).map(m=>({name:m.name,position:m.position,favoritePosition:m.favoritePosition,
+                gamesPlayed:m.gamesPlayed,ratingAve:m.ratingAve,goals:m.goals,assists:m.assists,
+                manOfTheMatch:m.manOfTheMatch,cleanSheetsGK:m.cleanSheetsGK}))};
+        """)
+        print(json.dumps({"screen":"roster-inspection",**roster_inspection},ensure_ascii=False),flush=True)
     # Go beyond the home card: verify each of the five screens and the full
     # squad view at representative mobile and desktop sizes.
     if width in (390, 1280):
