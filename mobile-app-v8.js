@@ -20,6 +20,8 @@ const wrap=(cls,title,node)=>{const card=document.createElement('section');card.
 summary.append(wrap('dfc-summary-division','DIVISION',primary),wrap('dfc-summary-rating','클럽 레이팅',rating),wrap('dfc-summary-form','최근 10경기 폼',form));
 const stat=wrap('dfc-summary-stat','시즌 팀 기록',null);stat.append(metrics);summary.append(stat);
 lower.append(wrap('dfc-board-matches','',recent),wrap('dfc-board-trend','팀 흐름 · 최근 경기',trend),wrap('dfc-board-leaders','주요 랭킹',lead));
+const localizeBoard=()=>{const en=document.documentElement.lang==='en';const titles=[['.dfc-summary-stat .dfc-card-title',en?'Season Record':'시즌 팀 기록'],['.dfc-board-trend .dfc-card-title',en?'Team Trends · Recent Matches':'팀 흐름 · 최근 경기'],['.dfc-board-leaders .dfc-card-title',en?'Top Players':'주요 랭킹'],['.dfc-summary-rating .dfc-card-title',en?'Club Rating':'클럽 레이팅'],['.dfc-summary-form .dfc-card-title',en?'Last 10 Form':'최근 10경기 폼']];for(const [selector,value] of titles){const el=board.querySelector(selector);if(el)el.textContent=value}};
+localizeBoard();new MutationObserver(localizeBoard).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
 hero.classList.add('dfc-legacy-hero');hero.style.display='none';
 players.classList.add('app-screen');matches.classList.add('app-screen');more.classList.add('app-screen');tactics.classList.add('app-screen');
 const rivals=document.createElement('section');rivals.className='app-screen';rivals.id='app-rivals';rivals.innerHTML='<div class="screen-head"><div><span class="eyebrow">HEAD TO HEAD</span><h2>상대전적</h2></div><small>상대팀별 맞대결</small></div>';
