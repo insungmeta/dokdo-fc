@@ -101,7 +101,7 @@ main.shell{padding-top:16px;padding-bottom:calc(110px + env(safe-area-inset-bott
 #matches .archive-filter{padding:11px 10px 3px}#matches .archive-filter button{padding:7px 9px;font-size:10px}
 #matches .inline-match-review{margin:5px 0 10px}#matches .inline-match-review .review-utility{padding:10px 12px}#matches .inline-match-review .match-center-head{padding:12px}#matches .inline-match-review .center-body{padding:12px}
 #app-rivals .h2h-head{padding:13px}
-.app-bottom-nav{position:fixed;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));bottom:0;left:0;right:0;z-index:130;align-items:stretch;background:#0b1723f7;border-top:1px solid #2c4752;box-shadow:0 -8px 24px #0007;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:7px max(5px,env(safe-area-inset-left,0px)) calc(7px + env(safe-area-inset-bottom,0px)) max(5px,env(safe-area-inset-right,0px))}
+.app-bottom-nav{position:fixed;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));bottom:0;left:0;right:0;z-index:130;align-items:stretch;background:#0b1723f7;border-top:1px solid #2c4752;box-shadow:0 -8px 24px #0007;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:7px max(5px,env(safe-area-inset-left,0px)) calc(7px + env(safe-area-inset-bottom,0px)) max(5px,env(safe-area-inset-right,0px))}
 .app-bottom-nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:51px;padding:4px 2px;color:#8fa6b2;border:0;border-radius:10px;background:none;font-size:10px;font-weight:850;white-space:nowrap}
 .app-bottom-nav button svg{height:21px;width:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .app-bottom-nav button.active{color:var(--applime);background:#1d3b36}.app-bottom-nav button.active svg{stroke-width:2.1}
@@ -494,3 +494,20 @@ main.shell{padding-bottom:calc(124px + env(safe-area-inset-bottom,0px))}footer.f
 #app-home .sync-check-feedback[data-state="warn"]{border-color:#94784f;background:#3c3022;color:#ffe6b3}
 #app-home .sync-check-feedback[data-state="error"]{border-color:#965759;background:#43282b;color:#ffced0}
 @media(max-width:380px){#app-home .sync-health #syncRefreshNow{min-width:82px;padding:9px 7px;font-size:11px}}
+
+
+/* Dedicated tactics screen and six equal-width navigation tabs. */
+#tactics{min-width:0;margin-top:0}
+#tactics .tactical-lab{margin-top:0}
+@media(min-width:801px) and (max-width:1100px){
+ .header .shell{gap:7px}
+ .header .nav{gap:2px;min-width:0}
+ .header .nav a{padding:9px 6px;font-size:11px}
+ .header .brand h1{font-size:18px}
+}
+@media(max-width:800px){
+ .app-bottom-nav{grid-template-columns:repeat(6,minmax(0,1fr));gap:3px;padding-left:5px;padding-right:5px}
+ .app-bottom-nav button{min-width:0;min-height:64px;padding:5px 1px;letter-spacing:-.45px;font-size:clamp(8px,2.35vw,10px);white-space:nowrap;overflow:hidden}
+ .app-bottom-nav button .app-nav-icon{width:29px;height:28px}
+ .app-bottom-nav button .app-nav-label{max-width:100%;white-space:nowrap}
+}
