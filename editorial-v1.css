@@ -516,3 +516,16 @@ main{padding-top:15px}
 #app-home .dfc-summary-stat .metric{min-width:0!important;width:100%!important}
 #app-home .dfc-summary-stat .metric>div:not(.metric-icon){min-width:0!important;width:100%!important}
 @media(max-width:380px){#app-home .dfc-summary-stat .metric h3{font-size:8px!important;letter-spacing:-.6px!important}}
+
+/* 4K source photograph replaces pixelated mockup crop; typography remains real HTML. */
+/* CC0: Wikimedia Commons, Gomis and Neustädter in a header duel (October 2017).jpg */
+#app-home .dfc-photo-banner{
+ background-image:linear-gradient(90deg,#061121 0%,#061121fa 20%,#061121e9 37%,#0611217d 63%,#06112122 100%),url('https://commons.wikimedia.org/wiki/Special:FilePath/Gomis_and_Neust%C3%A4dter_in_a_header_duel_(October_2017).jpg?width=2560')!important;
+ background-color:#061121!important;
+ background-size:cover,cover!important;
+ background-position:center,center 44%!important;
+ background-repeat:no-repeat!important;
+}
+@media(max-width:700px){
+ #app-home .dfc-photo-banner{background-position:center,64% 42%!important;background-size:cover,auto 170%!important}
+}
