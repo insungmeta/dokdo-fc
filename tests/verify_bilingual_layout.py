@@ -207,140 +207,66 @@ def validate(driver, lang, width):
                 WebDriverWait(driver,12).until(
                     lambda d: d.execute_script("return Boolean(document.querySelector('#tlPitch svg'))")
                 )
-                tactical=script(driver, """
-                    const root=document.querySelector('#tacticalLab'),svg=root.querySelector('#tlPitch svg');
-                    const count=()=>Array.from(root.querySelectorAll('#tlPitch text')).filter(n=>n.textContent==='USER').length;
-                    const out={visible:Boolean(root&&svg),firstHuman:count(),
-                         evidence:root.querySelector('#tlEvidence')?.textContent,
-                         formation:root.querySelector('#tlTitle')?.textContent,
-                         width:document.documentElement.scrollWidth};
-                    root.querySelector('[data-tl-people="9"]').click();
-                    out.nineHuman=count();
-                    root.querySelector('[data-tl-formation="4-3-3"]').click();
-                    out.alternative=root.querySelector('#tlPitch svg')?.getAttribute('aria-label');
-                    out.fourThreeThree=root.querySelector('[data-tl-formation="4-3-3"]').getAttribute('aria-pressed');
-                    out.widthAfter=document.documentElement.scrollWidth;
-                    return out;
-                """)
-                print(json.dumps({"lang":lang,"width":width,"screen":"tactics",**tactical},ensure_ascii=False),flush=True)
-                driver.save_screenshot(str(OUT / f"dfc-{lang}-{width}-tactics.png"))
-                if tactical["firstHuman"]!=5 or tactical["nineHuman"]!=9:
-                    info["issues"].append('tactics human slot count not updated')
-                if tactical["fourThreeThree"]!="true" or not tactical["evidence"]:
-                    info["issues"].append('tactics formation or evidence not rendered')
-                if tactical["widthAfter"]>width+4:
-                    info["issues"].append('tactical pitch causes page overflow')
-                best=script(driver, """
+                quick=script(driver, """
                     const root=document.querySelector('#tacticalLab');
+                    const count=()=>Array.from(root.querySelectorAll('#tlPitch text')).filter(x=>x.textContent==='USER').length;
+                    const cards=Array.from(root.querySelectorAll('[data-tl-forecast]'));
+                    const detail=root.querySelector('.tl-more-details');
+                    const out={
+                        visible:root.getBoundingClientRect().height>100,
+                        options:cards.map(c=>c.dataset.tlForecast),
+                        forecastCount:cards.length,
+                        actionCount:root.querySelectorAll('#tlActions li').length,
+                        detailsInitiallyClosed:!detail.open,
+                        trialRemoved:!root.querySelector('#tlTrialStart,#tlTrialStop,#tlTrialMatches'),
+                        people5:count(),dataEvidence:root.querySelector('#tlEvidence')?.textContent,
+                        english:document.documentElement.lang
+                    };
+                    root.querySelector('[data-tl-people="9"]').click();
+                    out.people9=count();
+                    root.querySelector('[data-tl-forecast="4-4-2"]').click();
+                    out.fourFourTwo=root.querySelector('[data-tl-formation="4-4-2"]').getAttribute('aria-pressed');
+                    out.formationLabel=root.querySelector('#tlTitle').textContent;
+                    out.selectedVisual=root.querySelector('[data-tl-forecast="4-4-2"]').classList.contains('is-selected');
+                    detail.open=true;
+                    out.detailsOpen=detail.open;
+                    out.rationale=Boolean(root.querySelector('#tlForecastDetails').textContent.trim());
+                    root.querySelector('[data-tl-people="5"]').click();
+                    root.querySelector('[data-tl-forecast="4-2-3-1"]').click();
                     root.querySelector('#tlBestXI').click();
                     const rows=Array.from(root.querySelectorAll('#tlXIList .tl-xi-row'));
-                    const names=rows.map(row=>row.querySelector('.tl-xi-name')?.textContent.trim())
-                        .filter(x=>x&&!x.includes('AI /')&&!x.includes('미확인'));
-                    const selected=Array.from(root.querySelectorAll('#tlPitch svg text')).filter(x=>x.textContent==='USER').length;
-                    const result={rowCount:rows.length,uniquePlayers:new Set(names).size,
-                     candidates:names.length,panelVisible:!root.querySelector('#tlBestXIPanel').hidden,
-                     bestButtonPressed:root.querySelector('#tlBestXI').getAttribute('aria-pressed'),
-                     formation:root.querySelector('#tlTitle').textContent,
-                     usedWidth:document.documentElement.scrollWidth,menuActive:document.querySelector('#tactics').classList.contains('is-active')};
-                    root.querySelector('#tlRecommendFormation').click();
-                    result.suggestedFormationPressed=Array.from(root.querySelectorAll('[data-tl-formation]')).filter(b=>b.getAttribute('aria-pressed')==='true').map(b=>b.textContent.trim());
-                    return result;
+                    out.xiRows=rows.length;out.bestOpen=!root.querySelector('#tlBestXIPanel').hidden;
+                    const names=rows.map(r=>r.querySelector('.tl-xi-name')?.textContent.trim())
+                       .filter(x=>x&&!x.includes('AI /')&&!x.includes('미확인'));
+                    out.uniqueNames=new Set(names).size;out.namedPlayers=names.length;
+                    const st=rows.find(r=>r.querySelector('strong')?.textContent==='ST');
+                    out.striker=st?.querySelector('.tl-xi-name')?.textContent.trim();
+                    out.pageWidth=document.documentElement.scrollWidth;
+                    return out;
                 """)
-                print(json.dumps({"lang":lang,"width":width,"screen":"best-xi",**best},ensure_ascii=False),flush=True)
-                driver.save_screenshot(str(OUT / f"dfc-{lang}-{width}-best-xi.png"))
-                if best["rowCount"]!=11 or not best["panelVisible"] or best["bestButtonPressed"]!="true" or not best["menuActive"]:
-                    info["issues"].append('best xi selection did not render 11 positions')
-                if best["uniquePlayers"]!=best["candidates"]:
-                    info["issues"].append('best xi duplicated a player in multiple positions')
-                if best["usedWidth"]>width+4:
-                    info["issues"].append('best xi panel horizontally overflows')
-                forecast=script(driver, """
-                    const lab=document.querySelector('#tacticalLab');
-                    const cards=Array.from(lab.querySelectorAll('#tlForecastOptions [data-tl-forecast]'));
-                    const ids=cards.map(c=>c.dataset.tlForecast);
-                    const text=lab.querySelector('#tlForecastFoot')?.textContent||'';
-                    const trialBefore=lab.querySelector('#tlTrialStatus')?.textContent||'';
-                    const option=cards.find(c=>c.dataset.tlForecast==='4-4-2');
-                    option?.click();
-                    const altSelected=lab.querySelector('[data-tl-formation="4-4-2"]')?.getAttribute('aria-pressed');
-                    const line=lab.querySelectorAll('#tlPitch svg rect').length;
-                    lab.querySelector('#tlTrialStart')?.click();
-                    const startHidden=lab.querySelector('#tlTrialStart').hidden;
-                    const trialStarted=lab.querySelector('#tlTrialStatus')?.textContent||'';
-                    lab.querySelector('#tlTrialStop')?.click();
-                    const stopped=lab.querySelector('#tlTrialStart').hidden===false;
-                    return {options:ids,forecastNotes:text,trialBefore,altSelected,line,startHidden,
-                            trialStarted,stopped,width:document.documentElement.scrollWidth};
+                print(json.dumps({"lang":lang,"width":width,"screen":"quick-tactics",**quick},ensure_ascii=False),flush=True)
+                driver.save_screenshot(str(OUT / f"dfc-{lang}-{width}-quick-tactics.png"))
+                if not quick["visible"] or sorted(quick["options"])!=["4-2-3-1","4-3-3","4-4-2"]:
+                    info["issues"].append("quick tactics route or formation cards missing")
+                if quick["people5"]!=5 or quick["people9"]!=9 or not quick["fourFourTwo"]=="true" or not quick["selectedVisual"]:
+                    info["issues"].append("tactics player count or formation selector fails")
+                if quick["actionCount"]!=2 or not quick["detailsInitiallyClosed"] or not quick["trialRemoved"]:
+                    info["issues"].append("quick tactic screen too verbose or trial controls remain")
+                if not quick["detailsOpen"] or not quick["rationale"] or not quick["bestOpen"] or quick["xiRows"]!=11:
+                    info["issues"].append("optional analysis or Best XI not available")
+                if quick["namedPlayers"]!=quick["uniqueNames"]:
+                    info["issues"].append("Best XI duplicated player")
+                if quick["pageWidth"]>width+4:
+                    info["issues"].append("quick tactical UI horizontal overflow")
+                current=script(driver, """
+                    const data=window.__dokdoData||{};
+                    const name=(data.members||[]).find(p=>p.name==='dududada3472')?.name;
+                    const hist=(data.matches||[]).flatMap(m=>(m.players||[])
+                         .filter(p=>p.name===name && Number(p.playerId)>0));
+                    return {name,forwards:hist.filter(p=>p.position==='forward').length};
                 """)
-                print(json.dumps({"lang":lang,"width":width,"screen":"forecast-and-trial",**forecast},ensure_ascii=False),flush=True)
-                driver.save_screenshot(str(OUT / f"dfc-{lang}-{width}-forecasts.png"))
-                if sorted(forecast["options"])!=["4-2-3-1","4-3-3","4-4-2"]:
-                    info["issues"].append("forecast does not offer all three experimental formations")
-                if forecast["altSelected"]!="true" or not forecast["line"] or not forecast["startHidden"] or not forecast["stopped"]:
-                    info["issues"].append("forecasts, new formation or trial controls not functioning")
-                if forecast["width"]>width+4:
-                    info["issues"].append("forecast cards horizontal overflow")
-                striker=script(driver, """
-                   const root=document.querySelector('#tacticalLab');
-                   const player=(window.__dokdoData?.members||[]).find(p=>p.name==='dududada3472');
-                   const hits=(window.__dokdoData?.matches||[]).flatMap(m=>(m.players||[])
-                     .filter(p=>p.name==='dududada3472'&&Number(p.playerId)>0));
-                   const fw=hits.filter(p=>p.position==='forward').length,
-                         mf=hits.filter(p=>p.position==='midfielder').length;
-                   const st=Array.from(root.querySelectorAll('#tlXIList .tl-xi-row'))
-                     .find(r=>r.querySelector('strong')?.textContent==='ST');
-                   const chosen=st?.querySelector('.tl-xi-name')?.textContent.trim();
-                   const positions=Array.from(root.querySelectorAll('[data-tl-formation]'));
-                   const suggested=root.querySelector('#tlForecastOptions .tl-forecast-card.is-first')?.dataset.tlForecast;
-                   const alternative=suggested==='4-3-3'?'4-2-3-1':'4-3-3';
-                   positions.find(b=>b.dataset.tlFormation===alternative)?.click();
-                   root.querySelector('#tlRecommendFormation').click();
-                   const selected=positions.find(b=>b.getAttribute('aria-pressed')==='true')?.dataset.tlFormation;
-                   return {player:player?.name,goals:player?.goals,latestPosition:player?.position,
-                     archivedFW:fw,archivedMF:mf,stChosen:chosen,suggested,selected,
-                     buttonFeedback:root.querySelector('#tlFormationFeedback')?.textContent.trim()};
-                """)
-                print(json.dumps({"lang":lang,"width":width,"screen":"top-scorer-role-and-recommend-reset",**striker},ensure_ascii=False),flush=True)
-                if striker["player"] and striker["archivedFW"]>=3 and striker["archivedFW"]>striker["archivedMF"]*2:
-                    if striker["stChosen"]!=striker["player"]:
-                        info["issues"].append("Primary archived FW and season top scorer incorrectly omitted from ST")
-                if striker["selected"]!=striker["suggested"] or not striker["buttonFeedback"]:
-                    info["issues"].append("Suggested formation button did not visibly reset and acknowledge selection")
-                # Synthetic future fixtures are used ONLY inside this temporary
-                # headless browser session to test trial reporting, never
-                # uploaded to the real EA match archive or shown to users.
-                trial_simulation=script(driver, """
-                    const original=window.__dokdoData,lab=document.querySelector('#tacticalLab');
-                    const futureDate=Math.max(...original.matches.filter(m=>m.matchType==='leagueMatch')
-                        .map(m=>Date.parse(m.timestamp)).filter(Number.isFinite));
-                    lab.querySelector('[data-tl-forecast="4-4-2"]').click();
-                    lab.querySelector('#tlTrialStart').click();
-                    const mock=Array.from({length:5},(_,i)=>({
-                      matchId:'__synthetic_validation_'+i,matchType:'leagueMatch',
-                      timestamp:new Date(futureDate+(i+1)*3600000).toISOString(),
-                      goals:i%2===0?2:0,goalsAgainst:1,players:[],opponentName:'Synthetic QA Only'
-                    }));
-                    window.__dokdoData={...original,matches:[...mock,...original.matches]};
-                    document.dispatchEvent(new Event('dokdo:ready'));
-                    const before=lab.querySelectorAll('[data-tl-trial-match]').length;
-                    for(let i=0;i<5;i++){
-                      const input=lab.querySelector('[data-tl-trial-match="__synthetic_validation_'+i+'"]');
-                      if(!input)continue;
-                      input.checked=true;input.dispatchEvent(new Event('change',{bubbles:true}));
-                    }
-                    const result=lab.querySelector('#tlTrialStatus').textContent;
-                    const verified=result.includes('5/5')&&result.includes('→');
-                    lab.querySelector('#tlTrialStop').click();
-                    window.__dokdoData=original;document.dispatchEvent(new Event('dokdo:ready'));
-                    return {shown:before,verified,summary:result.slice(0,480),
-                     stopped:!lab.querySelector('#tlTrialStart').hidden,
-                     pageWidth:document.documentElement.scrollWidth};
-                """)
-                print(json.dumps({"lang":lang,"width":width,"screen":"trial-comparison-simulation",**trial_simulation},ensure_ascii=False),flush=True)
-                if trial_simulation["shown"]!=5 or not trial_simulation["verified"] or not trial_simulation["stopped"]:
-                    info["issues"].append("5-match confirmed trial comparison did not compute")
-                if trial_simulation["pageWidth"]>width+4:
-                    info["issues"].append("trial comparison overflowed mobile viewport")
+                if current["name"] and current["forwards"]>=3 and quick["striker"]!=current["name"]:
+                    info["issues"].append("Archived top scorer not selected as ST")
             if screen=="matches":
                 driver.execute_script("document.querySelector('#matchList .match-item').click()")
                 detail=script(driver, """
