@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.window.OnBackInvokedDispatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
@@ -67,6 +69,18 @@ public final class MainActivity extends Activity {
         offlinePanel = makeOfflinePanel();
         root.addView(offlinePanel);
         setContentView(root);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
+                    OnBackInvokedDispatcher.PRIORITY_DEFAULT,
+                    () -> {
+                        if (webView != null && webView.getVisibility() == View.VISIBLE
+                                && webView.canGoBack()) {
+                            webView.goBack();
+                        } else {
+                            finish();
+                        }
+                    });
+        }
         webView.loadUrl(HOME);
     }
 
@@ -231,13 +245,15 @@ public final class MainActivity extends Activity {
         return Math.round(value * getResources().getDisplayMetrics().density);
     }
 
+    // Handle hardware Back on older Android; API 33+ gesture Back is registered above.
     @Override
-    public void onBackPressed() {
-        if (webView != null && webView.getVisibility() == View.VISIBLE && webView.canGoBack()) {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && webView != null
+                && webView.getVisibility() == View.VISIBLE && webView.canGoBack()) {
             webView.goBack();
-        } else {
-            super.onBackPressed();
+            return true;
         }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
