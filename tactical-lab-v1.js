@@ -238,9 +238,119 @@ function shareText(){
  lines.push('https://insungmeta.github.io/dokdo-fc/'+(en()?'?lang=en#tactics':'#tactics'));
  return lines.join('\n');
 }
+
+/* Forecast ranks are transparent heuristics. There is no historical formation
+ * label in the EA data, so they are NOT trained win probabilities or evidence
+ * that the proposed formation caused prior wins.
+ */
+function forecastCandidates(r,count){
+ const sample=r.now.n,conceded=r.now.gaAvg,scored=r.now.gfAvg;
+ const roleCounts={forward:0,midfielder:0,defender:0,goalkeeper:0};
+ for(const p of r.roster){
+  if(!(Number(p.gamesPlayed)>=5))continue;
+  const c=primaryPosition(p,r.history).category;
+  if(c&&roleCounts[c]!==undefined)roleCounts[c]++;
+ }
+ const pass=r.pass.ratio,forward=roleCounts.forward;
+ const hypotheses=[
+  {id:'4-2-3-1',
+   weight:20+Math.min(20,conceded*9)+(conceded>=1.6?10:0)+(pass!==null&&pass<.68?5:0)+
+      (roleCounts.midfielder>=2?4:0),
+   expected:t('중앙의 두 수비형 미드필더로 상대 역습 공간을 줄이고 ST–CAM 연계를 유지하는 가설입니다.',
+              'Hypothesis: double-pivot cover reduces transition gaps while preserving ST–CAM combinations.'),
+   risk:t('측면 윙어와 CAM이 고립되면 공격이 ST 한 명에게 집중됩니다.',
+          'Risk: the sole ST can be isolated if the CAM and wide players lose support.'),
+   task:t('공을 잃으면 CDM 한 명은 중앙을 지키고, 다른 한 명만 전진하세요.',
+          'After a turnover, hold one CDM centrally and release only the other.')},
+  {id:'4-3-3',
+   weight:18+(scored<1.4?14:4)+(conceded<1.4?9:-6)+(pass!==null&&pass>=.72?6:0)+
+      (roleCounts.forward>=3?5:0)+(count>=7?3:0),
+   expected:t('3명의 공격수로 수비 폭을 벌려 측면 침투와 컷백을 늘리는 가설입니다.',
+              'Hypothesis: three forwards stretch the back line, creating wide runs and cutbacks.'),
+   risk:t('CDM이 올라가거나 양쪽 풀백이 동시에 전진하면 역습에 노출됩니다.',
+          'Risk: the lone CDM and advancing fullbacks may leave counterattack space.'),
+   task:t('윙어를 폭넓게 두고, ST는 중앙 박스를 지키며 CDM은 전진을 제한하세요.',
+          'Keep wingers wide, ST central, and CDM deeper during attacking buildup.')},
+  {id:'4-4-2',
+   weight:17+(scored<1.5?14:3)+(forward>=2?10:-9)+(pass!==null&&pass<.72?5:0)-
+      (conceded>=1.7?8:0)+(count>=7?5:0),
+   expected:t('두 공격수가 서로 등지고 받거나 뒷공간을 침투하며 득점 경로를 나누는 새로운 실험안입니다.',
+              'New trial hypothesis: two strikers divide hold-up and runs behind, offering another scoring route.'),
+   risk:t('2명의 중앙 미드필더만으로 수적 열세가 생길 수 있고, LM/RM 복귀가 중요합니다.',
+          'Risk: two central midfielders can be outnumbered; LM/RM recovery matters.'),
+   task:t('첫 ST는 볼을 받고 두 번째 ST는 침투하세요. 양쪽 미드필더에게 수비 복귀를 지시하세요.',
+          'One ST shows for the ball, the other runs behind; wide midfielders must recover.')}
+ ];
+ hypotheses.sort((a,b)=>b.weight-a.weight||a.id.localeCompare(b.id));
+ return hypotheses.map((p,i)=>({...p,rank:i+1,sample}));
+}
+const trialKey='dfc-tactical-trial-v1';
+let trial=null;
+try{
+ const stored=JSON.parse(localStorage.getItem(trialKey)||'null');
+ if(stored&&stored.version===1&&Array.isArray(stored.confirmed)&&typeof stored.formation==='string')
+  trial=stored;
+}catch(_){}
+function storeTrial(){
+ try{
+  if(trial)localStorage.setItem(trialKey,JSON.stringify(trial));
+  else localStorage.removeItem(trialKey);
+  return true;
+ }catch(_){return false}
+}
+function eligibleTrialMatches(r){
+ if(!trial||!Array.isArray(r.league))return [];
+ const stamp=Date.parse(trial.anchorTimestamp||'');
+ if(!Number.isFinite(stamp))return [];
+ return r.league.filter(m=>Date.parse(m.timestamp)>stamp &&
+   !trial.anchorIds.includes(String(m.matchId)));
+}
+function renderTrial(r){
+ const start=id('tlTrialStart'),stop=id('tlTrialStop'),list=id('tlTrialMatches');
+ stop.hidden=!trial;
+ start.hidden=!!trial;
+ start.textContent=t('선택 전술 5경기 시험 시작','Start 5-Match Tactical Trial');
+ stop.textContent=t('시험 기록 종료','End Trial');
+ if(!trial){
+  id('tlTrialStatus').textContent=t(
+   '아직 진행 중인 시험이 없습니다. 실제 경기에서 새 전술을 쓸 때 시작한 뒤, 해당 전술을 사용한 경기만 직접 체크하세요. 기록은 이 브라우저에만 저장됩니다.',
+   'No active trial. Start when you actually use the formation, then manually check the matches where it was used. Saved only in this browser.');
+  list.innerHTML='';return;
+ }
+ const matches=eligibleTrialMatches(r),confirmedSet=new Set(trial.confirmed);
+ const verified=matches.filter(m=>confirmedSet.has(String(m.matchId))).sort(
+  (a,b)=>String(a.timestamp).localeCompare(String(b.timestamp))).slice(0,5);
+ const base=trial.baseline||{pts:0,gfAvg:0,gaAvg:0,n:0};
+ let status=t('시험 전술 ','Trial formation ')+trial.formation+
+  t(' · 직접 확인한 경기 ',' · manually verified matches ')+verified.length+'/5'+
+  t(' · 신규 보관 경기 ',' · new archived fixtures ')+matches.length;
+ if(matches.length===0)status+=' · '+t('새 경기가 저장되면 여기에 표시됩니다.','New matches will appear when archived.');
+ if(verified.length>=5){
+  const after=summary(verified);
+  status+='\n'+t('시험 전/후 비교 (확인한 5경기 기준): ','Before vs trial (5 confirmed matches): ')+
+   t('경기당 승점 ','points/match ')+avg(base.pts)+' → '+avg(after.pts)+
+   t(' · 득점 ',' · goals ')+avg(base.gfAvg)+' → '+avg(after.gfAvg)+
+   t(' · 실점 ',' · conceded ')+avg(base.gaAvg)+' → '+avg(after.gaAvg)+'.\n'+
+   t('결과가 좋아져도 전술의 인과 효과는 입증되지 않습니다. 상대 수준과 참여 인원이 다를 수 있습니다.',
+     'Better results do not prove the formation caused them. Opposition and player availability may differ.');
+ } else status+='\n'+t('최소 5경기를 실제 사용했다고 표시해야 비교 결과가 나옵니다.',
+   'Confirm actual use in at least 5 matches to see the comparison.');
+ id('tlTrialStatus').textContent=status;
+ list.innerHTML=matches.slice(0,22).map(m=>{
+  const checked=confirmedSet.has(String(m.matchId)),key=escape(m.matchId);
+  const date=new Date(m.timestamp).toLocaleDateString(en()?'en-GB':'ko-KR',{timeZone:'Asia/Seoul',month:'2-digit',day:'2-digit'});
+  return '<label class="tl-trial-match"><input type="checkbox" data-tl-trial-match="'+key+'" '+(checked?'checked ':'')+
+   '/><span>'+escape(date)+' · '+escape(m.opponentName||t('상대팀','Opponent'))+' · '+
+   Number(m.goals)+':'+Number(m.goalsAgainst)+'</span><small>'+
+   t('이 전술 실제 사용','Actually used this tactic')+'</small></label>';
+ }).join('');
+ if(matches.length>22)list.insertAdjacentHTML('beforeend','<p>'+
+  t('최근 22경기만 표시됩니다.','Only the latest 22 matches are shown.')+'</p>');
+}
+
 function render(){
  if(!model)return;
- const {now,before,pass,delta,suggested,updated}=model,formation=selected||suggested;
+ const {now,before,pass,delta,updated}=model,forecast=forecastCandidates(model,people),suggested=forecast[0].id,formation=selected||suggested;
  const qualified=now.n>=5,dx=diagnoses(model);
  for(const button of root.querySelectorAll('[data-tl-formation]')){
   const current=button.dataset.tlFormation===formation;button.classList.toggle('is-selected',current);
@@ -254,6 +364,28 @@ function render(){
  const stale=!updated||Date.now()-Date.parse(updated)>20*60*1000;
  id('tlEvidence').textContent=(stale?t('데이터 지연 · ','Data delayed · '):'')+t('최근 보관 리그 ','Last ')+now.n+t('경기 · 마지막 수집 ',' archived league games · last collected ')+status;
  id('tlEvidence').classList.toggle('is-stale',stale);
+
+ const band=now.n>=20?t('시험 가설 · 비교 자료 충분','Trial hypotheses · fair sample'):
+  now.n>=10?t('시험 가설 · 표본 제한','Trial hypotheses · limited sample'):
+  t('초기 가설 · 표본 부족','Exploratory · small sample');
+ id('tlForecastConfidence').textContent=band;
+ id('tlForecastIntro').textContent=t(
+  '최근 리그 '+now.n+'경기: 경기당 득점 '+avg(now.gfAvg)+' · 실점 '+avg(now.gaAvg)+
+  '. 이 기록과 선수 주 포지션 분포에서 전술 가설을 도출했습니다. 실제 포메이션 사용 이력은 EA 데이터에 없습니다.',
+  'Last '+now.n+' league matches: '+avg(now.gfAvg)+' goals scored and '+avg(now.gaAvg)+
+  ' conceded per match. Formations below are hypotheses from results and positional coverage; EA does not supply historical formation choices.');
+ id('tlForecastOptions').innerHTML=forecast.map((p,i)=>
+  '<button type="button" class="tl-forecast-card'+(i===0?' is-first':'')+(formation===p.id?' is-selected':'')+
+  '" data-tl-forecast="'+p.id+'" aria-pressed="'+(formation===p.id)+'">'+
+  '<div class="tl-forecast-top"><span class="tl-forecast-order">'+(i===0?t('우선 시험 1순위','First to trial'):
+   t('대안 실험 ','Alternative #')+(i+1))+'</span></div>'+
+  '<strong>'+p.id+'</strong><span>'+escape(p.expected)+'</span>'+
+  '<small class="tl-forecast-risk">'+escape(p.risk)+'</small>'+
+  '<small>'+escape(p.task)+'</small></button>').join('');
+ id('tlForecastFoot').textContent=t(
+  '순서는 득점·실점·패스 성공률·선수 포지션 분포·인원에 적용한 공개 규칙 기반의 실험 우선순위입니다. 승률 예측값이나 EA 공식 메타가 아니며, 기존에 이 포메이션을 사용했다는 뜻도 아닙니다.',
+  'These are rule-based experiment priorities using scoring, concessions, collected passing, role mix and player count. They are not calibrated win probabilities, official EA meta, or claims that these formations were previously used.');
+ renderTrial(model);
  id('tlStats').innerHTML=[
   [t('경기당 득점','Goals per Game'),avg(now.gfAvg)],
   [t('경기당 실점','Conceded per Game'),avg(now.gaAvg)],
@@ -293,12 +425,9 @@ function render(){
  }
  id('tlRecommendFormation').textContent=t('추천 포메이션 보기','View Suggested Formation');
  id('tlReason').textContent=!qualified
-  ?t('5경기 미만이므로 실제 결과 기반 추천을 보류합니다. 4-2-3-1은 기본 예시일 뿐입니다.','Fewer than 5 matches: there is not enough evidence for a result-based recommendation.')
-  :formation!==suggested
-  ?t('직접 선택한 대안 전술입니다. 최근 결과만으로 효과가 보장되지 않습니다.','Manually selected alternative; outcomes cannot be guaranteed from match results.')
-  :formation==='4-3-3'
-  ?t('최근 득점 부족과 상대적으로 낮은 실점을 기준으로 폭넓은 공격을 시험해 볼 수 있습니다.','Low recent scoring with comparatively controlled concessions suggests testing wider attacking patterns.')
-  :t('중앙 수비 보호와 ST–CAM 연계를 함께 유지하는 균형형 제안입니다.','Balanced starting point with central cover and ST–CAM link play.');
+  ?t('자료가 적어 초기 실험안으로만 제시합니다. 실제 경기에서 결과를 확인하세요.','Limited records: this is an exploratory trial idea. Test it in matches.')
+  :forecast.find(x=>x.id===formation)?.expected||t('새로운 전술 실험안입니다.','Experimental tactical setup.');
+
  id('tlStrengths').innerHTML=dx.strengths.map(s=>'<li>'+escape(s)+'</li>').join('');
  id('tlRisks').innerHTML=dx.risks.map(s=>'<li>'+escape(s)+'</li>').join('');
  const actions=[
