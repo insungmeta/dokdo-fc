@@ -38,6 +38,10 @@ jobs:
         run: gradle -p android-app :app:assembleDebug --no-daemon --stacktrace
       - name: Android lint
         run: gradle -p android-app :app:lintDebug --no-daemon --stacktrace
+      - name: Validate release Android App Bundle (unsigned, NOT published)
+        run: |
+          gradle -p android-app :app:bundleRelease --no-daemon --stacktrace
+          test -s android-app/app/build/outputs/bundle/release/app-release.aab
       - name: Confirm manifest uses only Internet permission
         run: |
           python - <<'PY'
