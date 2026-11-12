@@ -878,11 +878,11 @@
     {
       "name": "IIIIIIIIIIIIxD_I",
       "position": "forward",
-      "gamesPlayed": 90,
-      "goals": 140,
-      "assists": 63,
+      "gamesPlayed": 93,
+      "goals": 150,
+      "assists": 65,
       "averageRating": 8.2,
-      "manOfTheMatch": 28,
+      "manOfTheMatch": 29,
       "ratingAve": 8.2
     },
     {
@@ -988,12 +988,12 @@
     {
       "name": "natural-shaper53",
       "position": "forward",
-      "gamesPlayed": 35,
-      "goals": 32,
-      "assists": 33,
-      "averageRating": 8.3,
-      "manOfTheMatch": 6,
-      "ratingAve": 8.3
+      "gamesPlayed": 38,
+      "goals": 35,
+      "assists": 43,
+      "averageRating": 8.4,
+      "manOfTheMatch": 7,
+      "ratingAve": 8.4
     },
     {
       "name": "keledek_diecast",
@@ -48868,8 +48868,8 @@
     }
   ],
   "sync": {
-    "lastAttempt": "2026-11-11T23:58:28.226265+00:00",
-    "lastSuccess": "2026-11-11T23:58:28.226265+00:00",
+    "lastAttempt": "2026-11-12T00:57:48.157101+00:00",
+    "lastSuccess": "2026-11-12T00:57:48.157101+00:00",
     "error": null
   },
   "archiveVersion": 1,
@@ -48908,5 +48908,12 @@
     "relegations": 0,
     "reputationTier": 0,
     "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l112893.png"
+  },
+  "ratingTrend": {
+    "current": 1408,
+    "baseline": 1423,
+    "delta": -15,
+    "period": "previous",
+    "baselineAt": "2026-11-11T17:23:03.897710+00:00"
   }
 }
