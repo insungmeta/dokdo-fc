@@ -56,7 +56,7 @@ function compute(data){
  const delta=now.n===10&&before.n===10?now.pts-before.pts:null;
  // These are editorial tactical heuristics, not validated EA formation recommendations.
  const suggested=now.n>=5&&now.gaAvg<1.3&&now.gfAvg<1.2?'4-3-3':'4-2-3-1';
- return {now,before,pass,delta,suggested,updated:data?.sync?.lastSuccess||null,roster:Array.isArray(data?.members)?data.members:[],history:archivedRoleHistory(data?.matches),league};
+ return {now,before,pass,delta,suggested,updated:data?.sync?.lastSuccess||null,roster:Array.isArray(data?.members)?data.members:[],history:archivedRoleHistory(data?.matches),league,sourceCount:Array.isArray(data?.matches)?data.matches.length:0};
 }
 function diagnoses(r){
  const {now,pass,delta}=r;
@@ -549,7 +549,7 @@ async function pollTacticalData(){
   const fresh=await response.json();
   if(!fresh||!Array.isArray(fresh.matches)||!Array.isArray(fresh.members))return;
   const changed=!model||fresh.sync?.lastSuccess!==model.updated||
-   fresh.matches.length!==model.league.length;
+   fresh.matches.length!==model.sourceCount;
   if(changed){model=compute(fresh);render();}
  }catch(error){
   const status=id('tlEvidence');
