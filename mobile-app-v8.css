@@ -521,3 +521,18 @@ main.shell{padding-bottom:calc(124px + env(safe-area-inset-bottom,0px))}footer.f
 #players .leader-more-controls button:focus-visible{outline:2px solid #c8f35d;outline-offset:2px}
 #players .leader-more-controls #leaderScrollHint{flex:1;min-width:0;color:#c7e0de;text-align:center;font-size:11px;line-height:1.4;font-weight:750;overflow-wrap:anywhere}
 @media(min-width:1001px){#players .leader-more-controls{display:none!important}}
+
+
+/* Scan-first presentation: keep advanced ranking rules accessible but collapsed. */
+#players .squad-info{margin:11px 0 0;border:1px solid #3e5962;border-radius:10px;min-width:0}
+#players .squad-info>summary{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:12px 15px;font-size:12px;font-weight:750;color:#c7dadb;list-style:none}
+#players .squad-info>summary::-webkit-details-marker{display:none}
+#players .squad-info>summary::after{content:'+';color:#c3e0b5;font-size:18px}
+#players .squad-info[open]>summary::after{content:'−'}
+#players .squad-info>summary:focus-visible{outline:2px solid #bfe878;outline-offset:2px}
+#players .squad-info .separate-row{margin:0;padding:0 10px 10px}
+@media(max-width:800px){
+ #players .section-title>p,#matches .section-title>p{display:none}
+ #players .squad-info .highlight-panel h3{font-size:13px}
+ #players .squad-info .highlight-panel p{font-size:11px;line-height:1.5}
+}
