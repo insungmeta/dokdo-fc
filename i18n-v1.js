@@ -1,17 +1,14 @@
 /* DOKDO FC bilingual interface: KO / EN, with dynamic content and shareable URLs. */
 (function () {
   'use strict';
-  var key = 'dfc-language';
+  // The ordinary website URL must ALWAYS open in Korean.
+  // English is opt-in via the EN button or an explicit ?lang=en link only.
+  // Never infer English from browser locale or an old saved preference.
   var query = new URLSearchParams(window.location.search).get('lang');
-  var saved = '';
-  try { saved = localStorage.getItem(key) || ''; } catch (_) {}
-  var locale = (query === 'ko' || query === 'en') ? query :
-    ((saved === 'ko' || saved === 'en') ? saved :
-     (/^ko(?:-|$)/i.test(navigator.language || 'ko') ? 'ko' : 'en'));
+  var locale = query === 'en' ? 'en' : 'ko';
   var english = locale === 'en';
   document.documentElement.lang = locale;
   document.documentElement.setAttribute('data-dfc-language', locale);
-  try { if (query === 'ko' || query === 'en') localStorage.setItem(key, locale); } catch (_) {}
 
   var terms = (window.DFC_TRANSLATIONS || []).slice().sort(function (a, b) {
     return b[0].length - a[0].length;
@@ -221,9 +218,6 @@
         a.className = 'is-active';
         a.setAttribute('aria-current', 'true');
       }
-      a.addEventListener('click', function () {
-        try { localStorage.setItem(key, lang); } catch (_) {}
-      });
       panel.appendChild(a);
     });
     target.appendChild(panel);
