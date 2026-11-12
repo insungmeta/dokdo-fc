@@ -129,7 +129,7 @@ main{padding-top:15px}
  .hero-right{padding:12px!important}
  .division-hero-main{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}
  .division-digit{font-size:62px!important}
- .division-trend{display:none!important}
+ .division-trend{display:block!important}
  .division-subline{display:flex!important;flex-wrap:wrap!important;gap:5px!important}
  .division-form{padding:8px!important}
  .hero-chips{display:none!important}
