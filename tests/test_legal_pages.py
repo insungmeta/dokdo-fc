@@ -50,7 +50,7 @@ class LegalNoticeTests(unittest.TestCase):
     def test_unofficial_ea_collector_has_pause_control_and_disclosure(self):
         workflow = self.read(".github/workflows/update-and-publish.yml")
         self.assertIn("vars.DFC_PAUSE_COLLECTION != 'true'", workflow)
-        self.assertIn("until verified authorization", self.read("COMPLIANCE_REVIEW.md").replace("until permission is documented", "until verified authorization"))
+        self.assertIn("This does not resolve the high risk or establish permission", self.read("COMPLIANCE_REVIEW.md"))
         self.assertIn("license", self.read("README.md").lower())
 
     def test_privacy_notice_discloses_retention_and_external_services(self):
