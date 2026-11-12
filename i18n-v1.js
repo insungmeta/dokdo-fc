@@ -1,0 +1,170 @@
+/* DOKDO FC bilingual interface: KO / EN, with dynamic content and shareable URLs. */
+(function () {
+  'use strict';
+  var key = 'dfc-language';
+  var query = new URLSearchParams(window.location.search).get('lang');
+  var saved = '';
+  try { saved = localStorage.getItem(key) || ''; } catch (_) {}
+  var locale = (query === 'ko' || query === 'en') ? query :
+    ((saved === 'ko' || saved === 'en') ? saved :
+     (/^ko(?:-|$)/i.test(navigator.language || 'ko') ? 'ko' : 'en'));
+  var english = locale === 'en';
+  document.documentElement.lang = locale;
+  document.documentElement.setAttribute('data-dfc-language', locale);
+  try { if (query === 'ko' || query === 'en') localStorage.setItem(key, locale); } catch (_) {}
+
+  var terms = (window.DFC_TRANSLATIONS || []).slice().sort(function (a, b) {
+    return b[0].length - a[0].length;
+  });
+  var blocked = [
+    '.dfc-lang-switch', 'script', 'style', 'noscript', 'pre', 'code',
+    '.match-item .title', '.standing-row .who strong', '.roster-identity strong',
+    '.roster-avatar', '.home-leader .hl-name', '.star .person', '.card-row .name',
+    '.crest-fallback', '.team-name-pair', '#gameTeamDisplay',
+    '#profileName', '#profileAvatar', '#h2hOpponentGroup',
+    '#rivalSelect option', '.h2h-rival-brand', '.match-contributor-chip strong',
+    '.roster-member summary strong', '.h2h-fixtures .name',
+    '.board-post-content', '.board-comment-content', '[translate="no"]',
+    '[data-no-translate]'
+  ].join(',');
+  var cache = new Map();
+  function protectedNode(node) {
+    var el = node.nodeType === 1 ? node : node.parentElement;
+    return !el || !!el.closest(blocked);
+  }
+  function translate(str) {
+    if (!english || !str || !/[가-힣]/.test(str)) return str;
+    if (cache.has(str)) return cache.get(str);
+    var out = str;
+    for (var i = 0; i < terms.length; i++) {
+      var original = terms[i][0], target = terms[i][1];
+      if (!original || out.indexOf(original) === -1) continue;
+      // Short syllables and units must match an entire UI label, not player names.
+      if (original.length < 3 && out.trim() !== original) continue;
+      out = out.split(original).join(target);
+    }
+    // Counts and division tiers are numerical and not part of player names.
+    out = out.replace(/(\d+)\s*부(?=\s*리그|[\s·,:.!?)]|$)/g, 'Division $1');
+    out = out.replace(/(\d+)\s*승\s*[·,\/]\s*(\d+)\s*무\s*[·,\/]\s*(\d+)\s*패/g, '$1W · $2D · $3L');
+    out = out.replace(/(\d+)\s*경기(?=[\s·,.!)]|$)/g, '$1 matches');
+    out = out.replace(/(\d+)\s*명(?=[\s·,.!)]|$)/g, '$1 players');
+    if (cache.size > 3500) cache.clear();
+    cache.set(str, out);
+    return out;
+  }
+  function translateText(node) {
+    if (protectedNode(node)) return;
+    var before = node.nodeValue;
+    var after = translate(before);
+    if (after !== before) node.nodeValue = after;
+  }
+  function translateAttrs(root) {
+    if (!root || root.nodeType !== 1 || protectedNode(root)) return;
+    ['aria-label', 'title', 'placeholder', 'alt'].forEach(function (attr) {
+      var before = root.getAttribute(attr);
+      if (before && /[가-힣]/.test(before)) {
+        var after = translate(before);
+        if (before !== after) root.setAttribute(attr, after);
+      }
+    });
+  }
+  var translating = false, queued = false;
+  function localize() {
+    if (!english || translating || !document.body) return;
+    translating = true;
+    try {
+      var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      var n;
+      while ((n = walker.nextNode())) translateText(n);
+      var elements = document.body.querySelectorAll('[aria-label],[title],[placeholder],[alt]');
+      for (var i = 0; i < elements.length; i++) translateAttrs(elements[i]);
+      if (/[가-힣]/.test(document.title)) document.title = translate(document.title);
+      var metas = document.querySelectorAll('meta[name="description"], meta[property="og:title"], meta[property="og:description"], meta[name="twitter:title"], meta[name="twitter:description"]');
+      for (var j = 0; j < metas.length; j++) {
+        if (/[가-힣]/.test(metas[j].content)) metas[j].content = translate(metas[j].content);
+      }
+      var og = document.querySelector('meta[property="og:locale"]');
+      if (og) og.content = 'en_US';
+      var links = document.querySelectorAll('a[href]');
+      for (var k = 0; k < links.length; k++) {
+        if (links[k].closest('.dfc-lang-switch')) continue;
+        var href = links[k].getAttribute('href');
+        if (!href || !/^\.\/(?:legacy|index)\.html(?:\?|#|$)/.test(href)) continue;
+        var dest = new URL(href, location.href);
+        if (dest.searchParams.get('lang') === 'en') continue;
+        dest.searchParams.set('lang', 'en');
+        links[k].setAttribute('href', dest.pathname + dest.search + dest.hash);
+      }
+    } finally { translating = false; }
+  }
+  function languageLink(lang) {
+    var current = new URL(location.href);
+    current.searchParams.set('lang', lang);
+    return current.pathname + current.search + current.hash;
+  }
+  function addStyles() {
+    if (document.getElementById('dfc-lang-styles')) return;
+    var st = document.createElement('style');
+    st.id = 'dfc-lang-styles';
+    st.textContent = [
+      '.dfc-lang-switch{display:inline-flex;flex:none;align-items:center;gap:3px;background:#112a31;border:1px solid #688478;border-radius:10px;padding:3px;position:relative;z-index:140}',
+      '.dfc-lang-switch a{display:grid;place-items:center;min-width:34px;min-height:34px;padding:5px;border-radius:7px;color:#d1e4e5;text-decoration:none;font:900 11px/1 Arial,sans-serif}',
+      '.dfc-lang-switch a.is-active{background:#c8f35d;color:#10261c}',
+      '.dfc-lang-switch a:focus-visible{outline:2px solid #c8f35d;outline-offset:2px}',
+      '@media(max-width:800px){.header .shell>.dfc-lang-switch{margin-left:2px;gap:1px;padding:2px}.header .shell>.dfc-lang-switch a{min-width:33px;min-height:36px}.header .shell>.app-status{margin-left:auto}html[data-dfc-language="en"] .app-bottom-nav .app-nav-label{font-size:9px;letter-spacing:-.2px}}',
+      '@media(max-width:385px){.header .shell>.app-status{display:none!important}.header .shell>.dfc-lang-switch{margin-left:auto}}',
+      '.header>.dfc-lang-switch{margin-left:auto}',
+      '@media(max-width:800px){.header>.dfc-lang-switch{margin-left:2px}}'
+    ].join('\n');
+    document.head.appendChild(st);
+  }
+  function addSwitch() {
+    var target = document.querySelector('.header .shell') ||
+       document.querySelector('.header .nav-right') ||
+       document.querySelector('header.header');
+    if (!target || document.querySelector('.dfc-lang-switch')) return;
+    var panel = document.createElement('div');
+    panel.className = 'dfc-lang-switch';
+    panel.setAttribute('role', 'group');
+    panel.setAttribute('aria-label', 'Language selection / 언어 선택');
+    ['ko', 'en'].forEach(function (lang) {
+      var a = document.createElement('a');
+      a.href = languageLink(lang);
+      a.textContent = lang.toUpperCase();
+      a.lang = lang;
+      a.setAttribute('aria-label', lang === 'ko' ? '한국어로 보기' : 'View in English');
+      if (lang === locale) {
+        a.className = 'is-active';
+        a.setAttribute('aria-current', 'true');
+      }
+      a.addEventListener('click', function () {
+        try { localStorage.setItem(key, lang); } catch (_) {}
+      });
+      panel.appendChild(a);
+    });
+    target.appendChild(panel);
+  }
+  function scheduleTranslate() {
+    if (!english || queued) return;
+    queued = true;
+    Promise.resolve().then(function () {
+      queued = false;
+      localize();
+    });
+  }
+  function init() {
+    addStyles();
+    addSwitch();
+    if (!english) return;
+    localize();
+    var observer = new MutationObserver(scheduleTranslate);
+    observer.observe(document.body, {
+      subtree: true, childList: true, characterData: true, attributes: true,
+      attributeFilter: ['aria-label', 'title', 'alt', 'placeholder']
+    });
+  }
+  window.DOKDO_LANGUAGE = { current: locale, translate: translate };
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  else init();
+})();
