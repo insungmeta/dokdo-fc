@@ -274,7 +274,7 @@ def validate(driver, lang, width):
                      .find(r=>r.querySelector('strong')?.textContent==='ST');
                    const chosen=st?.querySelector('.tl-xi-name')?.textContent.trim();
                    const positions=Array.from(root.querySelectorAll('[data-tl-formation]'));
-                   const suggested=positions.find(b=>b.getAttribute('aria-pressed')==='true')?.dataset.tlFormation;
+                   const suggested=root.querySelector('#tlForecastOptions .tl-forecast-card.is-first')?.dataset.tlForecast;
                    const alternative=suggested==='4-3-3'?'4-2-3-1':'4-3-3';
                    positions.find(b=>b.dataset.tlFormation===alternative)?.click();
                    root.querySelector('#tlRecommendFormation').click();
