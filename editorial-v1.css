@@ -358,3 +358,37 @@ main{padding-top:15px}
 .dfc-summary-rating .metric b{font-size:30px!important}
 .dfc-board-leaders .home-leader-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
 }
+
+/* Layout safety patch: never crop or overlap live data with fixed-height tiles. */
+.dfc-match-board,.dfc-summary-grid,.dfc-lower-grid{min-width:0!important}
+.dfc-summary-grid>.dfc-board-card{height:auto!important;max-height:none!important;min-height:106px!important;overflow:visible!important}
+.dfc-summary-grid .division-primary,.dfc-summary-grid .division-showcase,.dfc-summary-grid .division-copy,.dfc-summary-grid .metric,.dfc-summary-grid .division-form{position:static!important;transform:none!important;float:none!important;max-width:100%!important;min-width:0!important}
+.dfc-summary-grid .division-showcase{display:flex!important;align-items:center!important;flex-wrap:wrap!important}
+.dfc-summary-grid .division-digit{font-size:clamp(28px,3.8vw,46px)!important;line-height:1.1!important;letter-spacing:-1px!important}
+.dfc-summary-grid .division-copy{flex:1 1 70px!important}
+.dfc-summary-grid .division-copy strong{display:block!important;overflow-wrap:anywhere!important}
+.dfc-summary-grid .division-subline{display:none!important}
+.dfc-summary-grid .division-live{display:none!important}
+.dfc-summary-rating .metric{display:flex!important;flex-direction:column!important;gap:3px!important;min-height:0!important}
+.dfc-summary-rating .metric b{font-size:clamp(24px,3vw,37px)!important;line-height:1.1!important}
+.dfc-summary-rating .metric small,.dfc-summary-rating .rating-reference,.dfc-summary-rating .rating-caption{display:none!important}
+.dfc-summary-form .division-form{display:block!important}
+.dfc-summary-form .division-form-results{display:flex!important;flex-wrap:nowrap!important;gap:2px!important}
+.dfc-summary-form .division-form-results span{flex:1 1 0!important;width:auto!important;min-width:0!important;line-height:21px!important;text-align:center!important}
+.dfc-summary-stat .metric-strip{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:start!important;gap:4px!important}
+.dfc-summary-stat .metric{display:flex!important;flex-direction:column!important;gap:2px!important;padding:0!important;min-height:0!important}
+.dfc-summary-stat .metric h3{font-size:9px!important;line-height:1.15!important;overflow-wrap:anywhere!important}
+.dfc-summary-stat .metric b{font-size:clamp(15px,2vw,22px)!important;line-height:1.1!important}
+.dfc-summary-stat .metric-wdl .wdl-values{display:flex!important;flex-wrap:wrap!important}
+.dfc-lower-grid>.dfc-board-card{min-width:0!important;overflow:hidden!important}
+.dfc-banner-title strong{font-size:clamp(32px,6vw,75px)!important;line-height:1.08!important}
+@media(max-width:700px){
+ .dfc-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important}
+ .dfc-summary-grid>.dfc-board-card{height:auto!important;max-height:none!important;min-height:108px!important;padding:9px!important;overflow:hidden!important}
+ .dfc-summary-grid .division-digit{font-size:34px!important}
+ .dfc-summary-grid .division-copy strong{font-size:10px!important}
+ .dfc-summary-rating .metric b{font-size:30px!important}
+ .dfc-summary-form .division-form-results span{height:20px!important;line-height:20px!important;font-size:9px!important}
+ .dfc-summary-stat .metric b{font-size:17px!important}
+ .dfc-banner-title strong{font-size:clamp(30px,8.2vw,46px)!important}
+}
