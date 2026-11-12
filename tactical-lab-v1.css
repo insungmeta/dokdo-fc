@@ -47,3 +47,16 @@
   #more .tl-box ul{font-size:11px}
   #more .tl-method{font-size:10px}
 }
+
+
+#more .tl-box.tl-roles h4{color:#d5f1b5}
+#more .tl-roles ul{list-style:none;padding:0;gap:5px}
+#more .tl-roles li{padding:7px 9px;border-radius:8px;background:#1c3941;border:1px solid #3c5c60;font-size:11px;line-height:1.6}
+#more .tl-roles li strong{display:inline-block;min-width:44px;color:#d6f48b;white-space:nowrap;font-size:11px}
+#more .tl-ai-summary{font-size:10px;color:#b5c8cd;line-height:1.6;margin:10px 0 0;overflow-wrap:anywhere}
+#more .tl-share{display:flex;flex-wrap:wrap;align-items:center;gap:9px;min-width:0}
+#more .tl-share button{min-height:44px;border:1px solid #a7d76d;border-radius:10px;background:#c8f35d;color:#163024;font-size:12px;font-weight:950;padding:10px 15px;cursor:pointer}
+#more .tl-share button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+#more .tl-share button:disabled{opacity:.7;cursor:progress}
+#more .tl-share #tlShareStatus{flex:1;min-width:0;color:#c3d9d7;font-size:11px;line-height:1.5;overflow-wrap:anywhere}
+@media(max-width:540px){#more .tl-share button{width:100%}#more .tl-share #tlShareStatus{text-align:center}}
