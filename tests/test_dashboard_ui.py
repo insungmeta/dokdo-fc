@@ -83,7 +83,6 @@ class DashboardUIContract(unittest.TestCase):
         self.assertIn('id="tlCopy"', self.html)
         self.assertIn('id="tlBestXI"', self.html)
         self.assertIn('id="tlXIList"', self.html)
-        self.assertIn('id="tlRecommendFormation"', self.html)
         self.assertIn("function bestXI(roster,formation,history={})", tactical)
         self.assertIn("function archivedRoleHistory(matches)", tactical)
         self.assertIn("function primaryPosition(p,history)", tactical)
@@ -94,14 +93,17 @@ class DashboardUIContract(unittest.TestCase):
         self.assertIn("navigator.clipboard.writeText(shareText())", tactical)
         self.assertIn("if(now.n===0)return", tactical)
         self.assertIn("function forecastCandidates(r,count)", tactical)
-        self.assertIn("function renderTrial(r)", tactical)
-        self.assertIn("function eligibleTrialMatches(r)", tactical)
-        self.assertIn("const trialKey='dfc-tactical-trial-v1'", tactical)
+        self.assertNotIn("function renderTrial(r)", tactical)
+        self.assertNotIn("localStorage", tactical)
         self.assertIn("tacticalPolling=true", tactical)
-        self.assertIn("matches.length>22", tactical)
-        for token in ("tlForecastOptions","tlForecastConfidence","tlTrialStart",
-                      "tlTrialStop","tlTrialStatus","tlTrialMatches"):
+        for token in ("tlForecastOptions","tlForecastConfidence",
+                      "tlForecastDetails","tlActions","tlReason"):
             self.assertIn('id="' + token + '"', self.html)
+        self.assertIn('class="tl-more-details"', self.html)
+        self.assertIn('class="site-data-note"', self.html)
+        self.assertNotIn('id="tlTrialStart"', self.html)
+        self.assertNotIn('id="tlTrialStop"', self.html)
+        self.assertNotIn('id="tlTrialMatches"', self.html)
         self.assertIn('data-tl-formation="4-4-2"', self.html)
         self.assertIn("'4-4-2':", tactical)
         self.assertIn('getElementById(\'tactics\')?.classList.contains(\'is-active\')', tactical)
