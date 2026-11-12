@@ -82,6 +82,21 @@ def validate(driver, lang, width):
         if(document.documentElement.scrollWidth>innerWidth+4)issues.push('page horizontal overflow '+checks.documentWidth+' > '+innerWidth);
         return {issues,checks};
     """.replace("arguments[0]",json.dumps(lang)))
+    if lang=="en" and width in (390,1280):
+        home_audit=script(driver, """
+            const root=document.querySelector('#app-home');
+            const skip='.roster-identity strong,.roster-avatar,.match-item .title,.standing-row .who strong,.home-leader .hl-name,.star .person,.card-row .name,.team-name-pair,.crest-fallback,.match-contributor-chip strong,option,.board-post';
+            const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);const untranslated=[];
+            let n;while(n=walker.nextNode()){
+              if(!/[가-힣]/.test(n.nodeValue))continue;
+              const el=n.parentElement;if(!el||el.closest(skip)||getComputedStyle(el).display==='none')continue;
+              const value=n.nodeValue.trim();if(value)untranslated.push(value.slice(0,125));
+            }
+            return {untranslated:untranslated.slice(0,35)};
+        """)
+        print(json.dumps({"lang":lang,"width":width,"screen":"home-translation",**home_audit},ensure_ascii=False),flush=True)
+        if home_audit["untranslated"]:
+            info["issues"].append("untranslated home labels "+str(home_audit["untranslated"]))
     screenshot = OUT / f"dfc-{lang}-{width}.png"
     driver.save_screenshot(str(screenshot))
     print(json.dumps({"lang":lang,"width":width,**info},ensure_ascii=False),flush=True)
@@ -186,6 +201,8 @@ def validate(driver, lang, width):
             print(json.dumps({"lang":lang,"width":width,"screen":screen,**details},ensure_ascii=False),flush=True)
             driver.save_screenshot(str(OUT / f"dfc-{lang}-{width}-{screen}.png"))
             info["issues"].extend(screen+": "+x for x in details["issues"])
+            if lang=="en" and details.get("untranslated"):
+                info["issues"].append(screen+" untranslated UI text: "+str(details["untranslated"]))
             if screen=="tactics":
                 WebDriverWait(driver,12).until(
                     lambda d: d.execute_script("return Boolean(document.querySelector('#tlPitch svg'))")
