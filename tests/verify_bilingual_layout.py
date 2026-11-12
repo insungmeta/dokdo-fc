@@ -79,6 +79,28 @@ def validate(driver, lang, width):
             if(!within(box,tr,3))issues.push('graph child box overflow '+selector);
             if(el.textContent.trim()&&!(el instanceof SVGElement)&&!within(textRange,tr,3))issues.push('graph child text overflow '+selector);
         }
+        // Detect dashboard overlaps and clipped headline text on mobile AND desktop.
+        const dashboard=document.querySelector('#app-home');
+        const boxes=Array.from(dashboard.querySelectorAll('.dfc-summary-grid>.dfc-board-card,.dfc-lower-grid>.dfc-board-card')).filter(visible);
+        checks.dashboardCards=boxes.map(x=>({className:x.className,rect:rect(x),scrollWidth:x.scrollWidth,clientWidth:x.clientWidth}));
+        for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){
+          const a=rect(boxes[i]),b=rect(boxes[j]);
+          const overlapX=Math.min(a.right,b.right)-Math.max(a.left,b.left);
+          const overlapY=Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top);
+          if(overlapX>3&&overlapY>3)issues.push('dashboard cards overlap '+i+' '+j);
+        }
+        const textTargets=Array.from(dashboard.querySelectorAll('.dfc-banner-title strong,.dfc-card-title,.dfc-summary-grid .division-digit,.dfc-summary-rating .metric b,.dfc-summary-stat .metric b'));
+        checks.clippedText=[];
+        for(const el of textTargets.filter(visible)){
+          const r=rect(el),parent=el.closest('.dfc-board-card')||el.closest('.dfc-photo-banner');
+          if(!parent)continue;
+          const p=rect(parent),t=margin(el);
+          if(r.width>0&&(t.right>p.right+3||t.left<p.left-3||t.bottom>p.bottom+3)){
+            const item={className:el.className,text:el.textContent.trim().slice(0,45),textRect:t,parentRect:p};
+            checks.clippedText.push(item);
+            issues.push('dashboard text clipped '+item.className+' '+item.text);
+          }
+        }
         if(document.documentElement.scrollWidth>innerWidth+4)issues.push('page horizontal overflow '+checks.documentWidth+' > '+innerWidth);
         return {issues,checks};
     """.replace("arguments[0]",json.dumps(lang)))
