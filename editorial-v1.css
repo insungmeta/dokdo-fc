@@ -529,3 +529,42 @@ main{padding-top:15px}
 @media(max-width:700px){
  #app-home .dfc-photo-banner{background-position:center,64% 42%!important;background-size:cover,auto 170%!important}
 }
+
+/* Reference-approved navy/lime identity: consolidated final visual override. */
+:root{--dfc-lime:#baff00;--dfc-deep:#001020;--dfc-panel:#061e38;--dfc-line:#3a709a}
+#app-home{background:#001021!important;color:#f6f9ff!important}
+#app-home .dfc-match-board{background:#001021!important;gap:10px!important}
+#app-home .dfc-board-card{background:linear-gradient(130deg,#082746,#02172c 85%)!important;border:1px solid #4279a2!important;border-radius:12px!important;box-shadow:inset 0 1px #ffffff16!important;padding:13px!important}
+#app-home .dfc-photo-banner{border:0!important;border-bottom:2px solid #4279a2!important;border-radius:0!important;min-height:175px!important;background-color:#061a30!important}
+#app-home .dfc-photo-banner .dfc-banner-title{max-width:63%!important;filter:drop-shadow(0 3px 8px #00101e)!important}
+#app-home .dfc-banner-title span{color:#baff00!important;font-style:italic!important;font-weight:900!important;font-size:clamp(9px,1.3vw,16px)!important;letter-spacing:.6px!important}
+#app-home .dfc-banner-title strong{font-family:Impact,'Arial Narrow',Arial,sans-serif!important;font-style:italic!important;font-size:clamp(35px,6vw,80px)!important;letter-spacing:-.6px!important;line-height:1.06!important;text-shadow:0 2px 8px #001020!important}
+#app-home .dfc-banner-title small{font-style:italic!important;font-weight:700!important;color:#e4f0ff!important;letter-spacing:.5px!important}
+#app-home .dfc-card-title{font-size:clamp(11px,1.5vw,17px)!important;font-weight:900!important;color:#f4f9ff!important;line-height:1.3!important;word-break:keep-all!important;overflow-wrap:normal!important}
+#app-home .dfc-card-title:before{background:#baff00!important}
+#app-home .dfc-summary-grid .division-digit{color:#fff!important;font-family:Impact,'Arial Narrow',Arial,sans-serif!important;font-style:italic!important;font-size:clamp(36px,5vw,60px)!important}
+#app-home .dfc-summary-rating .metric b,#app-home .dfc-summary-stat .metric b{color:#baff00!important;font-family:Impact,'Arial Narrow',Arial,sans-serif!important;font-style:italic!important}
+#app-home .dfc-summary-rating .metric b{font-size:clamp(34px,5vw,64px)!important}
+#app-home .dfc-summary-stat .metric b{font-size:clamp(23px,3.3vw,40px)!important}
+#app-home .dfc-summary-stat .metric h3{font-size:clamp(10px,1.4vw,15px)!important;letter-spacing:-.3px!important;white-space:nowrap!important;word-break:keep-all!important}
+#app-home .dfc-summary-grid .division-form-results span{border-radius:3px!important;font-weight:900!important}
+#app-home .dfc-summary-grid>.dfc-board-card{min-height:148px!important;height:auto!important;max-height:none!important;overflow:hidden!important}
+#app-home .dfc-summary-stat .metric-strip{gap:9px!important}
+#app-home .dfc-summary-form .division-form-results{margin-top:12px!important}
+#app-home .dfc-summary-form .division-form-results span{height:29px!important}
+#app-home .dfc-lower-grid>.dfc-board-card{border-radius:12px!important}
+@media(min-width:900px){#app-home .dfc-summary-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}#app-home .dfc-lower-grid{grid-template-columns:1.1fr 1.1fr .85fr!important}}
+@media(min-width:701px) and (max-width:899px){#app-home .dfc-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:700px){
+ #app-home .dfc-photo-banner{height:185px!important;min-height:185px!important;max-height:none!important;background-size:cover,auto 165%!important;background-position:center,61% 45%!important}
+ #app-home .dfc-banner-title strong{font-size:clamp(31px,8.4vw,48px)!important}
+ #app-home .dfc-banner-title span{font-size:9px!important}
+ #app-home .dfc-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+ #app-home .dfc-summary-grid>.dfc-board-card{min-height:152px!important;padding:11px!important}
+ #app-home .dfc-card-title{font-size:12px!important}
+ #app-home .dfc-summary-grid .division-digit{font-size:clamp(30px,8.2vw,42px)!important}
+ #app-home .dfc-summary-rating .metric b{font-size:clamp(31px,8vw,42px)!important}
+ #app-home .dfc-summary-stat .metric b{font-size:clamp(21px,6vw,29px)!important}
+ #app-home .dfc-summary-stat .metric h3{font-size:clamp(9px,2.5vw,12px)!important}
+ #app-home .dfc-summary-form .division-form-results span{height:24px!important}
+}
