@@ -5,6 +5,8 @@ on:
       - main
     paths:
       - 'index.html'
+      - 'privacy.html'
+      - 'legal.html'
       - 'legacy.html'
       - 'live-dashboard-v7.js'
       - 'mobile-app-v8.css'
