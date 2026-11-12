@@ -89,6 +89,34 @@ def validate(driver, lang, width):
           const overlapY=Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top);
           if(overlapX>3&&overlapY>3)issues.push('dashboard cards overlap '+i+' '+j);
         }
+        // Compare actual rendered text glyph rectangles, not just element boxes.
+        // A card may fit its width while absolutely-positioned labels collide.
+        checks.textCollisions=[];
+        for(const card of boxes){
+          const walker=document.createTreeWalker(card,NodeFilter.SHOW_TEXT);
+          const fragments=[];let node;
+          while((node=walker.nextNode())){
+            if(!node.nodeValue.trim())continue;
+            const parent=node.parentElement;
+            if(!parent||!visible(parent)||parent.closest('svg,details:not([open]),[hidden]'))continue;
+            const range=document.createRange();range.selectNodeContents(node);
+            for(const rr of Array.from(range.getClientRects())){
+              if(rr.width<3||rr.height<3)continue;
+              fragments.push({node,rect:{left:rr.left,right:rr.right,top:rr.top,bottom:rr.bottom},text:node.nodeValue.trim().slice(0,35)});
+            }
+          }
+          for(let i=0;i<fragments.length;i++)for(let j=i+1;j<fragments.length;j++){
+            const a=fragments[i],b=fragments[j];
+            if(a.node===b.node)continue;
+            const ox=Math.min(a.rect.right,b.rect.right)-Math.max(a.rect.left,b.rect.left);
+            const oy=Math.min(a.rect.bottom,b.rect.bottom)-Math.max(a.rect.top,b.rect.top);
+            if(ox>5&&oy>5){
+              const collision={card:card.className,a:a.text,b:b.text,ox:Math.round(ox),oy:Math.round(oy)};
+              checks.textCollisions.push(collision);
+              if(checks.textCollisions.length<=12)issues.push('text collision '+JSON.stringify(collision));
+            }
+          }
+        }
         const textTargets=Array.from(dashboard.querySelectorAll('.dfc-banner-title strong,.dfc-card-title,.dfc-summary-grid .division-digit,.dfc-summary-rating .metric b,.dfc-summary-stat .metric b'));
         checks.clippedText=[];
         for(const el of textTargets.filter(visible)){
