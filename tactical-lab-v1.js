@@ -143,7 +143,7 @@ function candidateScore(p,role){
  if(roleCategory(role)==='midfielder')return rating*7+assists*.38+goals*.12+Math.min(games,90)*.12+(mvp/games)*10;
  return rating*9+Math.min(games,100)*.15+(mvp/games)*9; // DF, archival tackle events not used as season totals
 }
-function bestXI(roster,formation,history={}){
+function bestXI(roster,formation,history={},humanCount=5){
  const members=Array.isArray(roster)?roster:[],used=new Set(),chosen={};
  const valid=members.filter(p=>p&&p.name&&Number(p.gamesPlayed)>=5&&
    Number.isFinite(Number(p.ratingAve))&&Number(p.ratingAve)>0);
@@ -154,7 +154,9 @@ function bestXI(roster,formation,history={}){
  : formation==='4-4-2'
  ? ['ST','ST2','GK','LCB','RCB','LB','RB','LM','RM','LCM','RCM']
  : ['ST','LW','RW','GK','LCB','RCB','LB','RB','LCDM','RCDM','CAM'];
+ const humanRoles=new Set(allocations[formation]?.[humanCount]||[]);
  for(const role of priority){
+  if(!humanRoles.has(role)){chosen[role]=null;continue;}
   const category=roleCategory(role);
   const options=valid.filter(p=>primaryPosition(p,history).category===category)
    .filter(p=>!used.has(personKey(p.name)));
@@ -233,7 +235,7 @@ function shareText(){
   t('최근','Last')+' '+r.now.n+t('경기 기준',' matches')+' · '+t('경기당 득점','Goals/match')+' '+avg(r.now.gfAvg)+' / '+t('실점','Conceded')+' '+avg(r.now.gaAvg)
  ];
  if(lineupMode){
-  const xi=bestXI(r.roster,formation,r.history);
+  const xi=bestXI(r.roster,formation,r.history,people);
   lines.push(t('베스트11 후보','Best XI Candidates')+': '+
    formations[formation].map(([role])=>role+' '+(xi[role]?.name||'AI')).join(' · '));
  }
@@ -368,7 +370,7 @@ function render(){
  ].map(([name,value])=>'<div class="tl-stat"><span>'+escape(name)+'</span><strong>'+escape(value)+'</strong></div>').join('');
  id('tlTitle').textContent=formation+' · '+(!qualified?t('전술 예시','Tactical Option'):
   formation===suggested?t('1순위 추천','Top Pick'):t('대안 전술','Alternative'));
- const lineup=lineupMode?bestXI(model.roster,formation,model.history):null;
+ const lineup=lineupMode?bestXI(model.roster,formation,model.history,people):null;
  id('tlPitch').innerHTML=pitch(formation,people,lineup);
  const assigned=lineup?allocations[formation][people].filter(pos=>lineup[pos]).length:people;
  id('tlLegend').textContent=lineupMode?
@@ -381,10 +383,10 @@ function render(){
  if(lineupMode){
   const positions=formations[formation].map(row=>row[0]);
   const active=new Set(allocations[formation][people]);
-  const filled=positions.filter(pos=>Boolean(lineup[pos])).length;
+  const filled=positions.filter(pos=>active.has(pos)&&Boolean(lineup[pos])).length;
   id('tlBestXICount').textContent=t('선수 후보 '+filled+'명 / 11자리','Candidates '+filled+' / 11 slots');
   id('tlXIList').innerHTML=positions.map(pos=>{
-   const p=lineup[pos],human=active.has(pos)&&Boolean(p),rating=p?Number(p.ratingAve).toFixed(1):'—';
+   const p=active.has(pos)?lineup[pos]:null,human=active.has(pos)&&Boolean(p),rating=p?Number(p.ratingAve).toFixed(1):'—';
    return '<div class="tl-xi-row"><strong>'+escape(pos)+'</strong><span class="tl-xi-name">'+escape(p?.name||t('AI / 미확인','AI / Unverified'))+'</span>'+
      '<span class="tl-xi-info">'+(p?(()=>{
       const primary=primaryPosition(p,model.history),roleLabel=roleNames[primary.category]?.[en()?1:0]||t('미확인','Unverified');
