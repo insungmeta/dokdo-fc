@@ -6,6 +6,7 @@ Designed for GitHub Actions + GitHub Pages with no persistent server.
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import logging
 from datetime import date, datetime, timedelta, timezone
@@ -353,10 +354,23 @@ def collect(api_factory=None, path=OUT):
     history_path, history = load_history(path, original, now)
     sync = dict(d.get("sync") or {})
     sync["lastAttempt"] = now
+    sources = copy.deepcopy(sync.get("sources") or {})
+    sync["sources"] = sources
     d["sync"] = sync
     errors = []
     successes = 0
     incoming = []
+
+    def mark_source(source, state, issue=None):
+        """Keep each endpoint's last successful observation distinct from a fresh attempt."""
+        row = dict(sources.get(source) or {})
+        row["lastAttempt"] = now
+        if state in ("ok", "partial"):
+            row["lastSuccess"] = now
+        row["state"] = state
+        row["error"] = str(issue)[:180] if issue else None
+        sources[source] = row
+
 
     try:
         if api_factory is None:
@@ -385,8 +399,12 @@ def collect(api_factory=None, path=OUT):
                     else:
                         d[field] = _enrich(d.get(field), response)
                     successes += 1
+                    mark_source(field, "ok")
+                else:
+                    mark_source(field, "unavailable", "EA 응답 없음")
             except Exception as exc:
                 errors.append(f"{field}: {exc}")
+                mark_source(field, "error", exc)
                 log.warning("%s failed: %s", field, exc)
 
         # EA offers two DIFFERENT leaderboards. Seasonal bestDivision can
@@ -400,11 +418,14 @@ def collect(api_factory=None, path=OUT):
                 if league is not None:
                     d[field] = _enrich(d.get(field), league)
                     successes += 1
+                    mark_source(field, "ok")
                 else:
+                    mark_source(field, "unavailable", "해당 클럽의 리그 응답 없음")
                     log.warning("DOKDO FC %s ID %s not found in leaderboard",
                                 scope, CLUB_ID)
             except Exception as exc:
                 errors.append(f"{scope} division: {exc}")
+                mark_source(field, "error", exc)
                 log.warning("Division lookup (%s) failed: %s", scope, exc)
 
         for kind in MATCH_TYPES:
@@ -413,6 +434,7 @@ def collect(api_factory=None, path=OUT):
                 if recent is None:
                     raise RuntimeError("EA returned no match response")
                 our_roster, opponents_roster = {}, {}
+                details_issue = None
                 try:
                     # EA already returns both club IDs in this match payload.
                     # Calling with both_teams avoids extra queries per opponent.
@@ -434,6 +456,7 @@ def collect(api_factory=None, path=OUT):
                         else:
                             opponents_roster.setdefault((str(mid), str(club)), []).append(p)
                 except Exception as exc:
+                    details_issue = str(exc)
                     errors.append(f"{kind} player details: {exc}")
                 for item in recent:
                     row = match(item, kind)
@@ -443,14 +466,25 @@ def collect(api_factory=None, path=OUT):
                     row["opponentPlayers"] = opponents_roster.get((mid, opp), [])
                     incoming.append(row)
                 successes += 1
+                mark_source(kind, "partial" if details_issue else "ok", details_issue)
             except Exception as exc:
                 errors.append(f"{kind}: {exc}")
+                mark_source(kind, "error", exc)
                 log.warning("%s failed: %s", kind, exc)
 
+    if api is None:
+        for field in ("club", "overall", "members", "career",
+                      "league", "leagueAllTime", *MATCH_TYPES):
+            mark_source(field, "error", "EA API 연결 실패")
     d["matches"] = merge(d.get("matches") or [], incoming)
     if successes:
         sync["lastSuccess"] = now
     sync["error"] = " | ".join(errors)[:500] or None
+    tracked = ("club", "overall", "league", "leagueAllTime", "members", "matches")
+    canonical = json.dumps({k: d.get(k) for k in tracked},
+                           ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+                           default=serialized)
+    sync["revision"] = hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:16]
 
     # Keep a permanent, append-only revision log of all team, season, career,
     # per-player and both-sides match details. Old data is never deleted.
@@ -466,6 +500,17 @@ def collect(api_factory=None, path=OUT):
     path.write_text(
         json.dumps(d, ensure_ascii=False, indent=2, default=serialized) + "\n",
         encoding="utf-8",
+    )
+    # Small, independently polled heartbeat: no need to download the multi-MB archive.
+    status = {
+        "schemaVersion": 1, "clubId": CLUB_ID, "checkedAt": now,
+        "lastSuccess": sync.get("lastSuccess"), "revision": sync["revision"],
+        "sources": sources, "partial": bool(errors) or any(
+            item.get("state") != "ok" for item in sources.values()
+        ),
+    }
+    (path.parent / "status.json").write_text(
+        json.dumps(status, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     log.info(
         "success=%s errors=%s matches_archived=%s history_revisions=%s",
