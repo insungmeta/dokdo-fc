@@ -52,6 +52,13 @@ class I18nTests(unittest.TestCase):
                       "data-dfc-language", "dfc-lang-switch"):
             self.assertIn(token, runtime)
 
+    def test_default_language_is_korean_and_english_requires_query(self):
+        runtime = (ROOT / "i18n-v1.js").read_text(encoding="utf-8")
+        self.assertIn("var locale = query === 'en' ? 'en' : 'ko';", runtime)
+        self.assertNotIn("navigator.language", runtime)
+        self.assertNotIn("localStorage.getItem", runtime)
+        self.assertIn("current.searchParams.set('lang', lang)", runtime)
+
     def test_stale_collection_is_not_reported_as_live(self):
         script = (ROOT / "live-dashboard-v7.js").read_text(encoding="utf-8")
         self.assertIn("minutes>=12", script)
