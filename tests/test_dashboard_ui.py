@@ -51,6 +51,18 @@ class DashboardUIContract(unittest.TestCase):
             self.assertIn(token, self.js)
         self.assertIn('num(x.appearances)>=5', self.js)
 
+    def test_manual_refresh_gives_explicit_feedback(self):
+        self.assertIn('id="syncCheckFeedback"', self.html)
+        self.assertIn('role="status"', self.html)
+        self.assertIn('>새 기록 확인</button>', self.html)
+        self.assertIn("checkFreshness({manual:true})", self.js)
+        self.assertIn("refreshButton.textContent='확인 중…'", self.js)
+        self.assertIn("showCheckFeedback(", self.js)
+        self.assertIn("새로 저장된 기록은 없습니다", self.js)
+        self.assertIn("확인 실패", self.js)
+        self.assertIn("#app-home .sync-check-feedback", self.css)
+        self.assertIn("min-height:44px", self.css)
+
     def test_mobile_five_sections_remain(self):
         for menu in ('home', 'players', 'matches', 'rivals', 'more'):
             self.assertIn(menu + ":'", self.mobile)
