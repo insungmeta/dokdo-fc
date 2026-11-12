@@ -69,7 +69,21 @@ jobs:
               git fetch origin main
               if ! git rebase origin/main; then
                 git rebase --abort || true
-                echo "A newer archive conflicts with this run; refusing to overwrite it."
+                # Multiple scheduled/manual runs can collect the same archive concurrently.
+                # If GitHub already has a newer or equally recent status snapshot,
+                # use that authoritative archive rather than overwriting it.
+                remote_status=$(git show origin/main:data/status.json 2>/dev/null || true)
+                if [ -n "$remote_status" ]; then
+                  remote_stamp=$(printf '%s' "$remote_status" | python -c 'import sys,json; print(json.load(sys.stdin).get("checkedAt",""))')
+                  local_stamp=$(python -c 'import json; print(json.load(open("data/status.json")).get("checkedAt",""))')
+                  if [[ "$remote_stamp" > "$local_stamp" || "$remote_stamp" == "$local_stamp" ]]; then
+                    echo "Superseded by a newer archived snapshot: $remote_stamp (ours: $local_stamp)"
+                    git reset --hard origin/main
+                    pushed=true
+                    break
+                  fi
+                fi
+                echo "Archive rebase conflicted with an older remote; refusing to overwrite it."
                 exit 1
               fi
               if git push origin HEAD:main; then
