@@ -241,3 +241,25 @@ main{padding-top:15px}
  .dfc-board-leaders .home-leader-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
  .dfc-board-leaders .home-leader{min-width:0!important}
 }
+
+/* Reference proportions: 768px supplied artwork shows all 4 + 3 columns. */
+@media(min-width:701px){
+ .dfc-summary-grid{grid-template-columns:1.12fr .83fr 1.18fr .95fr!important;gap:7px!important}
+ .dfc-lower-grid{grid-template-columns:1.06fr 1.13fr .9fr!important;gap:7px!important}
+ .dfc-board-leaders{grid-column:auto!important}
+ .dfc-photo-banner{min-height:clamp(150px,21vw,210px)!important}
+ .dfc-summary-grid>.dfc-board-card{min-height:0!important}
+ .dfc-board-card{padding:10px!important}
+ .dfc-summary-grid .division-digit{font-size:clamp(32px,5vw,60px)!important}
+ .dfc-summary-stat .metric b{font-size:clamp(16px,2.1vw,24px)!important}
+ .dfc-lower-grid>.dfc-board-card{min-height:225px!important}
+ .dfc-board-leaders .home-leader-grid{grid-template-columns:1fr!important}
+}
+@media(max-width:700px){
+ .rights-hold{padding:4px 10px!important;font-size:9px!important;line-height:1.25!important}
+ .rights-hold a{display:inline!important}
+ .dfc-photo-banner{border-radius:3px!important}
+ .dfc-summary-grid>.dfc-board-card{border-radius:3px!important}
+ .dfc-summary-grid .division-primary{min-width:0!important}
+ .dfc-summary-rating .rating-content{min-width:0!important}
+}
