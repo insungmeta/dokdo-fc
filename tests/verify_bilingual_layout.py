@@ -130,6 +130,33 @@ def validate(driver, lang, width):
             print(json.dumps({"lang":lang,"width":width,"screen":screen,**details},ensure_ascii=False),flush=True)
             driver.save_screenshot(str(OUT / f"dfc-{lang}-{width}-{screen}.png"))
             info["issues"].extend(screen+": "+x for x in details["issues"])
+            if screen=="more":
+                WebDriverWait(driver,12).until(
+                    lambda d: d.execute_script("return Boolean(document.querySelector('#tlPitch svg'))")
+                )
+                tactical=script(driver, """
+                    const root=document.querySelector('#tacticalLab'),svg=root.querySelector('#tlPitch svg');
+                    const count=()=>Array.from(root.querySelectorAll('#tlPitch text')).filter(n=>n.textContent==='USER').length;
+                    const out={visible:Boolean(root&&svg),firstHuman:count(),
+                         evidence:root.querySelector('#tlEvidence')?.textContent,
+                         formation:root.querySelector('#tlTitle')?.textContent,
+                         width:document.documentElement.scrollWidth};
+                    root.querySelector('[data-tl-people="9"]').click();
+                    out.nineHuman=count();
+                    root.querySelector('[data-tl-formation="4-3-3"]').click();
+                    out.alternative=svg.parentElement.querySelector('svg')?.getAttribute('aria-label');
+                    out.fourThreeThree=root.querySelector('[data-tl-formation="4-3-3"]').getAttribute('aria-pressed');
+                    out.widthAfter=document.documentElement.scrollWidth;
+                    return out;
+                """)
+                print(json.dumps({"lang":lang,"width":width,"screen":"tactics",**tactical},ensure_ascii=False),flush=True)
+                driver.save_screenshot(str(OUT / f"dfc-{lang}-{width}-tactics.png"))
+                if tactical["firstHuman"]!=5 or tactical["nineHuman"]!=9:
+                    info["issues"].append('tactics human slot count not updated')
+                if tactical["fourThreeThree"]!="true" or not tactical["evidence"]:
+                    info["issues"].append('tactics formation or evidence not rendered')
+                if tactical["widthAfter"]>width+4:
+                    info["issues"].append('tactical pitch causes page overflow')
             if screen=="matches":
                 driver.execute_script("document.querySelector('#matchList .match-item').click()")
                 detail=script(driver, """
