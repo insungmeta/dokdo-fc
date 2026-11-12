@@ -30,6 +30,46 @@ const labels={home:'클럽 홈',players:'선수 랭킹',matches:'경기 기록',
 const bottom=document.createElement('nav');bottom.className='app-bottom-nav';bottom.setAttribute('aria-label','주요 화면');
 bottom.innerHTML=Object.entries(labels).map(([id,label])=>'<button type="button" data-screen="'+id+'" aria-label="'+label+' 메뉴"><span class="app-nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true">'+icons[id]+'</svg></span><span class="app-nav-label">'+label+'</span></button>').join('');document.body.append(bottom);
 
+/* The ranking categories are a horizontal swipe strip on phones.
+ * Arrows and an explicit "next" hint keep the hidden categories discoverable. */
+const leaderTabs=$('#leaderTabs');
+if(leaderTabs){
+ const controls=document.createElement('div');
+ controls.id='leaderMoreControls';controls.className='leader-more-controls';
+ controls.setAttribute('role','group');controls.setAttribute('aria-label','선수 랭킹 이동');
+ controls.innerHTML='<button type="button" data-rank-direction="-1" aria-label="이전 랭킹 항목">‹</button>'+
+ '<span id="leaderScrollHint" aria-live="polite"></span>'+
+ '<button type="button" data-rank-direction="1" aria-label="다음 랭킹 항목">›</button>';
+ leaderTabs.insertAdjacentElement('afterend',controls);
+ const prev=controls.querySelector('[data-rank-direction="-1"]');
+ const next=controls.querySelector('[data-rank-direction="1"]');
+ const hint=controls.querySelector('#leaderScrollHint');
+ const update=()=>{
+  const isMobile=window.innerWidth<=1000;
+  const max=Math.max(0,leaderTabs.scrollWidth-leaderTabs.clientWidth);
+  controls.hidden=!isMobile||max<12;
+  if(controls.hidden)return;
+  prev.disabled=leaderTabs.scrollLeft<=4;
+  next.disabled=leaderTabs.scrollLeft>=max-4;
+  const bounds=leaderTabs.getBoundingClientRect();
+  const right=Array.from(leaderTabs.querySelectorAll('button')).filter(b=>b.getBoundingClientRect().right>bounds.right+12)
+    .map(b=>b.textContent.trim()).filter(Boolean);
+  const english=document.documentElement.lang==='en';
+  hint.textContent=right.length?(english?'More rankings: ':'다음 항목: ')+right.slice(0,2).join(' · '):
+     (english?'Swipe right for previous rankings':'오른쪽으로 밀어 이전 랭킹 보기');
+ };
+ controls.addEventListener('click',e=>{
+  const button=e.target.closest('[data-rank-direction]');if(!button)return;
+  leaderTabs.scrollBy({left:Number(button.dataset.rankDirection)*Math.max(170,leaderTabs.clientWidth*.65),behavior:'smooth'});
+ });
+ leaderTabs.addEventListener('scroll',update,{passive:true});
+ window.addEventListener('resize',update,{passive:true});
+ leaderTabs.addEventListener('click',()=>requestAnimationFrame(update));
+ requestAnimationFrame(update);
+ document.addEventListener('dokdo:ready',()=>requestAnimationFrame(update));
+}
+
+
 
 /* Squad: compact rankings and complete EA-observed member directory, no extra main menu. */
 let updateRoster=()=>{},selectSquad=()=>{};
