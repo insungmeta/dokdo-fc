@@ -195,3 +195,49 @@ main{padding-top:15px}
 .dfc-legacy-hero{display:none!important}
 @media(max-width:900px){.dfc-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dfc-lower-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dfc-board-leaders{grid-column:span 2}}
 @media(max-width:600px){.dfc-photo-banner{min-height:145px;padding:17px 19px}.dfc-banner-title strong{font-size:42px}.dfc-summary-grid{gap:6px}.dfc-board-card{padding:9px}.dfc-summary-grid .division-digit{font-size:44px!important}.dfc-summary-stat .metric b{font-size:18px!important}.dfc-lower-grid{grid-template-columns:1fr;gap:7px}.dfc-board-leaders{grid-column:auto}.dfc-lower-grid>.dfc-board-card{min-height:0}.dfc-board-trend .division-trend-chart{height:110px!important}.dfc-summary-form .division-form-results span{font-size:8px!important}}
+
+/* Compact 390px design: reference image's information density, no towering tiles. */
+@media(max-width:600px){
+ #app-home{padding-top:0!important}
+ .dfc-photo-banner{min-height:122px!important;max-height:122px!important;padding:10px 17px!important;background-position:center,70% 46%!important}
+ .dfc-banner-title span{font-size:13px!important}
+ .dfc-banner-title strong{font-size:34px!important}
+ .dfc-banner-title small{font-size:7px!important;letter-spacing:1.7px!important}
+ .dfc-match-board{gap:6px!important;margin-top:6px!important}
+ .dfc-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:5px!important;align-items:stretch}
+ .dfc-summary-grid>.dfc-board-card{height:105px!important;min-height:0!important;padding:7px 9px!important;overflow:hidden!important}
+ .dfc-card-title{font-size:9px!important;margin-bottom:4px!important;line-height:1.1!important}
+ .dfc-summary-division .division-primary{display:block!important}
+ .dfc-summary-division .division-showcase{display:flex!important;gap:5px!important;align-items:center!important}
+ .dfc-summary-division .division-digit{font-size:37px!important;line-height:1!important;letter-spacing:-2px!important}
+ .dfc-summary-division .division-copy{min-width:0!important}
+ .dfc-summary-division .division-copy strong{font-size:10px!important}
+ .dfc-summary-division .division-copy small{display:none!important}
+ .dfc-summary-division .division-live{font-size:8px!important}
+ .dfc-summary-division .division-subline{display:block!important;margin:4px 0 0!important}
+ .dfc-summary-division .division-subline>*{padding:0!important;font-size:9px!important;white-space:normal!important}
+ .dfc-summary-division .division-subline .season-wdl{display:none!important}
+ .dfc-summary-rating .metric{display:block!important;padding:0!important}
+ .dfc-summary-rating .rating-heading{position:absolute!important;right:8px!important;top:8px!important}
+ .dfc-summary-rating .metric b{font-size:31px!important;margin:0!important}
+ .dfc-summary-rating .rating-caption,.dfc-summary-rating .rating-reference{display:none!important}
+ .dfc-summary-rating .rating-trend{font-size:10px!important;margin-top:3px!important}
+ .dfc-summary-form .division-form{padding:0!important}
+ .dfc-summary-form .division-form-top{display:flex!important;flex-wrap:wrap!important;gap:3px!important}
+ .dfc-summary-form .division-form-top span,.dfc-summary-form .division-form-top b{font-size:10px!important}
+ .dfc-summary-form .division-form-results{margin:5px 0!important;gap:2px!important}
+ .dfc-summary-form .division-form-results span{height:19px!important;min-width:0!important;padding:0!important;font-size:8px!important}
+ .dfc-summary-form .division-form>small{display:none!important}
+ .dfc-summary-stat .metric-strip{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:1px!important}
+ .dfc-summary-stat .metric{min-height:0!important;padding:1px!important}
+ .dfc-summary-stat .metric h3{font-size:8px!important;margin:0!important}
+ .dfc-summary-stat .metric b{font-size:17px!important;margin:1px 0!important}
+ .dfc-summary-stat .metric-wdl .wdl-values{gap:2px!important}
+ .dfc-summary-stat .metric-wdl .wdl-values strong{font-size:12px!important}
+ .dfc-lower-grid{gap:6px!important}
+ .dfc-lower-grid>.dfc-board-card{padding:9px!important}
+ .dfc-board-matches .hero-recent-list .match-item{padding:5px 2px!important}
+ .dfc-board-trend .division-trend-chart{height:90px!important;max-height:90px!important}
+ .dfc-board-leaders .home-leader-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .dfc-board-leaders .home-leader{min-width:0!important}
+}
