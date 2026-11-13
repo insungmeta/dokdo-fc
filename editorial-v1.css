@@ -718,3 +718,15 @@ body{background:var(--dfc-ui-bg)}
  #app-home .dfc-summary-stat .metric-strip{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)!important}
  #app-home .dfc-summary-stat .metric-strip>.metric h3{font-size:12px!important;white-space:nowrap!important}
 }
+
+/* v22: visual screenshot review — reduce wasted space without shrinking statistics. */
+@media(max-width:700px){
+ #app-home .dfc-summary-grid>.dfc-board-card{min-height:0!important;padding:10px!important;gap:3px!important}
+ #app-home .dfc-summary-grid .division-form-results{margin-top:5px!important}
+ #app-home .dfc-summary-stat .metric-strip{gap:6px 6px!important}
+ #app-home .dfc-summary-stat .metric-strip>.metric:nth-child(2){padding-top:6px!important}
+ #app-home .dfc-summary-stat .metric-wdl .wdl-values>span{padding:4px 2px!important}
+ #app-home .dfc-summary-grid .division-digit{font-size:clamp(32px,8vw,42px)!important}
+ #app-home .dfc-board-card .dfc-card-title{margin-bottom:4px!important}
+ .rights-hold{padding:5px 10px!important;line-height:1.35!important;font-size:10px!important}
+}
