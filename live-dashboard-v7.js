@@ -115,7 +115,22 @@ function matchContributors(m){
  '<div class="match-contribution-row"><span class="match-contribution-label"><span aria-hidden="true">🎯</span> 도움</span><div class="match-contributor-values">'+assists+'</div></div>'+note;
 }
 
-function game(i){const m=games[i];if(!m)return;$('gameDate').textContent=m.time;$('gameTeamDisplay').innerHTML=dfc('detail-crest')+'<span class="team-name-pair">DOKDO FC <span>VS</span> '+E(m.opp)+'</span>'+crest(m.id,m.opp,'small');$('scoreUs').textContent=m.score[0];$('scoreThem').textContent=m.score[1];$('matchContributors').innerHTML=matchContributors(m);updateH2H(m.raw);
+function opponentRoster(m){
+ const panel=$('opponentRosterPanel'),list=$('opponentRosterList'),count=$('opponentRosterCount'),note=$('opponentRosterNote');
+ if(!panel||!list)return;panel.open=false;
+ const en=EN(),players=(m.raw.opponentPlayers||[]).filter(human);
+ count.textContent=en?players.length+' players':players.length+'명';
+ note.textContent=en?'Only collected human player data. AI players and unavailable statistics are not included.':'수집된 사람 선수 기록만 표시합니다. AI 선수와 미수집 기록은 제외합니다.';
+ if(m.dnf){list.innerHTML='<p class="opponent-roster-empty">'+(en?'Player statistics unavailable for this match.':'이 경기는 선수별 기록이 미집계되었습니다.')+'</p>';return}
+ if(!players.length){list.innerHTML='<p class="opponent-roster-empty">'+(en?'No opponent player records were collected.':'수집된 상대팀 선수 기록이 없습니다.')+'</p>';return}
+ const stat=(p,key)=>p[key]==null||p[key]===''?'—':String(num(p[key]));
+ const role=p=>String(p.position||p.favoritePosition||p.proPos||'').trim()||'—';
+ list.innerHTML=players.slice().sort((a,b)=>num(b.goals)-num(a.goals)||num(b.assists)-num(a.assists)||name(a).localeCompare(name(b))).map(p=>{
+  const fields=[['⚽',en?'Goals':'득점','goals'],['🎯',en?'Assists':'도움','assists'],['★',en?'Rating':'평점','rating'],['↗',en?'Shots':'슈팅','shots'],['⇄',en?'Passes':'패스 성공','passesMade'],['✦',en?'Tackles':'태클','tacklesMade']];
+  return '<details class="opponent-player"><summary><span class="opponent-avatar" aria-hidden="true">'+E(name(p).slice(0,1).toUpperCase())+'</span><span class="opponent-identity"><strong>'+E(name(p))+'</strong><small>'+E(role(p))+'</small></span><span class="opponent-player-goals">⚽ '+stat(p,'goals')+'</span><span class="opponent-chevron" aria-hidden="true">⌄</span></summary><div class="opponent-player-stats">'+fields.map(([icon,label,key])=>'<span><small>'+icon+' '+label+'</small><b>'+stat(p,key)+'</b></span>').join('')+'</div></details>';
+ }).join('');
+}
+function game(i){const m=games[i];if(!m)return;opponentRoster(m);$('gameDate').textContent=m.time;$('gameTeamDisplay').innerHTML=dfc('detail-crest')+'<span class="team-name-pair">DOKDO FC <span>VS</span> '+E(m.opp)+'</span>'+crest(m.id,m.opp,'small');$('scoreUs').textContent=m.score[0];$('scoreThem').textContent=m.score[1];$('matchContributors').innerHTML=matchContributors(m);updateH2H(m.raw);
 if(m.dnf){$('compareRows').innerHTML='<div class="coverage">이 경기의 선수별 세부 기록이 미집계되었습니다.</div>';$('coverage').textContent='세부 통계가 제공되지 않아 0으로 표시하지 않습니다.';$('ourPass').textContent='—';$('theirPass').textContent='—';return}
 $('compareRows').innerHTML=[['슈팅','shots'],['유효슈팅','onTarget'],['태클 성공','tackles'],['인터셉트','interceptions']].map(([label,k])=>{const a=m[k][0],b=m[k][1],mx=Math.max(a,b,1);return '<div class="dual"><strong>'+a+'</strong><div class="lane"><i style="width:'+Math.round(a/mx*100)+'%"></i></div><span class="label">'+label+'</span><div class="lane r"><i style="width:'+Math.round(b/mx*100)+'%"></i></div><strong>'+b+'</strong></div>'}).join('');
 $('coverage').innerHTML=EN()?('Collected human-player stats · DOKDO FC <b>'+m.counts[0]+'</b> players / Opponent <b>'+m.counts[1]+'</b> players. AI and unavailable opponent stats are excluded.'):('수집된 사람 선수 기록 · DOKDO FC <b>'+m.counts[0]+'</b>명 / 상대 <b>'+m.counts[1]+'</b>명. AI 및 누락된 상대팀 기록은 제외합니다.');$('ourPass').textContent=m.attempts[0]?Math.round(m.passes[0]/m.attempts[0]*100)+'%':'—';$('theirPass').textContent=m.attempts[1]?Math.round(m.passes[1]/m.attempts[1]*100)+'%':'—'}
