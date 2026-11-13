@@ -639,3 +639,75 @@ main{padding-top:15px}
  #app-home .dfc-summary-grid>.dfc-summary-stat{min-height:0!important}
  #app-home .dfc-summary-stat .metric-strip>.metric:nth-child(4){display:none!important}
 }
+
+/* v21 / Unified graphic-first design system across all six screens.
+   No changes to source statistics, data fetching or refresh cadence. */
+:root{--dfc-ui-bg:#031326;--dfc-ui-panel:#09213b;--dfc-ui-edge:#315775;--dfc-ui-lime:#baff00;--dfc-ui-text:#f4f8ff;--dfc-ui-muted:#a5bbce}
+body{background:var(--dfc-ui-bg)}
+.app-screen{color:var(--dfc-ui-text)}
+.app-screen .screen-head,.app-screen .section-title{margin-bottom:12px!important}
+.app-screen .screen-head h2,.app-screen .section-title h2{font-weight:900!important;letter-spacing:-.5px!important;line-height:1.15!important}
+.app-screen .screen-head .eyebrow,.app-screen .section-title .no{color:var(--dfc-ui-lime)!important;letter-spacing:1.2px!important}
+.app-screen .screen-head>small,.app-screen .section-title p{font-size:11px!important;line-height:1.35!important;color:var(--dfc-ui-muted)!important}
+.app-screen .panel,.app-screen .star,.app-screen .roster-panel,.app-screen .tl-box{background:linear-gradient(145deg,#0b2846,#061a30)!important;border:1px solid var(--dfc-ui-edge)!important;border-radius:10px!important;box-shadow:none!important}
+.app-screen button,.app-screen a{touch-action:manipulation}
+.app-screen .panel-head h3{font-weight:900!important;letter-spacing:-.3px!important}
+.app-screen .muted-tip,.app-screen .detail,.app-screen .sub{color:var(--dfc-ui-muted)!important}
+.app-screen .hero-number,.app-screen .card-count,.app-screen .star .hero-number{font-family:Impact,'Arial Narrow',Arial,sans-serif!important;font-style:italic!important;color:var(--dfc-ui-lime)!important;font-weight:900!important;line-height:1.06!important}
+.app-screen .star-grid{gap:9px!important}
+.app-screen .star{padding:13px!important;min-width:0!important}
+.app-screen .star .star-top{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:6px!important;font-size:11px!important;font-weight:900!important}
+.app-screen .star .emblem{font-size:22px!important}
+.app-screen .star .person{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-weight:800!important}
+.app-screen .star .detail{font-size:10px!important;line-height:1.3!important}
+#players .squad-switch,#players #leaderTabs,#matches .archive-filter,#app-rivals .rival-filter{gap:5px!important}
+#players .squad-switch button,#players #leaderTabs button,#matches .archive-filter button,#app-rivals button{border-radius:7px!important;font-weight:800!important}
+#players .squad-switch button.is-selected,#players #leaderTabs button.active,#matches .archive-filter button.active{background:var(--dfc-ui-lime)!important;color:#071526!important}
+#matches .match-archive .match-list{min-width:0!important}
+#matches .match-archive .match-list>*{min-width:0!important}
+#matches .archive-searchbar{gap:8px!important}
+#matches .archive-searchbar label{font-size:11px!important}
+#matches .archive-filter{display:flex!important;flex-wrap:wrap!important}
+#app-rivals .panel{min-width:0!important}
+#more .team-record{border-radius:8px!important;overflow:hidden!important}
+#more .formline{gap:4px!important}
+#more .formline>*{border-radius:3px!important}
+#more .team-period-compare{overflow:hidden!important}
+#tactics .tl-quick-head{gap:10px!important}
+#tactics .tl-main-pick h3{font-weight:900!important;line-height:1.15!important}
+#tactics .tl-pitch-wrap{border-radius:12px!important;overflow:hidden!important}
+#tactics .tl-evidence,#tactics .tl-formation-feedback{font-size:11px!important;line-height:1.4!important}
+#app-home .dfc-board-card{border-radius:10px!important}
+#app-home .dfc-card-title{display:flex!important;align-items:center!important;gap:7px!important}
+#app-home .dfc-card-title[data-symbol]:before{content:attr(data-symbol)!important;clip-path:none!important;background:transparent!important;color:var(--dfc-ui-lime)!important;font:900 17px/1 Arial,sans-serif!important;width:18px!important;height:18px!important;flex:0 0 18px!important;text-align:center!important;opacity:1!important}
+#app-home .dfc-board-matches .hero-recent-list{overflow:hidden!important}
+#app-home .dfc-board-matches .hero-recent-list .match-item{min-width:0!important}
+#app-home .dfc-board-leaders .home-leader-grid{gap:6px!important}
+#app-home .dfc-board-leaders .home-leader{min-width:0!important}
+#app-home .dfc-board-leaders .home-leader .hl-name{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#app-home .dfc-summary-form .division-form-results span{font-weight:900!important;border-radius:3px!important}
+#app-home .dfc-summary-stat .metric-wdl .wdl-values>span{min-width:0!important}
+.app-bottom-nav{background:#06192e!important;border-top:1px solid #325472!important}
+.app-bottom-nav button{min-width:0!important}
+.app-bottom-nav button.active,.app-bottom-nav button[aria-current="page"]{background:var(--dfc-ui-lime)!important;color:#061627!important}
+@media(max-width:700px){
+ .app-screen .screen-head,.app-screen .section-title{gap:6px!important;margin-bottom:9px!important}
+ .app-screen .screen-head h2,.app-screen .section-title h2{font-size:20px!important}
+ .app-screen .screen-head>small,.app-screen .section-title p{font-size:10px!important}
+ .app-screen .panel,.app-screen .star,.app-screen .roster-panel{border-radius:8px!important}
+ #players .star-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+ #players .star{padding:10px!important}
+ #players .star .hero-number{font-size:clamp(30px,9vw,42px)!important}
+ #players .star .person{font-size:12px!important}
+ #players .star .detail{font-size:9px!important}
+ #matches .archive-searchbar{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #matches .archive-searchbar label{min-width:0!important}
+ #matches .archive-searchbar input,#matches .archive-searchbar select{width:100%!important;min-width:0!important}
+ #app-home .dfc-board-card{padding:10px!important}
+ #app-home .dfc-card-title[data-symbol]:before{font-size:14px!important;width:15px!important;height:15px!important;flex-basis:15px!important}
+ #app-home .dfc-lower-grid{gap:8px!important}
+ #tactics .tl-quick-head{display:flex!important;flex-wrap:wrap!important}
+ #tactics .tl-main-pick{min-width:0!important}
+ #tactics .tl-evidence{max-width:100%!important}
+}
+@media(prefers-reduced-motion:reduce){.app-screen *{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
