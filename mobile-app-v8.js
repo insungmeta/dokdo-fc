@@ -20,6 +20,16 @@ const wrap=(cls,title,node)=>{const card=document.createElement('section');card.
 summary.append(wrap('dfc-summary-division','DIVISION',primary),wrap('dfc-summary-rating','클럽 레이팅',rating),wrap('dfc-summary-form','최근 10경기 폼',form));
 const stat=wrap('dfc-summary-stat','시즌 팀 기록',null);stat.append(metrics);summary.append(stat);
 lower.append(wrap('dfc-board-matches','',recent),wrap('dfc-board-trend','팀 흐름 · 최근 경기',trend),wrap('dfc-board-leaders','주요 랭킹',lead));
+/* Graphic-first dashboard: short labels, native symbols and progressive detail. */
+const decorateDashboard=()=>{
+ const symbolMap=[['.dfc-summary-division','★'],['.dfc-summary-rating','♛'],['.dfc-summary-form','▥'],['.dfc-summary-stat','◉'],['.dfc-board-trend','↗'],['.dfc-board-leaders','♜']];
+ for(const [selector,symbol] of symbolMap){const heading=board.querySelector(selector+' .dfc-card-title');if(heading){heading.dataset.symbol=symbol;}}
+ const recentLink=board.querySelector('.hero-recent-all');
+ if(recentLink)recentLink.setAttribute('aria-label','전체 경기 기록 보기');
+ const legend=board.querySelector('.dfc-summary-form .division-form-results');
+ if(legend)legend.setAttribute('title','초록: 승리 · 회색: 무승부 · 빨강: 패배');
+};
+decorateDashboard();
 const localizeBoard=()=>{const en=document.documentElement.lang==='en';const titles=[['.dfc-summary-stat .dfc-card-title',en?'Season Record':'시즌 팀 기록'],['.dfc-board-trend .dfc-card-title',en?'Team Trends · Recent Matches':'팀 흐름 · 최근 경기'],['.dfc-board-leaders .dfc-card-title',en?'Top Players':'주요 랭킹'],['.dfc-summary-rating .dfc-card-title',en?'Club Rating':'클럽 레이팅'],['.dfc-summary-form .dfc-card-title',en?'Last 10 Form':'최근 10경기 폼']];for(const [selector,value] of titles){const el=board.querySelector(selector);if(el)el.textContent=value}};
 localizeBoard();new MutationObserver(localizeBoard).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
 hero.classList.add('dfc-legacy-hero');hero.style.display='none';
