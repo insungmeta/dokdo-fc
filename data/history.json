@@ -78407,6 +78407,42 @@
           ]
         }
       ]
+    },
+    {
+      "at": "2026-11-13T14:27:27.759961+00:00",
+      "kind": "data-change",
+      "career": [
+        {
+          "name": "JJONGHONEY",
+          "position": "goalkeeper",
+          "gamesPlayed": 359,
+          "goals": 20,
+          "assists": 27,
+          "averageRating": 6.9,
+          "manOfTheMatch": 29,
+          "ratingAve": 6.9
+        },
+        {
+          "name": "EDEN0420_pc",
+          "position": "defender",
+          "gamesPlayed": 67,
+          "goals": 22,
+          "assists": 2,
+          "averageRating": 7.7,
+          "manOfTheMatch": 7,
+          "ratingAve": 7.7
+        },
+        {
+          "name": "kimbyungseuk",
+          "position": "midfielder",
+          "gamesPlayed": 1013,
+          "goals": 66,
+          "assists": 63,
+          "averageRating": 6.6,
+          "manOfTheMatch": 37,
+          "ratingAve": 6.6
+        }
+      ]
     }
   ]
 }
