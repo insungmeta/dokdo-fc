@@ -589,3 +589,53 @@ main{padding-top:15px}
  #app-home .dfc-summary-stat .metric-wdl .wdl-values strong{font-size:clamp(11px,3.1vw,15px)!important}
  #app-home .dfc-summary-stat .metric-wdl .wdl-values small{font-size:8px!important}
 }
+
+/* v20 — mobile graphic-first season stats: two large numbers + full-width W/D/L score tiles. */
+@media(max-width:700px){
+ #app-home .dfc-summary-stat .metric-strip{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:10px 7px!important;align-items:start!important
+ }
+ #app-home .dfc-summary-stat .metric-strip>.metric:nth-child(1){grid-column:1!important;grid-row:1!important}
+ #app-home .dfc-summary-stat .metric-strip>.metric:nth-child(3){grid-column:2!important;grid-row:1!important}
+ #app-home .dfc-summary-stat .metric-strip>.metric:nth-child(2){
+  grid-column:1/-1!important;grid-row:2!important;
+  border-top:1px solid #315578!important;padding-top:8px!important
+ }
+ #app-home .dfc-summary-stat .metric-strip>.metric:nth-child(2) h3{
+  font-size:10px!important;margin-bottom:5px!important;letter-spacing:0!important
+ }
+ #app-home .dfc-summary-stat .metric-strip>.metric h3{
+  font-size:clamp(9px,2.5vw,11px)!important;white-space:nowrap!important;
+  letter-spacing:-.35px!important
+ }
+ #app-home .dfc-summary-stat .metric-strip>.metric b{
+  font-size:clamp(23px,6.5vw,32px)!important;line-height:1.15!important
+ }
+ #app-home .dfc-summary-stat .metric-wdl .wdl-values{
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:5px!important;margin:0!important
+ }
+ #app-home .dfc-summary-stat .metric-wdl .wdl-values>span{
+  display:flex!important;flex-direction:column!important;align-items:center!important;
+  justify-content:center!important;gap:1px!important;min-width:0!important;
+  padding:6px 2px!important;border-radius:5px!important;
+  background:#123a2a!important;border-bottom:3px solid #72d84a!important
+ }
+ #app-home .dfc-summary-stat .metric-wdl .wdl-values>span:nth-child(2){
+  background:#263a50!important;border-color:#8296ae!important
+ }
+ #app-home .dfc-summary-stat .metric-wdl .wdl-values>span:nth-child(3){
+  background:#472333!important;border-color:#e45c64!important
+ }
+ #app-home .dfc-summary-stat .metric-wdl .wdl-values strong{
+  display:block!important;font:italic 900 clamp(18px,5.5vw,26px)/1.1 Impact,'Arial Narrow',Arial,sans-serif!important;
+  letter-spacing:0!important;color:#fff!important
+ }
+ #app-home .dfc-summary-stat .metric-wdl .wdl-values small{
+  display:block!important;font:800 10px/1.2 Arial,'Malgun Gothic',sans-serif!important;
+  color:#e8eff7!important
+ }
+ #app-home .dfc-summary-grid>.dfc-summary-stat{min-height:0!important}
+ #app-home .dfc-summary-stat .metric-strip>.metric:nth-child(4){display:none!important}
+}
