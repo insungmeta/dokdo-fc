@@ -730,3 +730,47 @@ body{background:var(--dfc-ui-bg)}
  #app-home .dfc-board-card .dfc-card-title{margin-bottom:4px!important}
  .rights-hold{padding:5px 10px!important;line-height:1.35!important;font-size:10px!important}
 }
+
+/* v23: broadcast editorial design; graphic values sourced from existing DOM. */
+#app-home .dfc-summary-stat .dfc-season-visual{display:grid;grid-template-columns:minmax(88px,112px) minmax(0,1fr);align-items:center;gap:13px;margin-top:8px;padding-top:10px;border-top:1px solid #294962}
+#app-home .dfc-record-ring{--dfc-w:0%;--dfc-wd:0%;width:100%;aspect-ratio:1;border-radius:50%;background:conic-gradient(#baff00 0 var(--dfc-w),#8aa4bd var(--dfc-w) var(--dfc-wd),#e54c59 var(--dfc-wd) 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;isolation:isolate}
+#app-home .dfc-record-ring:before{content:"";position:absolute;inset:12px;background:#071b30;border-radius:50%;z-index:-1}
+#app-home .dfc-ring-value{color:#f8fbff;font-size:clamp(17px,2vw,26px);font-weight:950;font-variant-numeric:tabular-nums;line-height:1.15}
+#app-home .dfc-ring-label{font-size:10px;font-weight:800;color:#aec5d7}
+#app-home .dfc-record-key{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;min-width:0}
+#app-home .dfc-record-key>span{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;gap:3px;background:#0c2945;border:1px solid #274761;border-radius:7px;padding:8px 2px}
+#app-home .dfc-record-key i{width:18px;height:4px;border-radius:3px;background:#baff00}
+#app-home .dfc-record-key .dfc-key-d{background:#8aa4bd}
+#app-home .dfc-record-key .dfc-key-l{background:#e54c59}
+#app-home .dfc-record-key b{font-size:clamp(15px,2vw,24px);line-height:1.1;font-variant-numeric:tabular-nums;color:#fff}
+#app-home .dfc-record-key small{font-size:10px;font-weight:800;color:#aec5d7}
+#app-home .dfc-summary-stat .metric-wdl{display:none!important}
+#app-home .dfc-summary-stat .metric-strip{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+#app-home .dfc-summary-stat .metric-strip>.metric:nth-child(3){display:flex!important}
+#app-home .dfc-summary-stat .metric-strip>.metric:nth-child(4){display:none!important}
+#app-home .dfc-summary-stat .metric-strip>.metric:nth-child(1){grid-column:auto!important}
+#app-home .dfc-summary-stat .metric-strip>.metric:nth-child(3){grid-column:auto!important}
+#app-home .dfc-summary-stat .metric-strip>.metric h3{overflow-wrap:normal!important;word-break:keep-all!important}
+#players .star-grid .star{position:relative;overflow:hidden}
+#players .star-grid .star:after{content:"";position:absolute;right:-15px;top:-30px;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,#baff001a,transparent 70%);pointer-events:none}
+#players .star-grid .star .hero-number{font-size:clamp(36px,4.5vw,60px)!important}
+#players .star-grid .star .person{max-width:100%}
+#app-home .dfc-board-matches .hero-recent-card{background:transparent!important}
+#app-home .dfc-summary-rating .metric-rating b{font-variant-numeric:tabular-nums}
+#app-home .dfc-board-card .dfc-card-title{font-size:12px!important;letter-spacing:.15px!important;font-weight:900!important}
+#app-home .dfc-photo-banner{border-radius:12px!important}
+@media(max-width:700px){
+ #app-home .dfc-summary-stat .dfc-season-visual{grid-template-columns:92px minmax(0,1fr);gap:8px;margin-top:6px;padding-top:8px}
+ #app-home .dfc-record-ring:before{inset:10px}
+ #app-home .dfc-record-key{gap:4px}
+ #app-home .dfc-record-key>span{padding:7px 2px}
+ #app-home .dfc-record-key b{font-size:17px}
+ #app-home .dfc-ring-value{font-size:19px}
+ #app-home .dfc-summary-stat .metric-strip{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #app-home .dfc-summary-stat .metric-strip>.metric:nth-child(1),#app-home .dfc-summary-stat .metric-strip>.metric:nth-child(3){grid-column:auto!important;grid-row:auto!important;border:0!important;padding:4px!important}
+ #app-home .dfc-summary-stat .metric-strip>.metric:nth-child(3){display:flex!important}
+ #app-home .dfc-summary-stat .metric-strip>.metric h3{font-size:11px!important;white-space:normal!important}
+ #app-home .dfc-summary-stat .metric-strip>.metric b{font-size:clamp(20px,6vw,27px)!important}
+ #players .star-grid .star .hero-number{font-size:clamp(30px,9vw,42px)!important}
+}
+@media(max-width:365px){#app-home .dfc-summary-stat .dfc-season-visual{grid-template-columns:80px minmax(0,1fr)}#app-home .dfc-record-key b{font-size:15px}}
