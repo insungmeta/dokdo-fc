@@ -711,3 +711,10 @@ body{background:var(--dfc-ui-bg)}
  #tactics .tl-evidence{max-width:100%!important}
 }
 @media(prefers-reduced-motion:reduce){.app-screen *{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* v21.1 — verified 1024px EN collision: give season statistics adequate width. */
+@media(min-width:900px) and (max-width:1199px){
+ #app-home .dfc-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #app-home .dfc-summary-stat .metric-strip{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)!important}
+ #app-home .dfc-summary-stat .metric-strip>.metric h3{font-size:12px!important;white-space:nowrap!important}
+}
