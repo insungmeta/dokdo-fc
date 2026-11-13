@@ -799,3 +799,39 @@ body{background:var(--dfc-ui-bg)}
  #app-home .dfc-summary-grid .division-digit{font-size:29px!important}
  #app-home .dfc-summary-stat .dfc-season-visual{grid-template-columns:95px minmax(0,1fr)!important;gap:8px!important}
 }
+
+/* v25: precise screenshot correction — separate division suffix and remove form dead space. */
+@media(max-width:700px){
+ #app-home .dfc-summary-grid{grid-auto-rows:min-content!important;align-content:start!important;align-items:start!important}
+ #app-home .dfc-summary-grid>.dfc-summary-form{
+  grid-column:1/-1!important;grid-row:2!important;display:block!important;
+  height:max-content!important;min-height:0!important;max-height:116px!important;
+  align-self:start!important;padding:10px 12px!important;overflow:visible!important
+ }
+ #app-home .dfc-summary-form>.dfc-card-title{margin:0 0 5px!important;min-height:0!important}
+ #app-home .dfc-summary-form .division-form{
+  display:block!important;height:max-content!important;min-height:0!important;max-height:none!important;
+  margin:0!important;padding:0!important;flex:none!important;align-self:start!important
+ }
+ #app-home .dfc-summary-form .division-form-top{margin:0!important;padding:0!important;min-height:0!important}
+ #app-home .dfc-summary-form .division-form-results{margin:5px 0 0!important;min-height:0!important}
+ #app-home .dfc-summary-form .division-form-results span{height:24px!important}
+ #app-home .dfc-summary-form .division-form>small{display:none!important}
+ #app-home .dfc-summary-division .division-showcase{
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;
+  column-gap:18px!important;row-gap:4px!important;flex-wrap:nowrap!important
+ }
+ #app-home .dfc-summary-division .division-digit{
+  display:inline-block!important;flex:0 0 auto!important;
+  margin:0 8px 0 0!important;padding-right:6px!important;
+  letter-spacing:0!important;white-space:nowrap!important;line-height:1.2!important
+ }
+ #app-home .dfc-summary-division .division-copy{
+  flex:1 1 auto!important;min-width:0!important;margin-left:4px!important;
+  padding-left:4px!important
+ }
+ #app-home .dfc-summary-division .division-copy strong{
+  display:block!important;white-space:normal!important;word-break:keep-all!important;
+  line-height:1.45!important;letter-spacing:0!important;font-size:11px!important
+ }
+}
