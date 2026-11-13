@@ -835,3 +835,12 @@ body{background:var(--dfc-ui-bg)}
   line-height:1.45!important;letter-spacing:0!important;font-size:11px!important
  }
 }
+
+/* v26: keep '5부' together; retain the wider gap before '현재 소속 리그'. */
+@media(max-width:700px){
+ #app-home .dfc-summary-division .division-digit{
+  margin:0!important;padding:0!important;letter-spacing:-1px!important;
+ }
+ #app-home .dfc-summary-division .division-showcase{column-gap:18px!important}
+ #app-home .dfc-summary-division .division-copy{margin-left:4px!important;padding-left:4px!important}
+}
