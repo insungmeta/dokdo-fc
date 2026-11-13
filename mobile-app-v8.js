@@ -30,6 +30,36 @@ const decorateDashboard=()=>{
  if(legend)legend.setAttribute('title','초록: 승리 · 회색: 무승부 · 빨강: 패배');
 };
 decorateDashboard();
+/* Broadcast-style live season graphic. Read the existing EA-rendered W/D/L DOM;
+   never insert fabricated numbers or modify collection. */
+const recordCard=board.querySelector('.dfc-summary-stat');
+if(recordCard){
+ const graphic=document.createElement('div');
+ graphic.className='dfc-season-visual';
+ graphic.setAttribute('aria-label','시즌 승무패 분포');
+ graphic.innerHTML='<div class="dfc-record-ring" role="img"><span class="dfc-ring-value">—</span><small class="dfc-ring-label">승률</small></div><div class="dfc-record-key"><span><i class="dfc-key-w"></i><b class="dfc-key-w-value">—</b><small class="dfc-key-w-label">승</small></span><span><i class="dfc-key-d"></i><b class="dfc-key-d-value">—</b><small class="dfc-key-d-label">무</small></span><span><i class="dfc-key-l"></i><b class="dfc-key-l-value">—</b><small class="dfc-key-l-label">패</small></span></div>';
+ recordCard.append(graphic);
+ const wdl=recordCard.querySelector('.wdl-values');
+ let previous='';
+ const updateRecordGraphic=()=>{
+  if(!wdl)return;
+  const nums=Array.from(wdl.querySelectorAll('strong')).slice(0,3).map(n=>Number((n.textContent||'').replace(/[^0-9]/g,'')));
+  if(nums.length!==3||nums.some(n=>!Number.isFinite(n)))return;
+  const key=nums.join(':');if(previous===key)return;previous=key;
+  const total=nums.reduce((a,b)=>a+b,0);
+  const percentages=total?nums.map(n=>n/total*100):[0,0,0];
+  const pct=total?(nums[0]/total*100).toFixed(1):'—';
+  graphic.querySelector('.dfc-ring-value').textContent=pct==='—'?'—':pct+'%';
+  graphic.querySelector('.dfc-record-ring').style.setProperty('--dfc-w',percentages[0]+'%');
+  graphic.querySelector('.dfc-record-ring').style.setProperty('--dfc-wd',(percentages[0]+percentages[1])+'%');
+  graphic.querySelector('.dfc-record-ring').setAttribute('aria-label','승 '+nums[0]+' 무 '+nums[1]+' 패 '+nums[2]+', 승률 '+pct+'%');
+  ['w','d','l'].forEach((k,i)=>graphic.querySelector('.dfc-key-'+k+'-value').textContent=String(nums[i]));
+ };
+ const localizeRecord=()=>{const en=document.documentElement.lang==='en';graphic.querySelector('.dfc-ring-label').textContent=en?'WIN RATE':'승률';['w','d','l'].forEach((k,i)=>graphic.querySelector('.dfc-key-'+k+'-label').textContent=en?['W','D','L'][i]:['승','무','패'][i])};
+ updateRecordGraphic();localizeRecord();
+ if(wdl)new MutationObserver(updateRecordGraphic).observe(wdl,{subtree:true,characterData:true,childList:true});
+ new MutationObserver(localizeRecord).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+}
 const localizeBoard=()=>{const en=document.documentElement.lang==='en';const titles=[['.dfc-summary-stat .dfc-card-title',en?'Season Record':'시즌 팀 기록'],['.dfc-board-trend .dfc-card-title',en?'Team Trends · Recent Matches':'팀 흐름 · 최근 경기'],['.dfc-board-leaders .dfc-card-title',en?'Top Players':'주요 랭킹'],['.dfc-summary-rating .dfc-card-title',en?'Club Rating':'클럽 레이팅'],['.dfc-summary-form .dfc-card-title',en?'Last 10 Form':'최근 10경기 폼']];for(const [selector,value] of titles){const el=board.querySelector(selector);if(el)el.textContent=value}};
 localizeBoard();new MutationObserver(localizeBoard).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
 hero.classList.add('dfc-legacy-hero');hero.style.display='none';
