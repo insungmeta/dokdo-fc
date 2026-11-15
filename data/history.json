@@ -107789,6 +107789,22 @@
           "ratingAve": 6.3
         }
       ]
+    },
+    {
+      "at": "2026-11-15T04:00:46.147550+00:00",
+      "kind": "data-change",
+      "career": [
+        {
+          "name": "EDEN0420_pc",
+          "position": "midfielder",
+          "gamesPlayed": 81,
+          "goals": 24,
+          "assists": 5,
+          "averageRating": 7.6,
+          "manOfTheMatch": 10,
+          "ratingAve": 7.6
+        }
+      ]
     }
   ]
 }
