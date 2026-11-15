@@ -126911,6 +126911,22 @@
           ]
         }
       ]
+    },
+    {
+      "at": "2026-11-15T18:58:41.120034+00:00",
+      "kind": "data-change",
+      "career": [
+        {
+          "name": "mael97463",
+          "position": "goalkeeper",
+          "gamesPlayed": 80,
+          "goals": 0,
+          "assists": 2,
+          "averageRating": 6.3,
+          "manOfTheMatch": 0,
+          "ratingAve": 6.3
+        }
+      ]
     }
   ]
 }
