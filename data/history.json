@@ -127039,6 +127039,22 @@
           "ratingAve": 6.9
         }
       ]
+    },
+    {
+      "at": "2026-11-16T11:46:24.473511+00:00",
+      "kind": "data-change",
+      "career": [
+        {
+          "name": "FinalThreat_0",
+          "position": "midfielder",
+          "gamesPlayed": 146,
+          "goals": 10,
+          "assists": 23,
+          "averageRating": 6.7,
+          "manOfTheMatch": 11,
+          "ratingAve": 6.7
+        }
+      ]
     }
   ]
 }
