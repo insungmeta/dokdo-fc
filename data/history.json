@@ -127023,6 +127023,22 @@
           "ratingAve": 6.9
         }
       ]
+    },
+    {
+      "at": "2026-11-16T06:15:27.774529+00:00",
+      "kind": "data-change",
+      "career": [
+        {
+          "name": "yj8984",
+          "position": "midfielder",
+          "gamesPlayed": 226,
+          "goals": 30,
+          "assists": 69,
+          "averageRating": 6.9,
+          "manOfTheMatch": 10,
+          "ratingAve": 6.9
+        }
+      ]
     }
   ]
 }
