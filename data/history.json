@@ -142622,6 +142622,56 @@
         "reputationTier": 0,
         "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l99160101.png"
       }
+    },
+    {
+      "at": "2026-11-17T05:54:38.552195+00:00",
+      "kind": "data-change",
+      "club": {
+        "clubId": 331042,
+        "clubName": "DOKDO FC",
+        "regionId": 5128531,
+        "teamId": 112172,
+        "crestAssetId": 99160101,
+        "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l112172.png",
+        "stadium": "티어 1 스타",
+        "name": "DOKDO FC"
+      },
+      "league": {
+        "clubId": 331042,
+        "clubName": "DOKDO FC",
+        "currentDivision": 4,
+        "bestDivision": 3,
+        "gamesPlayed": 222,
+        "wins": 84,
+        "ties": 47,
+        "losses": 91,
+        "goals": 289,
+        "goalsAgainst": 310,
+        "cleanSheets": 78,
+        "points": 138,
+        "promotions": 10,
+        "relegations": 8,
+        "reputationTier": 1,
+        "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l112172.png"
+      },
+      "leagueAllTime": {
+        "clubId": 331042,
+        "clubName": "DOKDO FC",
+        "currentDivision": 5,
+        "bestDivision": 5,
+        "gamesPlayed": 31,
+        "wins": 8,
+        "ties": 6,
+        "losses": 17,
+        "goals": 34,
+        "goalsAgainst": 76,
+        "cleanSheets": 4,
+        "points": 13,
+        "promotions": 1,
+        "relegations": 0,
+        "reputationTier": 0,
+        "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l112172.png"
+      }
     }
   ]
 }
