@@ -6,8 +6,8 @@
     "clubName": "DOKDO FC",
     "regionId": 5128531,
     "teamId": 112893,
-    "crestAssetId": 99160719,
-    "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l112893.png",
+    "crestAssetId": 99160101,
+    "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l99160101.png",
     "stadium": "티어 1 스타",
     "name": "DOKDO FC"
   },
@@ -118640,66 +118640,66 @@
     }
   ],
   "sync": {
-    "lastAttempt": "2026-11-17T03:16:10.244622+00:00",
-    "lastSuccess": "2026-11-17T03:16:10.244622+00:00",
+    "lastAttempt": "2026-11-17T04:08:09.140102+00:00",
+    "lastSuccess": "2026-11-17T04:08:09.140102+00:00",
     "error": null,
     "sources": {
       "club": {
-        "lastAttempt": "2026-11-17T03:16:10.244622+00:00",
-        "lastSuccess": "2026-11-17T03:16:10.244622+00:00",
+        "lastAttempt": "2026-11-17T04:08:09.140102+00:00",
+        "lastSuccess": "2026-11-17T04:08:09.140102+00:00",
         "state": "ok",
         "error": null
       },
       "overall": {
-        "lastAttempt": "2026-11-17T03:16:10.244622+00:00",
-        "lastSuccess": "2026-11-17T03:16:10.244622+00:00",
+        "lastAttempt": "2026-11-17T04:08:09.140102+00:00",
+        "lastSuccess": "2026-11-17T04:08:09.140102+00:00",
         "state": "ok",
         "error": null
       },
       "members": {
-        "lastAttempt": "2026-11-17T03:16:10.244622+00:00",
-        "lastSuccess": "2026-11-17T03:16:10.244622+00:00",
+        "lastAttempt": "2026-11-17T04:08:09.140102+00:00",
+        "lastSuccess": "2026-11-17T04:08:09.140102+00:00",
         "state": "ok",
         "error": null
       },
       "career": {
-        "lastAttempt": "2026-11-17T03:16:10.244622+00:00",
-        "lastSuccess": "2026-11-17T03:16:10.244622+00:00",
+        "lastAttempt": "2026-11-17T04:08:09.140102+00:00",
+        "lastSuccess": "2026-11-17T04:08:09.140102+00:00",
         "state": "ok",
         "error": null
       },
       "league": {
-        "lastAttempt": "2026-11-17T03:16:10.244622+00:00",
-        "lastSuccess": "2026-11-17T03:16:10.244622+00:00",
+        "lastAttempt": "2026-11-17T04:08:09.140102+00:00",
+        "lastSuccess": "2026-11-17T04:08:09.140102+00:00",
         "state": "ok",
         "error": null
       },
       "leagueAllTime": {
-        "lastAttempt": "2026-11-17T03:16:10.244622+00:00",
-        "lastSuccess": "2026-11-17T03:16:10.244622+00:00",
+        "lastAttempt": "2026-11-17T04:08:09.140102+00:00",
+        "lastSuccess": "2026-11-17T04:08:09.140102+00:00",
         "state": "ok",
         "error": null
       },
       "leagueMatch": {
-        "lastAttempt": "2026-11-17T03:16:10.244622+00:00",
-        "lastSuccess": "2026-11-17T03:16:10.244622+00:00",
+        "lastAttempt": "2026-11-17T04:08:09.140102+00:00",
+        "lastSuccess": "2026-11-17T04:08:09.140102+00:00",
         "state": "ok",
         "error": null
       },
       "friendlyMatch": {
-        "lastAttempt": "2026-11-17T03:16:10.244622+00:00",
-        "lastSuccess": "2026-11-17T03:16:10.244622+00:00",
+        "lastAttempt": "2026-11-17T04:08:09.140102+00:00",
+        "lastSuccess": "2026-11-17T04:08:09.140102+00:00",
         "state": "ok",
         "error": null
       },
       "playoffMatch": {
-        "lastAttempt": "2026-11-17T03:16:10.244622+00:00",
-        "lastSuccess": "2026-11-17T03:16:10.244622+00:00",
+        "lastAttempt": "2026-11-17T04:08:09.140102+00:00",
+        "lastSuccess": "2026-11-17T04:08:09.140102+00:00",
         "state": "ok",
         "error": null
       }
     },
-    "revision": "5895aeb831f12ea5"
+    "revision": "8a7786a686e0da1e"
   },
   "archiveVersion": 1,
   "league": {
@@ -118718,7 +118718,7 @@
     "promotions": 10,
     "relegations": 8,
     "reputationTier": 1,
-    "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l112893.png"
+    "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l99160101.png"
   },
   "leagueAllTime": {
     "clubId": 331042,
@@ -118736,7 +118736,7 @@
     "promotions": 1,
     "relegations": 0,
     "reputationTier": 0,
-    "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l112893.png"
+    "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l99160101.png"
   },
   "ratingTrend": {
     "current": 1605,
