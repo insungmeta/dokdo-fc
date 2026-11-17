@@ -142672,6 +142672,22 @@
         "reputationTier": 0,
         "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l112172.png"
       }
+    },
+    {
+      "at": "2026-11-17T12:23:36.668070+00:00",
+      "kind": "data-change",
+      "career": [
+        {
+          "name": "FinalThreat_0",
+          "position": "midfielder",
+          "gamesPlayed": 150,
+          "goals": 11,
+          "assists": 23,
+          "averageRating": 6.8,
+          "manOfTheMatch": 11,
+          "ratingAve": 6.8
+        }
+      ]
     }
   ]
 }
