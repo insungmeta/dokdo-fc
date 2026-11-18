@@ -1,61 +1,61 @@
 {
   "schemaVersion": 1,
   "clubId": 331042,
-  "checkedAt": "2026-11-18T13:40:01.093811+00:00",
-  "lastSuccess": "2026-11-18T13:40:01.093811+00:00",
-  "revision": "abf3e93d8940478b",
+  "checkedAt": "2026-11-18T14:32:19.356600+00:00",
+  "lastSuccess": "2026-11-18T14:32:19.356600+00:00",
+  "revision": "74d80a704bdb463d",
   "sources": {
     "club": {
-      "lastAttempt": "2026-11-18T13:40:01.093811+00:00",
-      "lastSuccess": "2026-11-18T13:40:01.093811+00:00",
+      "lastAttempt": "2026-11-18T14:32:19.356600+00:00",
+      "lastSuccess": "2026-11-18T14:32:19.356600+00:00",
       "state": "ok",
       "error": null
     },
     "overall": {
-      "lastAttempt": "2026-11-18T13:40:01.093811+00:00",
-      "lastSuccess": "2026-11-18T13:40:01.093811+00:00",
+      "lastAttempt": "2026-11-18T14:32:19.356600+00:00",
+      "lastSuccess": "2026-11-18T14:32:19.356600+00:00",
       "state": "ok",
       "error": null
     },
     "members": {
-      "lastAttempt": "2026-11-18T13:40:01.093811+00:00",
-      "lastSuccess": "2026-11-18T13:40:01.093811+00:00",
+      "lastAttempt": "2026-11-18T14:32:19.356600+00:00",
+      "lastSuccess": "2026-11-18T14:32:19.356600+00:00",
       "state": "ok",
       "error": null
     },
     "career": {
-      "lastAttempt": "2026-11-18T13:40:01.093811+00:00",
-      "lastSuccess": "2026-11-18T13:40:01.093811+00:00",
+      "lastAttempt": "2026-11-18T14:32:19.356600+00:00",
+      "lastSuccess": "2026-11-18T14:32:19.356600+00:00",
       "state": "ok",
       "error": null
     },
     "league": {
-      "lastAttempt": "2026-11-18T13:40:01.093811+00:00",
-      "lastSuccess": "2026-11-18T13:40:01.093811+00:00",
+      "lastAttempt": "2026-11-18T14:32:19.356600+00:00",
+      "lastSuccess": "2026-11-18T14:32:19.356600+00:00",
       "state": "ok",
       "error": null
     },
     "leagueAllTime": {
-      "lastAttempt": "2026-11-18T13:40:01.093811+00:00",
-      "lastSuccess": "2026-11-18T13:40:01.093811+00:00",
+      "lastAttempt": "2026-11-18T14:32:19.356600+00:00",
+      "lastSuccess": "2026-11-18T14:32:19.356600+00:00",
       "state": "ok",
       "error": null
     },
     "leagueMatch": {
-      "lastAttempt": "2026-11-18T13:40:01.093811+00:00",
-      "lastSuccess": "2026-11-18T13:40:01.093811+00:00",
+      "lastAttempt": "2026-11-18T14:32:19.356600+00:00",
+      "lastSuccess": "2026-11-18T14:32:19.356600+00:00",
       "state": "ok",
       "error": null
     },
     "friendlyMatch": {
-      "lastAttempt": "2026-11-18T13:40:01.093811+00:00",
-      "lastSuccess": "2026-11-18T13:40:01.093811+00:00",
+      "lastAttempt": "2026-11-18T14:32:19.356600+00:00",
+      "lastSuccess": "2026-11-18T14:32:19.356600+00:00",
       "state": "ok",
       "error": null
     },
     "playoffMatch": {
-      "lastAttempt": "2026-11-18T13:40:01.093811+00:00",
-      "lastSuccess": "2026-11-18T13:40:01.093811+00:00",
+      "lastAttempt": "2026-11-18T14:32:19.356600+00:00",
+      "lastSuccess": "2026-11-18T14:32:19.356600+00:00",
       "state": "ok",
       "error": null
     }
