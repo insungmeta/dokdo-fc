@@ -943,12 +943,12 @@
     {
       "name": "mael97463",
       "position": "goalkeeper",
-      "gamesPlayed": 82,
+      "gamesPlayed": 84,
       "goals": 0,
       "assists": 2,
-      "averageRating": 6.3,
+      "averageRating": 6.2,
       "manOfTheMatch": 0,
-      "ratingAve": 6.3
+      "ratingAve": 6.2
     },
     {
       "name": "y11-m-0cha",
@@ -164737,61 +164737,61 @@
     }
   ],
   "sync": {
-    "lastAttempt": "2026-11-19T17:32:38.700903+00:00",
-    "lastSuccess": "2026-11-19T17:32:38.700903+00:00",
+    "lastAttempt": "2026-11-19T18:24:31.016812+00:00",
+    "lastSuccess": "2026-11-19T18:24:31.016812+00:00",
     "error": null,
     "sources": {
       "club": {
-        "lastAttempt": "2026-11-19T17:32:38.700903+00:00",
-        "lastSuccess": "2026-11-19T17:32:38.700903+00:00",
+        "lastAttempt": "2026-11-19T18:24:31.016812+00:00",
+        "lastSuccess": "2026-11-19T18:24:31.016812+00:00",
         "state": "ok",
         "error": null
       },
       "overall": {
-        "lastAttempt": "2026-11-19T17:32:38.700903+00:00",
-        "lastSuccess": "2026-11-19T17:32:38.700903+00:00",
+        "lastAttempt": "2026-11-19T18:24:31.016812+00:00",
+        "lastSuccess": "2026-11-19T18:24:31.016812+00:00",
         "state": "ok",
         "error": null
       },
       "members": {
-        "lastAttempt": "2026-11-19T17:32:38.700903+00:00",
-        "lastSuccess": "2026-11-19T17:32:38.700903+00:00",
+        "lastAttempt": "2026-11-19T18:24:31.016812+00:00",
+        "lastSuccess": "2026-11-19T18:24:31.016812+00:00",
         "state": "ok",
         "error": null
       },
       "career": {
-        "lastAttempt": "2026-11-19T17:32:38.700903+00:00",
-        "lastSuccess": "2026-11-19T17:32:38.700903+00:00",
+        "lastAttempt": "2026-11-19T18:24:31.016812+00:00",
+        "lastSuccess": "2026-11-19T18:24:31.016812+00:00",
         "state": "ok",
         "error": null
       },
       "league": {
-        "lastAttempt": "2026-11-19T17:32:38.700903+00:00",
-        "lastSuccess": "2026-11-19T17:32:38.700903+00:00",
+        "lastAttempt": "2026-11-19T18:24:31.016812+00:00",
+        "lastSuccess": "2026-11-19T18:24:31.016812+00:00",
         "state": "ok",
         "error": null
       },
       "leagueAllTime": {
-        "lastAttempt": "2026-11-19T17:32:38.700903+00:00",
-        "lastSuccess": "2026-11-19T17:32:38.700903+00:00",
+        "lastAttempt": "2026-11-19T18:24:31.016812+00:00",
+        "lastSuccess": "2026-11-19T18:24:31.016812+00:00",
         "state": "ok",
         "error": null
       },
       "leagueMatch": {
-        "lastAttempt": "2026-11-19T17:32:38.700903+00:00",
-        "lastSuccess": "2026-11-19T17:32:38.700903+00:00",
+        "lastAttempt": "2026-11-19T18:24:31.016812+00:00",
+        "lastSuccess": "2026-11-19T18:24:31.016812+00:00",
         "state": "ok",
         "error": null
       },
       "friendlyMatch": {
-        "lastAttempt": "2026-11-19T17:32:38.700903+00:00",
-        "lastSuccess": "2026-11-19T17:32:38.700903+00:00",
+        "lastAttempt": "2026-11-19T18:24:31.016812+00:00",
+        "lastSuccess": "2026-11-19T18:24:31.016812+00:00",
         "state": "ok",
         "error": null
       },
       "playoffMatch": {
-        "lastAttempt": "2026-11-19T17:32:38.700903+00:00",
-        "lastSuccess": "2026-11-19T17:32:38.700903+00:00",
+        "lastAttempt": "2026-11-19T18:24:31.016812+00:00",
+        "lastSuccess": "2026-11-19T18:24:31.016812+00:00",
         "state": "ok",
         "error": null
       }
@@ -164837,9 +164837,9 @@
   },
   "ratingTrend": {
     "current": 1536,
-    "baseline": 1358,
-    "delta": 178,
+    "baseline": 1349,
+    "delta": 187,
     "period": "7d",
-    "baselineAt": "2026-11-12T17:26:47.417296+00:00"
+    "baselineAt": "2026-11-12T18:13:36.171930+00:00"
   }
 }
