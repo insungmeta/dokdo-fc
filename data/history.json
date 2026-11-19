@@ -178073,6 +178073,22 @@
           ]
         }
       ]
+    },
+    {
+      "at": "2026-11-19T01:07:24.635340+00:00",
+      "kind": "data-change",
+      "career": [
+        {
+          "name": "IIIIIIIIIIIIxD_I",
+          "position": "forward",
+          "gamesPlayed": 111,
+          "goals": 184,
+          "assists": 78,
+          "averageRating": 8.2,
+          "manOfTheMatch": 35,
+          "ratingAve": 8.2
+        }
+      ]
     }
   ]
 }
