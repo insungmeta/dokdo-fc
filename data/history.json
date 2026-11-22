@@ -258226,6 +258226,45 @@
           ]
         }
       ]
+    },
+    {
+      "at": "2026-11-22T06:29:45.309515+00:00",
+      "kind": "data-change",
+      "members": [
+        {
+          "name": "Alfachamp",
+          "playerName": "",
+          "position": "",
+          "overall": 0,
+          "gamesPlayed": 0,
+          "winRate": 0,
+          "goals": 0,
+          "assists": 0,
+          "averageRating": 0.0,
+          "manOfTheMatch": 0,
+          "shotSuccessRate": 0,
+          "passesMade": 0,
+          "passSuccessRate": 0,
+          "tacklesMade": 0,
+          "tackleSuccessRate": 0,
+          "cleanSheetsDef": 0,
+          "cleanSheetsGK": 0,
+          "redCards": 0,
+          "ratingAve": 0.0
+        }
+      ],
+      "career": [
+        {
+          "name": "Alfachamp",
+          "position": "",
+          "gamesPlayed": 0,
+          "goals": 0,
+          "assists": 0,
+          "averageRating": 0.0,
+          "manOfTheMatch": 0,
+          "ratingAve": 0.0
+        }
+      ]
     }
   ]
 }
