@@ -258281,6 +258281,22 @@
           "ratingAve": 7.0
         }
       ]
+    },
+    {
+      "at": "2026-11-22T13:44:59.321036+00:00",
+      "kind": "data-change",
+      "career": [
+        {
+          "name": "JJONGHONEY",
+          "position": "midfielder",
+          "gamesPlayed": 467,
+          "goals": 43,
+          "assists": 63,
+          "averageRating": 7.0,
+          "manOfTheMatch": 45,
+          "ratingAve": 7.0
+        }
+      ]
     }
   ]
 }
