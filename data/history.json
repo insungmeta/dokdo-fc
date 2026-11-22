@@ -258265,6 +258265,22 @@
           "ratingAve": 0.0
         }
       ]
+    },
+    {
+      "at": "2026-11-22T12:04:38.479890+00:00",
+      "kind": "data-change",
+      "career": [
+        {
+          "name": "JJONGHONEY",
+          "position": "goalkeeper",
+          "gamesPlayed": 466,
+          "goals": 43,
+          "assists": 62,
+          "averageRating": 7.0,
+          "manOfTheMatch": 45,
+          "ratingAve": 7.0
+        }
+      ]
     }
   ]
 }

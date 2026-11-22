@@ -998,8 +998,8 @@
   "career": [
     {
       "name": "JJONGHONEY",
-      "position": "forward",
-      "gamesPlayed": 464,
+      "position": "goalkeeper",
+      "gamesPlayed": 466,
       "goals": 43,
       "assists": 62,
       "averageRating": 7.0,
@@ -223044,61 +223044,61 @@
     }
   ],
   "sync": {
-    "lastAttempt": "2026-11-22T11:26:21.437943+00:00",
-    "lastSuccess": "2026-11-22T11:26:21.437943+00:00",
+    "lastAttempt": "2026-11-22T12:04:38.479890+00:00",
+    "lastSuccess": "2026-11-22T12:04:38.479890+00:00",
     "error": null,
     "sources": {
       "club": {
-        "lastAttempt": "2026-11-22T11:26:21.437943+00:00",
-        "lastSuccess": "2026-11-22T11:26:21.437943+00:00",
+        "lastAttempt": "2026-11-22T12:04:38.479890+00:00",
+        "lastSuccess": "2026-11-22T12:04:38.479890+00:00",
         "state": "ok",
         "error": null
       },
       "overall": {
-        "lastAttempt": "2026-11-22T11:26:21.437943+00:00",
-        "lastSuccess": "2026-11-22T11:26:21.437943+00:00",
+        "lastAttempt": "2026-11-22T12:04:38.479890+00:00",
+        "lastSuccess": "2026-11-22T12:04:38.479890+00:00",
         "state": "ok",
         "error": null
       },
       "members": {
-        "lastAttempt": "2026-11-22T11:26:21.437943+00:00",
-        "lastSuccess": "2026-11-22T11:26:21.437943+00:00",
+        "lastAttempt": "2026-11-22T12:04:38.479890+00:00",
+        "lastSuccess": "2026-11-22T12:04:38.479890+00:00",
         "state": "ok",
         "error": null
       },
       "career": {
-        "lastAttempt": "2026-11-22T11:26:21.437943+00:00",
-        "lastSuccess": "2026-11-22T11:26:21.437943+00:00",
+        "lastAttempt": "2026-11-22T12:04:38.479890+00:00",
+        "lastSuccess": "2026-11-22T12:04:38.479890+00:00",
         "state": "ok",
         "error": null
       },
       "league": {
-        "lastAttempt": "2026-11-22T11:26:21.437943+00:00",
-        "lastSuccess": "2026-11-22T11:26:21.437943+00:00",
+        "lastAttempt": "2026-11-22T12:04:38.479890+00:00",
+        "lastSuccess": "2026-11-22T12:04:38.479890+00:00",
         "state": "ok",
         "error": null
       },
       "leagueAllTime": {
-        "lastAttempt": "2026-11-22T11:26:21.437943+00:00",
-        "lastSuccess": "2026-11-22T11:26:21.437943+00:00",
+        "lastAttempt": "2026-11-22T12:04:38.479890+00:00",
+        "lastSuccess": "2026-11-22T12:04:38.479890+00:00",
         "state": "ok",
         "error": null
       },
       "leagueMatch": {
-        "lastAttempt": "2026-11-22T11:26:21.437943+00:00",
-        "lastSuccess": "2026-11-22T11:26:21.437943+00:00",
+        "lastAttempt": "2026-11-22T12:04:38.479890+00:00",
+        "lastSuccess": "2026-11-22T12:04:38.479890+00:00",
         "state": "ok",
         "error": null
       },
       "friendlyMatch": {
-        "lastAttempt": "2026-11-22T11:26:21.437943+00:00",
-        "lastSuccess": "2026-11-22T11:26:21.437943+00:00",
+        "lastAttempt": "2026-11-22T12:04:38.479890+00:00",
+        "lastSuccess": "2026-11-22T12:04:38.479890+00:00",
         "state": "ok",
         "error": null
       },
       "playoffMatch": {
-        "lastAttempt": "2026-11-22T11:26:21.437943+00:00",
-        "lastSuccess": "2026-11-22T11:26:21.437943+00:00",
+        "lastAttempt": "2026-11-22T12:04:38.479890+00:00",
+        "lastSuccess": "2026-11-22T12:04:38.479890+00:00",
         "state": "ok",
         "error": null
       }
