@@ -1014,6 +1014,27 @@
       "cleanSheetsGK": 0,
       "redCards": 0,
       "ratingAve": 6.7
+    },
+    {
+      "name": "Jihong94",
+      "playerName": "",
+      "position": "",
+      "overall": 0,
+      "gamesPlayed": 0,
+      "winRate": 0,
+      "goals": 0,
+      "assists": 0,
+      "averageRating": 0.0,
+      "manOfTheMatch": 0,
+      "shotSuccessRate": 0,
+      "passesMade": 0,
+      "passSuccessRate": 0,
+      "tacklesMade": 0,
+      "tackleSuccessRate": 0,
+      "cleanSheetsDef": 0,
+      "cleanSheetsGK": 0,
+      "redCards": 0,
+      "ratingAve": 0.0
     }
   ],
   "career": [
@@ -1486,6 +1507,16 @@
       "averageRating": 6.8,
       "manOfTheMatch": 4,
       "ratingAve": 6.8
+    },
+    {
+      "name": "Jihong94",
+      "position": "",
+      "gamesPlayed": 0,
+      "goals": 0,
+      "assists": 0,
+      "averageRating": 0.0,
+      "manOfTheMatch": 0,
+      "ratingAve": 0.0
     }
   ],
   "matches": [
@@ -238468,66 +238499,66 @@
     }
   ],
   "sync": {
-    "lastAttempt": "2026-11-23T00:15:12.846995+00:00",
-    "lastSuccess": "2026-11-23T00:15:12.846995+00:00",
+    "lastAttempt": "2026-11-23T01:28:11.232487+00:00",
+    "lastSuccess": "2026-11-23T01:28:11.232487+00:00",
     "error": null,
     "sources": {
       "club": {
-        "lastAttempt": "2026-11-23T00:15:12.846995+00:00",
-        "lastSuccess": "2026-11-23T00:15:12.846995+00:00",
+        "lastAttempt": "2026-11-23T01:28:11.232487+00:00",
+        "lastSuccess": "2026-11-23T01:28:11.232487+00:00",
         "state": "ok",
         "error": null
       },
       "overall": {
-        "lastAttempt": "2026-11-23T00:15:12.846995+00:00",
-        "lastSuccess": "2026-11-23T00:15:12.846995+00:00",
+        "lastAttempt": "2026-11-23T01:28:11.232487+00:00",
+        "lastSuccess": "2026-11-23T01:28:11.232487+00:00",
         "state": "ok",
         "error": null
       },
       "members": {
-        "lastAttempt": "2026-11-23T00:15:12.846995+00:00",
-        "lastSuccess": "2026-11-23T00:15:12.846995+00:00",
+        "lastAttempt": "2026-11-23T01:28:11.232487+00:00",
+        "lastSuccess": "2026-11-23T01:28:11.232487+00:00",
         "state": "ok",
         "error": null
       },
       "career": {
-        "lastAttempt": "2026-11-23T00:15:12.846995+00:00",
-        "lastSuccess": "2026-11-23T00:15:12.846995+00:00",
+        "lastAttempt": "2026-11-23T01:28:11.232487+00:00",
+        "lastSuccess": "2026-11-23T01:28:11.232487+00:00",
         "state": "ok",
         "error": null
       },
       "league": {
-        "lastAttempt": "2026-11-23T00:15:12.846995+00:00",
-        "lastSuccess": "2026-11-23T00:15:12.846995+00:00",
+        "lastAttempt": "2026-11-23T01:28:11.232487+00:00",
+        "lastSuccess": "2026-11-23T01:28:11.232487+00:00",
         "state": "ok",
         "error": null
       },
       "leagueAllTime": {
-        "lastAttempt": "2026-11-23T00:15:12.846995+00:00",
-        "lastSuccess": "2026-11-23T00:15:12.846995+00:00",
+        "lastAttempt": "2026-11-23T01:28:11.232487+00:00",
+        "lastSuccess": "2026-11-23T01:28:11.232487+00:00",
         "state": "ok",
         "error": null
       },
       "leagueMatch": {
-        "lastAttempt": "2026-11-23T00:15:12.846995+00:00",
-        "lastSuccess": "2026-11-23T00:15:12.846995+00:00",
+        "lastAttempt": "2026-11-23T01:28:11.232487+00:00",
+        "lastSuccess": "2026-11-23T01:28:11.232487+00:00",
         "state": "ok",
         "error": null
       },
       "friendlyMatch": {
-        "lastAttempt": "2026-11-23T00:15:12.846995+00:00",
-        "lastSuccess": "2026-11-23T00:15:12.846995+00:00",
+        "lastAttempt": "2026-11-23T01:28:11.232487+00:00",
+        "lastSuccess": "2026-11-23T01:28:11.232487+00:00",
         "state": "ok",
         "error": null
       },
       "playoffMatch": {
-        "lastAttempt": "2026-11-23T00:15:12.846995+00:00",
-        "lastSuccess": "2026-11-23T00:15:12.846995+00:00",
+        "lastAttempt": "2026-11-23T01:28:11.232487+00:00",
+        "lastSuccess": "2026-11-23T01:28:11.232487+00:00",
         "state": "ok",
         "error": null
       }
     },
-    "revision": "f2f15a4307e0fbfc"
+    "revision": "7b30dcd0e906d76d"
   },
   "archiveVersion": 1,
   "league": {
