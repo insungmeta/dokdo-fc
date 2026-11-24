@@ -292955,6 +292955,22 @@
           ]
         }
       ]
+    },
+    {
+      "at": "2026-11-24T14:43:46.591641+00:00",
+      "kind": "data-change",
+      "career": [
+        {
+          "name": "JJONGHONEY",
+          "position": "forward",
+          "gamesPlayed": 485,
+          "goals": 45,
+          "assists": 66,
+          "averageRating": 7.0,
+          "manOfTheMatch": 47,
+          "ratingAve": 7.0
+        }
+      ]
     }
   ]
 }

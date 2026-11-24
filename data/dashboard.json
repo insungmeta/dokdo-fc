@@ -1083,7 +1083,7 @@
     {
       "name": "JJONGHONEY",
       "position": "forward",
-      "gamesPlayed": 483,
+      "gamesPlayed": 485,
       "goals": 45,
       "assists": 66,
       "averageRating": 7.0,
@@ -254115,61 +254115,61 @@
     }
   ],
   "sync": {
-    "lastAttempt": "2026-11-24T13:48:56.985550+00:00",
-    "lastSuccess": "2026-11-24T13:48:56.985550+00:00",
+    "lastAttempt": "2026-11-24T14:43:46.591641+00:00",
+    "lastSuccess": "2026-11-24T14:43:46.591641+00:00",
     "error": null,
     "sources": {
       "club": {
-        "lastAttempt": "2026-11-24T13:48:56.985550+00:00",
-        "lastSuccess": "2026-11-24T13:48:56.985550+00:00",
+        "lastAttempt": "2026-11-24T14:43:46.591641+00:00",
+        "lastSuccess": "2026-11-24T14:43:46.591641+00:00",
         "state": "ok",
         "error": null
       },
       "overall": {
-        "lastAttempt": "2026-11-24T13:48:56.985550+00:00",
-        "lastSuccess": "2026-11-24T13:48:56.985550+00:00",
+        "lastAttempt": "2026-11-24T14:43:46.591641+00:00",
+        "lastSuccess": "2026-11-24T14:43:46.591641+00:00",
         "state": "ok",
         "error": null
       },
       "members": {
-        "lastAttempt": "2026-11-24T13:48:56.985550+00:00",
-        "lastSuccess": "2026-11-24T13:48:56.985550+00:00",
+        "lastAttempt": "2026-11-24T14:43:46.591641+00:00",
+        "lastSuccess": "2026-11-24T14:43:46.591641+00:00",
         "state": "ok",
         "error": null
       },
       "career": {
-        "lastAttempt": "2026-11-24T13:48:56.985550+00:00",
-        "lastSuccess": "2026-11-24T13:48:56.985550+00:00",
+        "lastAttempt": "2026-11-24T14:43:46.591641+00:00",
+        "lastSuccess": "2026-11-24T14:43:46.591641+00:00",
         "state": "ok",
         "error": null
       },
       "league": {
-        "lastAttempt": "2026-11-24T13:48:56.985550+00:00",
-        "lastSuccess": "2026-11-24T13:48:56.985550+00:00",
+        "lastAttempt": "2026-11-24T14:43:46.591641+00:00",
+        "lastSuccess": "2026-11-24T14:43:46.591641+00:00",
         "state": "ok",
         "error": null
       },
       "leagueAllTime": {
-        "lastAttempt": "2026-11-24T13:48:56.985550+00:00",
-        "lastSuccess": "2026-11-24T13:48:56.985550+00:00",
+        "lastAttempt": "2026-11-24T14:43:46.591641+00:00",
+        "lastSuccess": "2026-11-24T14:43:46.591641+00:00",
         "state": "ok",
         "error": null
       },
       "leagueMatch": {
-        "lastAttempt": "2026-11-24T13:48:56.985550+00:00",
-        "lastSuccess": "2026-11-24T13:48:56.985550+00:00",
+        "lastAttempt": "2026-11-24T14:43:46.591641+00:00",
+        "lastSuccess": "2026-11-24T14:43:46.591641+00:00",
         "state": "ok",
         "error": null
       },
       "friendlyMatch": {
-        "lastAttempt": "2026-11-24T13:48:56.985550+00:00",
-        "lastSuccess": "2026-11-24T13:48:56.985550+00:00",
+        "lastAttempt": "2026-11-24T14:43:46.591641+00:00",
+        "lastSuccess": "2026-11-24T14:43:46.591641+00:00",
         "state": "ok",
         "error": null
       },
       "playoffMatch": {
-        "lastAttempt": "2026-11-24T13:48:56.985550+00:00",
-        "lastSuccess": "2026-11-24T13:48:56.985550+00:00",
+        "lastAttempt": "2026-11-24T14:43:46.591641+00:00",
+        "lastSuccess": "2026-11-24T14:43:46.591641+00:00",
         "state": "ok",
         "error": null
       }
@@ -254215,9 +254215,9 @@
   },
   "ratingTrend": {
     "current": 1517,
-    "baseline": 1609,
-    "delta": -92,
+    "baseline": 1569,
+    "delta": -52,
     "period": "7d",
-    "baselineAt": "2026-11-17T13:38:40.459210+00:00"
+    "baselineAt": "2026-11-17T14:36:39.549477+00:00"
   }
 }
