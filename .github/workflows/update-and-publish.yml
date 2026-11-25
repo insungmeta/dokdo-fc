@@ -8,6 +8,7 @@ on:
     paths:
       - '.github/workflows/update-and-publish.yml'
       - 'collect.py'
+      - 'tools/discord_matches.py'
       - 'requirements.txt'
       - 'tests/**'
   schedule:
@@ -48,6 +49,7 @@ jobs:
           python -m unittest discover -s tests -p 'test_dashboard_ui.py' -v
           python -m unittest discover -s tests -p 'test_i18n.py' -v
           python -m unittest discover -s tests -p 'test_push.py' -v
+          python -m unittest discover -s tests -p 'test_discord.py' -v
       - name: Collect live FC27 records
         run: python collect.py
       - name: Check both permanent archives
@@ -101,6 +103,32 @@ jobs:
             done
             if [ "$pushed" != true ]; then
               echo "Could not publish the updated archive after 4 safe retries."
+              exit 1
+            fi
+          fi
+      - name: Send Discord notifications for newly archived matches
+        continue-on-error: true
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          python tools/discord_matches.py
+          if [ -f data/discord-state.json ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/discord-state.json
+            if ! git diff --cached --quiet; then
+              git commit -m "Update Discord notification state [skip ci]"
+              for attempt in 1 2 3; do
+                git fetch origin main
+                if ! git rebase origin/main; then
+                  git rebase --abort || true
+                  exit 1
+                fi
+                if git push origin HEAD:main; then
+                  exit 0
+                fi
+                sleep 3
+              done
               exit 1
             fi
           fi
