@@ -304289,6 +304289,28 @@
           "ratingAve": 8.3
         }
       ]
+    },
+    {
+      "at": "2026-11-25T14:04:52.959035+00:00",
+      "kind": "data-change",
+      "league": {
+        "clubId": 331042,
+        "clubName": "DOKDO FC",
+        "currentDivision": 3,
+        "bestDivision": 3,
+        "gamesPlayed": 338,
+        "wins": 131,
+        "ties": 66,
+        "losses": 141,
+        "goals": 444,
+        "goalsAgainst": 475,
+        "cleanSheets": 115,
+        "points": 177,
+        "promotions": 12,
+        "relegations": 9,
+        "reputationTier": 1,
+        "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l112172.png"
+      }
     }
   ]
 }

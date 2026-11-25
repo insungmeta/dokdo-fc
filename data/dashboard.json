@@ -264582,66 +264582,66 @@
     }
   ],
   "sync": {
-    "lastAttempt": "2026-11-25T12:53:06.292148+00:00",
-    "lastSuccess": "2026-11-25T12:53:06.292148+00:00",
+    "lastAttempt": "2026-11-25T14:04:52.959035+00:00",
+    "lastSuccess": "2026-11-25T14:04:52.959035+00:00",
     "error": null,
     "sources": {
       "club": {
-        "lastAttempt": "2026-11-25T12:53:06.292148+00:00",
-        "lastSuccess": "2026-11-25T12:53:06.292148+00:00",
+        "lastAttempt": "2026-11-25T14:04:52.959035+00:00",
+        "lastSuccess": "2026-11-25T14:04:52.959035+00:00",
         "state": "ok",
         "error": null
       },
       "overall": {
-        "lastAttempt": "2026-11-25T12:53:06.292148+00:00",
-        "lastSuccess": "2026-11-25T12:53:06.292148+00:00",
+        "lastAttempt": "2026-11-25T14:04:52.959035+00:00",
+        "lastSuccess": "2026-11-25T14:04:52.959035+00:00",
         "state": "ok",
         "error": null
       },
       "members": {
-        "lastAttempt": "2026-11-25T12:53:06.292148+00:00",
-        "lastSuccess": "2026-11-25T12:53:06.292148+00:00",
+        "lastAttempt": "2026-11-25T14:04:52.959035+00:00",
+        "lastSuccess": "2026-11-25T14:04:52.959035+00:00",
         "state": "ok",
         "error": null
       },
       "career": {
-        "lastAttempt": "2026-11-25T12:53:06.292148+00:00",
-        "lastSuccess": "2026-11-25T12:53:06.292148+00:00",
+        "lastAttempt": "2026-11-25T14:04:52.959035+00:00",
+        "lastSuccess": "2026-11-25T14:04:52.959035+00:00",
         "state": "ok",
         "error": null
       },
       "league": {
-        "lastAttempt": "2026-11-25T12:53:06.292148+00:00",
-        "lastSuccess": "2026-11-25T12:53:06.292148+00:00",
+        "lastAttempt": "2026-11-25T14:04:52.959035+00:00",
+        "lastSuccess": "2026-11-25T14:04:52.959035+00:00",
         "state": "ok",
         "error": null
       },
       "leagueAllTime": {
-        "lastAttempt": "2026-11-25T12:53:06.292148+00:00",
-        "lastSuccess": "2026-11-25T12:53:06.292148+00:00",
+        "lastAttempt": "2026-11-25T14:04:52.959035+00:00",
+        "lastSuccess": "2026-11-25T14:04:52.959035+00:00",
         "state": "ok",
         "error": null
       },
       "leagueMatch": {
-        "lastAttempt": "2026-11-25T12:53:06.292148+00:00",
-        "lastSuccess": "2026-11-25T12:53:06.292148+00:00",
+        "lastAttempt": "2026-11-25T14:04:52.959035+00:00",
+        "lastSuccess": "2026-11-25T14:04:52.959035+00:00",
         "state": "ok",
         "error": null
       },
       "friendlyMatch": {
-        "lastAttempt": "2026-11-25T12:53:06.292148+00:00",
-        "lastSuccess": "2026-11-25T12:53:06.292148+00:00",
+        "lastAttempt": "2026-11-25T14:04:52.959035+00:00",
+        "lastSuccess": "2026-11-25T14:04:52.959035+00:00",
         "state": "ok",
         "error": null
       },
       "playoffMatch": {
-        "lastAttempt": "2026-11-25T12:53:06.292148+00:00",
-        "lastSuccess": "2026-11-25T12:53:06.292148+00:00",
+        "lastAttempt": "2026-11-25T14:04:52.959035+00:00",
+        "lastSuccess": "2026-11-25T14:04:52.959035+00:00",
         "state": "ok",
         "error": null
       }
     },
-    "revision": "38485099f108fefe"
+    "revision": "95b073eb261e49b5"
   },
   "archiveVersion": 1,
   "league": {
@@ -264649,14 +264649,14 @@
     "clubName": "DOKDO FC",
     "currentDivision": 3,
     "bestDivision": 3,
-    "gamesPlayed": 337,
+    "gamesPlayed": 338,
     "wins": 131,
-    "ties": 65,
+    "ties": 66,
     "losses": 141,
-    "goals": 443,
-    "goalsAgainst": 474,
+    "goals": 444,
+    "goalsAgainst": 475,
     "cleanSheets": 115,
-    "points": 181,
+    "points": 177,
     "promotions": 12,
     "relegations": 9,
     "reputationTier": 1,
