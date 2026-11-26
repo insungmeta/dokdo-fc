@@ -1083,9 +1083,9 @@
     {
       "name": "JJONGHONEY",
       "position": "forward",
-      "gamesPlayed": 508,
+      "gamesPlayed": 506,
       "goals": 50,
-      "assists": 69,
+      "assists": 68,
       "averageRating": 7.0,
       "manOfTheMatch": 49,
       "ratingAve": 7.0
@@ -1093,7 +1093,7 @@
     {
       "name": "RiRiXiD",
       "position": "defender",
-      "gamesPlayed": 302,
+      "gamesPlayed": 299,
       "goals": 2,
       "assists": 1,
       "averageRating": 7.2,
@@ -1213,11 +1213,11 @@
     {
       "name": "Dokdo4866",
       "position": "defender",
-      "gamesPlayed": 288,
+      "gamesPlayed": 285,
       "goals": 13,
       "assists": 16,
       "averageRating": 7.5,
-      "manOfTheMatch": 52,
+      "manOfTheMatch": 51,
       "ratingAve": 7.5
     },
     {
@@ -1263,12 +1263,12 @@
     {
       "name": "ehztl23",
       "position": "midfielder",
-      "gamesPlayed": 26,
+      "gamesPlayed": 23,
       "goals": 0,
       "assists": 0,
-      "averageRating": 6.6,
+      "averageRating": 6.7,
       "manOfTheMatch": 0,
-      "ratingAve": 6.6
+      "ratingAve": 6.7
     },
     {
       "name": "aliffifahrul",
@@ -1353,7 +1353,7 @@
     {
       "name": "dududada3472",
       "position": "forward",
-      "gamesPlayed": 318,
+      "gamesPlayed": 315,
       "goals": 173,
       "assists": 49,
       "averageRating": 6.7,
@@ -1413,7 +1413,7 @@
     {
       "name": "yj8984",
       "position": "midfielder",
-      "gamesPlayed": 329,
+      "gamesPlayed": 326,
       "goals": 53,
       "assists": 113,
       "averageRating": 6.9,
@@ -284523,61 +284523,61 @@
     }
   ],
   "sync": {
-    "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
-    "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
-    "error": "all_time division: Could not reach EA (The read operation timed out) for https://proclubs.ea.com/api/fc/allTimeLeaderboard/search?platform=common-gen5&clubName=DOKDO+FC&maxResultCount=100",
+    "lastAttempt": "2026-11-26T18:05:59.498236+00:00",
+    "lastSuccess": "2026-11-26T18:05:59.498236+00:00",
+    "error": null,
     "sources": {
       "club": {
-        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
-        "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
+        "lastAttempt": "2026-11-26T18:05:59.498236+00:00",
+        "lastSuccess": "2026-11-26T18:05:59.498236+00:00",
         "state": "ok",
         "error": null
       },
       "overall": {
-        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
-        "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
+        "lastAttempt": "2026-11-26T18:05:59.498236+00:00",
+        "lastSuccess": "2026-11-26T18:05:59.498236+00:00",
         "state": "ok",
         "error": null
       },
       "members": {
-        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
-        "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
+        "lastAttempt": "2026-11-26T18:05:59.498236+00:00",
+        "lastSuccess": "2026-11-26T18:05:59.498236+00:00",
         "state": "ok",
         "error": null
       },
       "career": {
-        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
-        "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
+        "lastAttempt": "2026-11-26T18:05:59.498236+00:00",
+        "lastSuccess": "2026-11-26T18:05:59.498236+00:00",
         "state": "ok",
         "error": null
       },
       "league": {
-        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
-        "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
+        "lastAttempt": "2026-11-26T18:05:59.498236+00:00",
+        "lastSuccess": "2026-11-26T18:05:59.498236+00:00",
         "state": "ok",
         "error": null
       },
       "leagueAllTime": {
-        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
-        "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
-        "state": "error",
-        "error": "Could not reach EA (The read operation timed out) for https://proclubs.ea.com/api/fc/allTimeLeaderboard/search?platform=common-gen5&clubName=DOKDO+FC&maxResultCount=100"
+        "lastAttempt": "2026-11-26T18:05:59.498236+00:00",
+        "lastSuccess": "2026-11-26T18:05:59.498236+00:00",
+        "state": "ok",
+        "error": null
       },
       "leagueMatch": {
-        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
-        "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
+        "lastAttempt": "2026-11-26T18:05:59.498236+00:00",
+        "lastSuccess": "2026-11-26T18:05:59.498236+00:00",
         "state": "ok",
         "error": null
       },
       "friendlyMatch": {
-        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
-        "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
+        "lastAttempt": "2026-11-26T18:05:59.498236+00:00",
+        "lastSuccess": "2026-11-26T18:05:59.498236+00:00",
         "state": "ok",
         "error": null
       },
       "playoffMatch": {
-        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
-        "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
+        "lastAttempt": "2026-11-26T18:05:59.498236+00:00",
+        "lastSuccess": "2026-11-26T18:05:59.498236+00:00",
         "state": "ok",
         "error": null
       }
@@ -284623,9 +284623,9 @@
   },
   "ratingTrend": {
     "current": 1536,
-    "baseline": 1541,
-    "delta": -5,
+    "baseline": 1536,
+    "delta": 0,
     "period": "7d",
-    "baselineAt": "2026-11-19T16:38:48.235532+00:00"
+    "baselineAt": "2026-11-19T17:32:38.700903+00:00"
   }
 }

@@ -326272,6 +326272,72 @@
           "ratingAve": 6.9
         }
       ]
+    },
+    {
+      "at": "2026-11-26T18:05:59.498236+00:00",
+      "kind": "data-change",
+      "career": [
+        {
+          "name": "JJONGHONEY",
+          "position": "forward",
+          "gamesPlayed": 506,
+          "goals": 50,
+          "assists": 68,
+          "averageRating": 7.0,
+          "manOfTheMatch": 49,
+          "ratingAve": 7.0
+        },
+        {
+          "name": "RiRiXiD",
+          "position": "defender",
+          "gamesPlayed": 299,
+          "goals": 2,
+          "assists": 1,
+          "averageRating": 7.2,
+          "manOfTheMatch": 24,
+          "ratingAve": 7.2
+        },
+        {
+          "name": "Dokdo4866",
+          "position": "defender",
+          "gamesPlayed": 285,
+          "goals": 13,
+          "assists": 16,
+          "averageRating": 7.5,
+          "manOfTheMatch": 51,
+          "ratingAve": 7.5
+        },
+        {
+          "name": "ehztl23",
+          "position": "midfielder",
+          "gamesPlayed": 23,
+          "goals": 0,
+          "assists": 0,
+          "averageRating": 6.7,
+          "manOfTheMatch": 0,
+          "ratingAve": 6.7
+        },
+        {
+          "name": "dududada3472",
+          "position": "forward",
+          "gamesPlayed": 315,
+          "goals": 173,
+          "assists": 49,
+          "averageRating": 6.7,
+          "manOfTheMatch": 20,
+          "ratingAve": 6.7
+        },
+        {
+          "name": "yj8984",
+          "position": "midfielder",
+          "gamesPlayed": 326,
+          "goals": 53,
+          "assists": 113,
+          "averageRating": 6.9,
+          "manOfTheMatch": 15,
+          "ratingAve": 6.9
+        }
+      ]
     }
   ]
 }
