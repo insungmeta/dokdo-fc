@@ -13,13 +13,13 @@
   },
   "overall": {
     "clubId": 331042,
-    "gamesPlayed": 383,
+    "gamesPlayed": 386,
     "wins": 143,
     "ties": 77,
-    "losses": 163,
+    "losses": 166,
     "goals": 490,
-    "goalsAgainst": 569,
-    "skillRating": 1552,
+    "goalsAgainst": 575,
+    "skillRating": 1536,
     "winStreak": 0,
     "unbeatenStreak": 0,
     "promotions": 13,
@@ -54,16 +54,16 @@
       "playerName": "RiRi",
       "position": "defender",
       "overall": 76,
-      "gamesPlayed": 295,
-      "winRate": 39,
+      "gamesPlayed": 298,
+      "winRate": 38,
       "goals": 2,
       "assists": 1,
       "averageRating": 7.2,
       "manOfTheMatch": 23,
-      "shotSuccessRate": 18,
-      "passesMade": 2804,
+      "shotSuccessRate": 16,
+      "passesMade": 2822,
       "passSuccessRate": 80,
-      "tacklesMade": 309,
+      "tacklesMade": 312,
       "tackleSuccessRate": 52,
       "cleanSheetsDef": 94,
       "cleanSheetsGK": 0,
@@ -201,16 +201,16 @@
       "playerName": "Dokdo",
       "position": "defender",
       "overall": 84,
-      "gamesPlayed": 285,
-      "winRate": 38,
+      "gamesPlayed": 288,
+      "winRate": 37,
       "goals": 13,
       "assists": 16,
       "averageRating": 7.5,
-      "manOfTheMatch": 51,
+      "manOfTheMatch": 52,
       "shotSuccessRate": 11,
-      "passesMade": 2978,
+      "passesMade": 3000,
       "passSuccessRate": 75,
-      "tacklesMade": 286,
+      "tacklesMade": 289,
       "tackleSuccessRate": 16,
       "cleanSheetsDef": 95,
       "cleanSheetsGK": 0,
@@ -348,16 +348,16 @@
       "playerName": "KING",
       "position": "forward",
       "overall": 85,
-      "gamesPlayed": 315,
+      "gamesPlayed": 318,
       "winRate": 37,
       "goals": 173,
       "assists": 49,
       "averageRating": 6.7,
       "manOfTheMatch": 20,
-      "shotSuccessRate": 32,
-      "passesMade": 3252,
+      "shotSuccessRate": 31,
+      "passesMade": 3276,
       "passSuccessRate": 76,
-      "tacklesMade": 203,
+      "tacklesMade": 206,
       "tackleSuccessRate": 26,
       "cleanSheetsDef": 0,
       "cleanSheetsGK": 0,
@@ -411,17 +411,17 @@
       "playerName": "J. YJ",
       "position": "midfielder",
       "overall": 83,
-      "gamesPlayed": 303,
+      "gamesPlayed": 306,
       "winRate": 36,
       "goals": 49,
       "assists": 106,
       "averageRating": 6.9,
       "manOfTheMatch": 14,
-      "shotSuccessRate": 17,
-      "passesMade": 3937,
+      "shotSuccessRate": 16,
+      "passesMade": 3961,
       "passSuccessRate": 68,
-      "tacklesMade": 249,
-      "tackleSuccessRate": 15,
+      "tacklesMade": 251,
+      "tackleSuccessRate": 16,
       "cleanSheetsDef": 5,
       "cleanSheetsGK": 0,
       "redCards": 0,
@@ -579,21 +579,21 @@
       "playerName": "EZ",
       "position": "midfielder",
       "overall": 83,
-      "gamesPlayed": 23,
-      "winRate": 34,
+      "gamesPlayed": 26,
+      "winRate": 30,
       "goals": 0,
       "assists": 0,
-      "averageRating": 6.7,
+      "averageRating": 6.6,
       "manOfTheMatch": 0,
       "shotSuccessRate": 0,
-      "passesMade": 247,
+      "passesMade": 275,
       "passSuccessRate": 84,
-      "tacklesMade": 19,
-      "tackleSuccessRate": 59,
+      "tacklesMade": 20,
+      "tackleSuccessRate": 57,
       "cleanSheetsDef": 0,
       "cleanSheetsGK": 0,
       "redCards": 0,
-      "ratingAve": 6.7
+      "ratingAve": 6.6
     },
     {
       "name": "zndlzk",
@@ -1083,9 +1083,9 @@
     {
       "name": "JJONGHONEY",
       "position": "forward",
-      "gamesPlayed": 506,
+      "gamesPlayed": 508,
       "goals": 50,
-      "assists": 68,
+      "assists": 69,
       "averageRating": 7.0,
       "manOfTheMatch": 49,
       "ratingAve": 7.0
@@ -1093,7 +1093,7 @@
     {
       "name": "RiRiXiD",
       "position": "defender",
-      "gamesPlayed": 299,
+      "gamesPlayed": 302,
       "goals": 2,
       "assists": 1,
       "averageRating": 7.2,
@@ -1213,11 +1213,11 @@
     {
       "name": "Dokdo4866",
       "position": "defender",
-      "gamesPlayed": 285,
+      "gamesPlayed": 288,
       "goals": 13,
       "assists": 16,
       "averageRating": 7.5,
-      "manOfTheMatch": 51,
+      "manOfTheMatch": 52,
       "ratingAve": 7.5
     },
     {
@@ -1263,12 +1263,12 @@
     {
       "name": "ehztl23",
       "position": "midfielder",
-      "gamesPlayed": 23,
+      "gamesPlayed": 26,
       "goals": 0,
       "assists": 0,
-      "averageRating": 6.7,
+      "averageRating": 6.6,
       "manOfTheMatch": 0,
-      "ratingAve": 6.7
+      "ratingAve": 6.6
     },
     {
       "name": "aliffifahrul",
@@ -1353,7 +1353,7 @@
     {
       "name": "dududada3472",
       "position": "forward",
-      "gamesPlayed": 315,
+      "gamesPlayed": 318,
       "goals": 173,
       "assists": 49,
       "averageRating": 6.7,
@@ -1413,7 +1413,7 @@
     {
       "name": "yj8984",
       "position": "midfielder",
-      "gamesPlayed": 326,
+      "gamesPlayed": 329,
       "goals": 53,
       "assists": 113,
       "averageRating": 6.9,
@@ -284523,66 +284523,66 @@
     }
   ],
   "sync": {
-    "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-    "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
-    "error": null,
+    "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+    "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
+    "error": "all_time division: Could not reach EA (The read operation timed out) for https://proclubs.ea.com/api/fc/allTimeLeaderboard/search?platform=common-gen5&clubName=DOKDO+FC&maxResultCount=100",
     "sources": {
       "club": {
-        "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-        "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
+        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+        "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
         "state": "ok",
         "error": null
       },
       "overall": {
-        "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-        "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
+        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+        "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
         "state": "ok",
         "error": null
       },
       "members": {
-        "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-        "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
+        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+        "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
         "state": "ok",
         "error": null
       },
       "career": {
-        "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-        "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
+        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+        "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
         "state": "ok",
         "error": null
       },
       "league": {
-        "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-        "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
+        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+        "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
         "state": "ok",
         "error": null
       },
       "leagueAllTime": {
-        "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
+        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
         "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
-        "state": "ok",
-        "error": null
+        "state": "error",
+        "error": "Could not reach EA (The read operation timed out) for https://proclubs.ea.com/api/fc/allTimeLeaderboard/search?platform=common-gen5&clubName=DOKDO+FC&maxResultCount=100"
       },
       "leagueMatch": {
-        "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-        "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
+        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+        "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
         "state": "ok",
         "error": null
       },
       "friendlyMatch": {
-        "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-        "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
+        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+        "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
         "state": "ok",
         "error": null
       },
       "playoffMatch": {
-        "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-        "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
+        "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+        "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
         "state": "ok",
         "error": null
       }
     },
-    "revision": "22361a6a4d9fd6f7"
+    "revision": "2342bd6a9d987287"
   },
   "archiveVersion": 1,
   "league": {
@@ -284622,10 +284622,10 @@
     "crestUrl": "https://eafc24.content.easports.com/fifa/fltOnlineAssets/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fcweb/crests/256x256/l112172.png"
   },
   "ratingTrend": {
-    "current": 1552,
-    "baseline": 1496,
-    "delta": 56,
+    "current": 1536,
+    "baseline": 1541,
+    "delta": -5,
     "period": "7d",
-    "baselineAt": "2026-11-19T15:35:54.493840+00:00"
+    "baselineAt": "2026-11-19T16:38:48.235532+00:00"
   }
 }

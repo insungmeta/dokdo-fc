@@ -1,64 +1,64 @@
 {
   "schemaVersion": 1,
   "clubId": 331042,
-  "checkedAt": "2026-11-26T16:13:05.110146+00:00",
-  "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
-  "revision": "22361a6a4d9fd6f7",
+  "checkedAt": "2026-11-26T17:17:38.420203+00:00",
+  "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
+  "revision": "2342bd6a9d987287",
   "sources": {
     "club": {
-      "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-      "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
+      "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+      "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
       "state": "ok",
       "error": null
     },
     "overall": {
-      "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-      "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
+      "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+      "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
       "state": "ok",
       "error": null
     },
     "members": {
-      "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-      "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
+      "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+      "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
       "state": "ok",
       "error": null
     },
     "career": {
-      "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-      "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
+      "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+      "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
       "state": "ok",
       "error": null
     },
     "league": {
-      "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-      "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
+      "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+      "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
       "state": "ok",
       "error": null
     },
     "leagueAllTime": {
-      "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
+      "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
       "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
-      "state": "ok",
-      "error": null
+      "state": "error",
+      "error": "Could not reach EA (The read operation timed out) for https://proclubs.ea.com/api/fc/allTimeLeaderboard/search?platform=common-gen5&clubName=DOKDO+FC&maxResultCount=100"
     },
     "leagueMatch": {
-      "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-      "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
+      "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+      "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
       "state": "ok",
       "error": null
     },
     "friendlyMatch": {
-      "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-      "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
+      "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+      "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
       "state": "ok",
       "error": null
     },
     "playoffMatch": {
-      "lastAttempt": "2026-11-26T16:13:05.110146+00:00",
-      "lastSuccess": "2026-11-26T16:13:05.110146+00:00",
+      "lastAttempt": "2026-11-26T17:17:38.420203+00:00",
+      "lastSuccess": "2026-11-26T17:17:38.420203+00:00",
       "state": "ok",
       "error": null
     }
   },
-  "partial": false
+  "partial": true
 }
