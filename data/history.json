@@ -330027,6 +330027,32 @@
           ]
         }
       ]
+    },
+    {
+      "at": "2026-11-26T19:57:04.728013+00:00",
+      "kind": "data-change",
+      "career": [
+        {
+          "name": "mael97463",
+          "position": "goalkeeper",
+          "gamesPlayed": 105,
+          "goals": 1,
+          "assists": 2,
+          "averageRating": 6.3,
+          "manOfTheMatch": 0,
+          "ratingAve": 6.3
+        },
+        {
+          "name": "IIIIIIIIIIIIxD_I",
+          "position": "forward",
+          "gamesPlayed": 152,
+          "goals": 260,
+          "assists": 115,
+          "averageRating": 8.3,
+          "manOfTheMatch": 46,
+          "ratingAve": 8.3
+        }
+      ]
     }
   ]
 }
